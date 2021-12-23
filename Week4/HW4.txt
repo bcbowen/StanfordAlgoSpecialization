@@ -1,0 +1,5 @@
+1. How many different minimum cuts are there in a tree with n nodes (ie. n - 1 edges) ?
+
+n - 1
+
+2. 
