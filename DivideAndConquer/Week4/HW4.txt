@@ -1,0 +1,46 @@
+1. How many different minimum cuts are there in a tree with n nodes (ie. n - 1 edges) ?
+
+n - 1
+
+2. Question 2
+Let "output" denote the cut output by Karger's min cut algorithm on a given connected 
+graph with n vertices, and let 
+
+p = (1 / (n choose 2))
+ . Which of the following statements are true?
+
+True: For every graph G with n nodes, there exists a min cut ((A,B) of G such that Pr[out = (A,B)] >= p.
+(This is even weaker than what we proved in lecture.)
+
+
+True: For every graph G with n nodes and every min cut (A,B) of G, Pr[out = (A,B)] ≥ p.
+(This is exactly what we proved in lecture.)
+
+(Need one more)
+
+
+3. Let .5 < a < 1 be some constant. Suppose you are looking for the median element in an array using RANDOMIZED SELECT 
+(as explained in lectures). What is the probability that after the first iteration the size of the subarray in which the element you are looking for lies  
+is <= α times the size of the original array?
+
+
+2 * a - 1
+
+4. Let 0 < a < 1 be a constant, independent of n. 
+Consider an execution of RSelect in which you always manage to throw out at least a 
+1 - a fraction of the remaining elements before you recurse.  
+What is the maximum number of recursive calls you'll make before terminating?
+
+log(n) / log(a)
+
+5. The minimum s-t cut problem is the following.  The input is an undirected graph, and two distinct vertices of the graph are labelled "s" and "t".  
+The goal is to compute the minimum cut (i.e., fewest number of crossing edges) that satisfies the property that s and t are on different sides of the cut.
+Suppose someone gives you a subroutine for this s-t minimum cut problem via an API.  
+Your job is to solve the original minimum cut problem (the one discussed in the lectures), when all you can do is invoke the given min s-t cut subroutine.  
+(That is, the goal is to reduce the min cut problem to the min s-t cut problem.)
+
+Now suppose you are given an instance of the minimum cut problem - that is, you are given an undirected graph (with no specially labelled vertices) 
+and need to compute the minimum cut.  What is the minimum number of times that you need to call the given min s-t cut subroutine to guarantee that you'll find a 
+min cut of the given graph?
+
+n - 1

@@ -1,0 +1,108 @@
+1: Question 1
+3-way-Merge Sort : Suppose that instead of dividing in half at each step of Merge Sort, you divide into thirds, sort each third, and finally combine all of them using a three-way merge subroutine. 
+What is the overall asymptotic running time of this algorithm? (Hint: Note that the merge step can still be implemented in O(n) time.)
+
+n log(n): There is still a logarithmic number of levels, and the overall amount of work at each level is still linear.
+
+
+2: Question 2
+You are given functions f and g such that f(n)=O(g(n))f(n)=O(g(n)). 
+Is f(n)*log_2(f(n)^c) = O(g(n)*log_2(g(n)))?
+(Here c is some positive constant.)  You should assume that f and g are nondecreasing and always bigger than 1.
+
+- True
+-  (Not: Sometimes yes, sometimes no, depending on the constant cc)
+- (Not: Sometimes yes, sometimes no, depending on the functions f and g)
+- (Not: False)
+
+Question 3
+Assume again two (positive) nondecreasing functions f and g such that f(n)=O(g(n)). 
+Is 2^{f(n)}=O(2^{g(n)})? (Multiple answers may be correct, you should check all of those that apply.)
+
+
+- * Sometimes yes, sometimes no (depending on f and g)
+- * Yes if f(n) <= g(n) for all sufficiently large n
+- (Not: Always - This should not be selected: What if f(n) = 2n and g(n) = n?
+- (Not: Never)
+
+
+Question 4
+k-way-Merge Sort. Suppose you are given k sorted arrays, each with n elements, and you want to combine them into a single array of kn elements. Consider the following approach. 
+Using the merge subroutine taught in lecture, you merge the first 2 arrays, then merge the 3rd given array with this merged version of the first two arrays, then merge the 4th given array with the merged version of the first three arrays, and so on until you merge in the final (kth) input array. What is the running time taken by this successive merging algorithm, as a function of k and n? (Optional: can you think of a faster way to do the k-way merge procedure ?)
+ 
+- θ(nk^2)
+- NOT: θ(nlog(k))
+ - NOT: θ(nk)
+ - NOT: θ(n^2k)
+ 
+ 
+ Arrange the following functions in increasing order of growth rate (with g(n)g(n) following f(n)f(n) in your list if and only if f(n)=O(g(n))f(n)=O(g(n))).
+
+a)2^log(n)
+
+b)2^2^log(n)
+ 
+c)n^5/2
+ 
+d)2^n^2  
+ 
+e)n^2 log(n)
+
+Write your 5-letter answer, i.e., the sequence in lower case letters in the space provided.  For example, if you feel that the answer is a->b->c->d->e (from smallest to largest), then type abcde in the space provided without any spaces before / after / in between the string.
+
+You can assume that all logarithms are base 2 (though it actually doesn't matter).
+
+WARNING: this question has multiple versions, you might see different ones on different attempts!
+
+- NOT acebd
+
+
+n = 0.1; a: 0.1; b: 1.0717734625362931; c: 0.010000000000000002; d: 1.0069555500567189; e: -0.03321928094887363: ecadb
+n = 0.5; a: 0.5; b: 1.4142135623730951; c: 0.25; d: 1.189207115002721; e: -0.25: ecadb
+n = 2; a: 2; b: 4; c: 4; d: 16; e: 4: abced
+n = 10; a: 9.999999999999998; b: 1023.9999999999987; c: 100; d: 1.2676506002282294E+30; e: 332.1928094887362: acebd
+n = 100; a: 99.99999999999997; b: 1.2676506002282045E+30; c: 10000; d: ∞; e: 66438.56189774725: acebd
+
+
+n = 0.1; a: 0.1; b: 1.0717734625362931; c: 0.010000000000000002; d: 1.0069555500567189; e: -0.03321928094887363 : ecadb
+n = 0.5; a: 0.5; b: 1.4142135623730951; c: 0.25; d: 1.189207115002721; e: -0.25: ecadb
+n = 1; a: 1; b: 2; c: 1; d: 2; e: 0: e_ac_bd
+n = 2; a: 2; b: 4; c: 4; d: 16; e: 4: abced
+n = 4; a: 4; b: 16; c: 16; d: 65536; e: 32: a_bc_ed
+n = 5; a: 4.999999999999999; b: 31.99999999999998; c: 25; d: 33554432; e: 58.04820237218406: acbed
+n = 10; a: 9.999999999999998; b: 1023.9999999999987; c: 100; d: 1.2676506002282294E+30; e: 332.1928094887362: acebd
+n = 15; a: 15.000000000000002; b: 32768.000000000044; c: 225; d: 5.391989333430128E+67; e: 879.0503840119167: acebd
+n = 20; a: 20.000000000000004; b: 1048576.0000000026; c: 400; d: 2.5822498780869086E+120; e: 1728.771237954945 acebd
+
+
+************************************************************
+
+n = 0.1; a: 0.31622776601683794; b: 1.2589254117941673; c: 0.0316227766016838; d: NaN; e: 0.1
+n = 0.5; a: 0.7071067811865476; b: 3.1622776601683795; c: 0.3535533905932738; d: NaN; e: 0.5
+
+n = 1; a: 1; b: 10; c: 1; d: 1; e: 1 : _acde_b
+n = 2; a: 1.4142135623730951; b: 100; c: 2.8284271247461903; d: 2; e: 2 : a_de_cb
+n = 4; a: 2; b: 10000; c: 8; d: 2.665144142690225; e: 4 : adecb
+n = 5; a: 2.23606797749979; b: 100000; c: 11.180339887498949; d: 2.87544933501081; e: 5 : adecb
+n = 10; a: 3.1622776601683795; b: 10000000000; c: 31.622776601683793; d: 3.53721945446231; e: 10 : adecb
+n = 15; a: 3.872983346207417; b: 1000000000000000; c: 58.09475019311125; d: 3.9356054351147334; e: 15 : adecb
+n = 20; a: 4.47213595499958; b: 1E+20; c: 89.44271909999159; d: 4.22492211158772; e: 20 : adecb
+
+*************************************************************
+
+n = 0.1; a: -1.660964047443681; b: 0.3321928094887363; c: -4.9828921423310435; d: NaN; e: -3.321928094887362
+n = 0.5; a: -0.4999999999999999; b: 1.6609640474436813; c: -1.5; d: NaN; e: -1
+n = 1; a: 0; b: 3.321928094887362; c: 0; d: 0; e: 0
+n = 2; a: 0.5000000000000001; b: 6.643856189774724; c: 1.5; d: 1; e: 1
+n = 4; a: 1; b: 13.287712379549449; c: 3; d: 1.414213562373095; e: 2
+n = 5; a: 1.1609640474436813; b: 16.609640474436812; c: 3.4828921423310435; d: 1.523787417879332; e: 2.321928094887362
+n = 10; a: 1.6609640474436813; b: 33.219280948873624; c: 4.9828921423310435; d: 1.8226157288049947; e: 3.321928094887362
+n = 15; a: 1.9534452978042594; b: 49.82892142331043; c: 5.860335893412778; d: 1.9765855902562173; e: 3.9068905956085187
+n = 20; a: 2.1609640474436813; b: 66.43856189774725; c: 6.4828921423310435; d: 2.0789247448831243; e: 4.321928094887363: daecb
+
+
+n = 50; a: 2.821928094887362; b: 166.09640474436813; c: 8.465784284662087; d: 2.3756801530876848; e: 5.643856189774724 : daecb
+n = 100; a: 3.321928094887362; b: 332.19280948873626; c: 9.965784284662087; d: 2.5775678826705466; e: 6.643856189774724 : daecb
+n = 500; a: 4.4828921423310435; b: ∞; c: 13.448676426993131; d: 2.994291950472112; e: 8.965784284662087 : 
+
+

@@ -1,0 +1,71 @@
+1. Recall the Partition subroutine that we used in both QuickSort and RSelect. Suppose that the following array has just been partitioned around some pivot element: 3, 1, 2, 4, 5, 8, 7, 6, 9
+
+Which of these elements could have been the pivot element? (Hint: Check all that apply, there could be more than one possibility!)
+
+4, 5, 9
+
+2. Question 2
+Here is an array of ten integers: 5 3 8 9 1 7 0 2 6 4
+
+Suppose we run MergeSort on this array. What is the number in the 7th position of the partially sorted array after the outermost two recursive calls have completed 
+(i.e., just before the very last Merge step)? (When we say "7th" position, we're counting positions starting at 1; for example, the input array has a "0" in its 7th 
+position.)
+
+2 
+
+3. What is the asymptotic worst-case running time of MergeSort, as a function of the input array length n?
+n^2
+
+4. 
+What is the asymptotic running time of Randomized QuickSort on arrays of length n, in expectation (over the choice of random pivots) and in the worst case, respectively?
+
+expected: n log n, worst case: n^2
+
+
+5. Assume again two (positive) nondecreasing functions f and g such that f(n)=O(g(n)). 
+Is 2^{f(n)}=O(2^{g(n)})? (Multiple answers may be correct, you should check all of those that apply.)
+
+- * Sometimes yes, sometimes no (depending on f and g)
+- * Yes if f(n) <= g(n) for all sufficiently large n
+
+6. Let 0 < a < .5 be some constant. Consider running the Partition subroutine on an array with no duplicate elements and with the 
+pivot element chosen uniformly at random (as in QuickSort and RSelect). What is the probability that, after partitioning, both subarrays (elements to the 
+left of the pivot, and elements to the right of the pivot) have size at least \alphaα times that of the original array?
+
+1 - 2 * a
+
+7. Suppose that a randomized algorithm succeeds (e.g., correctly computes the minimum cut of a graph) with probability p 
+(with 0 < p < 1). Let e be a small positive number (less than 1).
+
+How many independent times do you need to run the algorithm to ensure that, with probability at least 1 - e, at least one trial succeeds?
+
+- log(1−p) / log(e)
+- log (e) / log (p)
+- log (e) / log (1 - p)
+- log (p) / log (e)
+
+
+8. Suppose you are given k sorted arrays, each with n elements, and you want to combine them into a single array of kn elements. 
+Consider the following approach. Divide the k arrays into k/2 pairs of arrays, and use the Merge subroutine taught in the MergeSort lectures to combine each pair. 
+Now you are left with k/2 sorted arrays, each with 2n elements. Repeat this approach until you have a single sorted array with kn elements. 
+What is the running time of this procedure, as a function of k and n?
+
+T(nk log (k))
+
+
+9. Running time of Strassen's matrix multiplication algorithm: Suppose that the running time of an algorithm is governed by the recurrence 
+T(n) = 7*T (n/2)+ n^2 
+What's the overall asymptotic running time (i.e., the value of T(n))?
+a = 7
+b = 2
+d = 2
+b^d = 4
+7 > 4
+
+n^log2(7)
+
+10. Recall the Master Method and its three parameters a,b,da,b,d. Which of the following is the best interpretation of 
+b^d, in the context of divide-and-conquer algorithms?
+
+The rate at which the work-per-subproblem is shrinking (per level of recursion).
+
