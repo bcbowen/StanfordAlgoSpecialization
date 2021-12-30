@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Graph
 {
-    public class Node
+    public class Node 
     {
         public int Value { get; set; }
 
@@ -15,7 +15,6 @@ namespace Graph
 
         public List<Node> PreviousNodes { get; private set; } = new List<Node>();
 
-        public int FinishTime { get; set; }
     }
 
     

@@ -13,34 +13,35 @@ namespace Graph
     public class DirectedGraph
     {
         private int _nextFinishTime = 1;
+        private int _nextComponentGroup = 1;
+        private Component _currentComponent;
 
         public List<Component> Components { get; private set; } = new List<Component>();
 
         public List<Node> Nodes { get; private set; } = new List<Node>();
 
-        #region Find
-        public Node Find(int value = -1, int finishTime = -1)
-        {
-            if (value < 0 && finishTime < 0) throw new ArgumentException("Either value or finishing time has to be passed");
+        /// <summary>
+        /// Finish Time
+        ///  key: Finish Time
+        ///  value: Node
+        /// </summary>
+        public SortedList<int, Node> FinishTimes { get; private set; } = new SortedList<int, Node>();
 
-            return Find(0, Nodes.Count() - 1, value, finishTime);
+
+        #region Find
+        public Node Find(int value)
+        {
+            return Find(0, Nodes.Count() - 1, value);
 
         }
 
-        private Node Find(int startIndex, int endIndex, int value = -1, int finishingTime = -1) 
+        private Node Find(int startIndex, int endIndex, int value)
         {
-            int searchVal = Math.Max(value, finishingTime); 
-
             Node result = null;
-            
-            Func<Node, int, int> Compare = (Node node, int i) => 
-                {
-                    return value > -1 ? node.Value.CompareTo(i) : node.FinishTime.CompareTo(i);
-                }; 
-            
+                       
             if (startIndex == endIndex) 
             {
-                if (Compare(Nodes[startIndex], searchVal) == 0)
+                if (Nodes[startIndex].Value == value)
                 {
                     result = Nodes[startIndex];
                 }
@@ -51,19 +52,20 @@ namespace Graph
             if (diff % 2 > 0) diff++;
             int midIndex = startIndex + (diff / 2);
 
-            int comparison = Compare(Nodes[midIndex], searchVal);
-            switch (comparison)
+            if (Nodes[midIndex].Value == value)
             {
-                case 0:
-                    return Nodes[midIndex];
-                case 1:
-                    return Find(startIndex, midIndex - 1, value, finishingTime);
-                default:
-                    return Find(midIndex + 1, endIndex, value, finishingTime);
+                return Nodes[midIndex];
+            } else if (Nodes[midIndex].Value > value)
+            {
+                return Find(startIndex, midIndex - 1, value);
             }
-
+            else
+            {
+                return Find(midIndex + 1, endIndex, value);
+            }
         }
         #endregion Find
+
 
         public static DirectedGraph Load(string path) 
         {
@@ -100,7 +102,7 @@ namespace Graph
             {
                 foreach (int id in node.NextNodeIds) 
                 {
-                    Node referencedNode = graph.Find(value: id);
+                    Node referencedNode = graph.Find(id);
                     Debug.Assert(referencedNode != null, $"Node {id} not found in graph! This should not happen, man!");
                     referencedNode.PreviousNodes.Add(node);
                     node.NextNodes.Add(referencedNode); 
@@ -110,10 +112,17 @@ namespace Graph
             return graph;
         }
 
-
-        public void DoTheKosaraju() 
+        /// <summary>
+        /// Return the n biggest components (node count) in desc order
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public int[] DoTheKosaraju(int count) 
         {
-            
+            FirstPass();
+            SecondPass();
+            int[] result = GetSCCCounts(count);
+            return result;
         }
 
         /// <summary>
@@ -133,11 +142,51 @@ namespace Graph
         internal void SetFinishTimes(Node node) 
         {
             node.Status = LastStep.FirstPass;
-            foreach (Node nextNode in node.NextNodes) 
+            foreach (Node nextNode in node.NextNodes.Where(n => n.Status != LastStep.FirstPass)) 
             {
-                if (nextNode.Status != LastStep.FirstPass) SetFinishTimes(nextNode);
+                SetFinishTimes(nextNode);
             }
-            node.FinishTime = _nextFinishTime++;
+            FinishTimes.Add(_nextFinishTime++, node);
+        }
+
+        internal void SecondPass() 
+        {
+            for (int i = FinishTimes.Count - 1; i >= 0; i--) 
+            {
+                Node node = FinishTimes[FinishTimes.Keys[i]];
+                if (node.Status != LastStep.SecondPass) 
+                {
+                    _currentComponent = new Component(_nextComponentGroup++);
+                    _currentComponent.Leader = node;
+                    
+                    CrawlComponents(node);
+                }
+            }
+
+
+        }
+
+        internal void CrawlComponents(Node node) 
+        {
+            _currentComponent.Nodes.Add(node);
+            node.Status = LastStep.SecondPass;
+            foreach (Node sibling in node.PreviousNodes.Where(n => n.Status != LastStep.SecondPass)) 
+            {
+                CrawlComponents(sibling);
+            }
+            Components.Add(_currentComponent);
+        }
+
+        public int[] GetSCCCounts(int count) 
+        {
+            int[] result = new[] { 0, 0, 0, 0, 0};
+            var componentCounts = (from component in Components select new { Count = component.Nodes.Count }).OrderByDescending(c => c.Count).Take(count).ToArray();
+            for (int i = 0; i < componentCounts.Length; i++) 
+            {
+                result[i] = componentCounts[i].Count;
+            }
+
+            return result;
         }
     }
 }
