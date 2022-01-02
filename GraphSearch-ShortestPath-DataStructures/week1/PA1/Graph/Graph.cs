@@ -27,46 +27,7 @@ namespace Graph
         /// </summary>
         public SortedList<int, Node> FinishTimes { get; private set; } = new SortedList<int, Node>();
 
-        /*
-        #region Find
-        public Node Find(int value)
-        {
-            return Find(0, Nodes.Count() - 1, value);
-
-        }
-
-        private Node Find(int startIndex, int endIndex, int value)
-        {
-            Node result = null;
-                       
-            if (startIndex == endIndex) 
-            {
-                if (Nodes[startIndex].Value == value)
-                {
-                    result = Nodes[startIndex];
-                }
-                return result;
-            }
-
-            int diff = endIndex - startIndex;
-            if (diff % 2 > 0) diff++;
-            int midIndex = startIndex + (diff / 2);
-
-            if (Nodes[midIndex].Value == value)
-            {
-                return Nodes[midIndex];
-            } else if (Nodes[midIndex].Value > value)
-            {
-                return Find(startIndex, midIndex - 1, value);
-            }
-            else
-            {
-                return Find(midIndex + 1, endIndex, value);
-            }
-        }
-        #endregion Find
-        */
-
+        
         public static DirectedGraph Load(string path) 
         {
             DirectedGraph graph = new DirectedGraph();
