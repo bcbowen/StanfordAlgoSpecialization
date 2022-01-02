@@ -24,7 +24,21 @@ namespace SCCTests
         }
 
         [Test]
-        public void LoadedGraphHasCorrectNodeCount()
+        /// <summary>
+        /// If an input file is missing nodes it means the missing nodes are not connected to anything, but they still exist (they are a component of 1) 
+        /// </summary>
+        public void LoadedGraphLoadsUnconnectedNodes() 
+        {
+            // 3_8 is missing node 6
+            const string fileName = "input_mostlyCycles_3_8.txt";
+            string path = Path.Combine(TestUtils.GetTestCaseDirectory().FullName, fileName);
+            Assert.IsTrue(File.Exists(path), "Missing test file");
+            DirectedGraph graph = DirectedGraph.Load(path);
+            Assert.True(graph.Nodes.Values.Any(n => n.Value == 6));
+        }
+
+        [Test]
+        public void LoadedGraphLoadsConnectedNodes()
         {
             Assert.AreEqual(8, _graph.Nodes.Count);
         }
@@ -39,7 +53,7 @@ namespace SCCTests
         [TestCase(8, new[] { 5, 7 })]
         public void LoadedGraphHasNextNodesSet(int value, int[] nextNodes)
         {
-            Node node = _graph.Nodes.FirstOrDefault(n => n.Value == value);
+            Node node = _graph.Nodes.Values.FirstOrDefault(n => n.Value == value);
             Assert.NotNull(node, "Node not found in collection!");
             Assert.AreEqual(nextNodes.Length, node.NextNodes.Count);
             foreach (int id in nextNodes) 
@@ -58,7 +72,7 @@ namespace SCCTests
         [TestCase(8, new[] { 7 })]
         public void LoadedGraphHasPreviousNodesSet(int value, int[] previousNodes)
         {
-            Node node = _graph.Nodes.FirstOrDefault(n => n.Value == value);
+            Node node = _graph.Nodes.Values.FirstOrDefault(n => n.Value == value);
             Assert.NotNull(node, "Node not found in collection!");
             Assert.AreEqual(previousNodes.Length, node.PreviousNodes.Count);
             foreach (int id in previousNodes)

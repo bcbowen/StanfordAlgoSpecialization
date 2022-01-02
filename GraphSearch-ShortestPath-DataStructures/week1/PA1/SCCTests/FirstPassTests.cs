@@ -26,7 +26,7 @@ namespace SCCTests
         [Test]
         public void StatusSetAfterFirstPass() 
         {
-            Assert.True(_graph.Nodes.All(n => n.Status == LastStep.FirstPass));
+            Assert.True(_graph.Nodes.Values.All(n => n.Status == LastStep.FirstPass));
         }
 
         /// <summary>
