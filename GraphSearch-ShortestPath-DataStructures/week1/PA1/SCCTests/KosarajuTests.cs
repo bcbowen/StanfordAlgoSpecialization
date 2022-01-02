@@ -28,20 +28,24 @@ namespace SCCTests
             Assert.AreEqual(testCase.ExpectedResults, results, "Results don't match man");
         }
 
-        [Test]
-        public void SmallKosarajuTests()
+        [TestCase("", 1, 16)]
+        public void KosarajuTests(string label, int lowerBound, int upperBound)
         {
-            var testCases = _testData.Where(c => c.EdgeCount <= 16);
+            var testCases = _testData.Where(c => c.EdgeCount > lowerBound && c.EdgeCount <= upperBound);
 
-            foreach (TestData testCase in testCases) 
+            foreach (TestData testCase in testCases)
             {
                 Console.WriteLine($"Testing {testCase.FileName}");
                 DirectedGraph graph = DirectedGraph.Load(testCase.FilePath);
+                DateTime startTime = DateTime.Now;
                 int[] results = graph.DoTheKosaraju(5);
                 Assert.AreEqual(testCase.ExpectedResults, results, $"Results don't match for testcase {testCase.FileName}");
+                TimeSpan elapsed = 
+                Console.WriteLine($"Done in {DateTime.Now.Subtract(startTime).TotalMilliseconds} milliseconds");
             }
-            
+
         }
+
 
         /// <summary>
         /// Regression test for cases that have been known to fail during development
