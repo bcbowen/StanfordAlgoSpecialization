@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("SCCTests")]
@@ -13,8 +10,8 @@ namespace Graph
     public class DirectedGraph
     {
         private int _nextFinishTime = 1;
-        private int _nextComponentGroup = 1;
-        private Component _currentComponent;
+        //private int _nextComponentGroup = 1;
+        //private Component _currentComponent;
 
         public List<Component> Components { get; private set; } = new List<Component>();
 
@@ -36,15 +33,12 @@ namespace Graph
             using (StreamReader reader = new StreamReader(path)) 
             {
                 string line;                
-                //int lastValue = -1;
-                //int nextValue = 1;
-                //Node node = null;
                 int value, referencedValue;
                 // Load Connected nodes from file (not guaranteed to be in order) 
                 while ((line = reader.ReadLine()) != null) 
                 {
                     string[] fields = line.Split(' ');
-                    if (fields.Length == 2)
+                    if (fields.Length >= 2)
                     {
                         value = int.Parse(fields[0]);
                         if (value > maxValue) maxValue = value;
@@ -156,22 +150,35 @@ namespace Graph
 
         internal void SecondPass() 
         {
+            //Stack<Node> nodeStack = new Stack<Node>();
+            Component currentComponent;
+            int nextComponentGroupId = 1;
             for (int i = FinishTimes.Count - 1; i >= 0; i--) 
             {
                 Node node = FinishTimes[FinishTimes.Keys[i]];
+
                 if (node.Status != LastStep.SecondPass) 
                 {
-                    _currentComponent = new Component(_nextComponentGroup++);
+                    //nodeStack.Push(node);
+                    currentComponent = new Component(nextComponentGroupId++);
+                    while ((node = node.PreviousNodes.FirstOrDefault(n => n.Status != LastStep.SecondPass)) != null) 
+                    {
+                        node.Status = LastStep.SecondPass;
+                        currentComponent.Nodes.Add(node);
+                    }
+                    Components.Add(currentComponent);
+                    /*
+                    _currentComponent = new Component(nextComponentGroupId++);
                     _currentComponent.Leader = node;
                     
                     CrawlComponents(node);
                     Components.Add(_currentComponent);
+                    */
                 }
             }
-
-
         }
 
+        /*
         internal void CrawlComponents(Node node) 
         {
             _currentComponent.Nodes.Add(node);
@@ -181,6 +188,7 @@ namespace Graph
                 CrawlComponents(sibling);
             }
         }
+        */
 
         public int[] GetSCCCounts(int count) 
         {
