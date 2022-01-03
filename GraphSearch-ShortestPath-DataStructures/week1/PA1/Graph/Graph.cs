@@ -150,8 +150,9 @@ namespace Graph
 
         internal void SecondPass() 
         {
-            //Stack<Node> nodeStack = new Stack<Node>();
+            Stack<Node> nodeStack = new Stack<Node>();
             Component currentComponent;
+            Node previousNode; 
             int nextComponentGroupId = 1;
             for (int i = FinishTimes.Count - 1; i >= 0; i--) 
             {
@@ -159,36 +160,42 @@ namespace Graph
 
                 if (node.Status != LastStep.SecondPass) 
                 {
-                    //nodeStack.Push(node);
+                    nodeStack.Push(node);
                     currentComponent = new Component(nextComponentGroupId++);
-                    while ((node = node.PreviousNodes.FirstOrDefault(n => n.Status != LastStep.SecondPass)) != null) 
+                    currentComponent.Leader = node;
+                    currentComponent.Nodes.Add(node);
+                    node.Status = LastStep.SecondPass;
+                    do
                     {
-                        node.Status = LastStep.SecondPass;
-                        currentComponent.Nodes.Add(node);
-                    }
+                        while ((previousNode = node.PreviousNodes.FirstOrDefault(n => n.Status != LastStep.SecondPass)) != null) 
+                        {
+                            node = previousNode;
+                            node.Status = LastStep.SecondPass;
+                            currentComponent.Nodes.Add(node);
+                            nodeStack.Push(node);
+                        }
+                       
+                        int lastValue = node.Value;
+                        do 
+                        {
+                            if (nodeStack.Peek().PreviousNodes.Any(n => n.Status != LastStep.SecondPass))
+                            {
+                                node = nodeStack.Peek();
+                            }
+                            else 
+                            {
+                                node = nodeStack.Pop();
+                            }
+                            
+                        } while (node.Value == lastValue && nodeStack.Count > 0);
+
+                    } while (nodeStack.Count > 0);
+
                     Components.Add(currentComponent);
-                    /*
-                    _currentComponent = new Component(nextComponentGroupId++);
-                    _currentComponent.Leader = node;
-                    
-                    CrawlComponents(node);
-                    Components.Add(_currentComponent);
-                    */
+
                 }
             }
         }
-
-        /*
-        internal void CrawlComponents(Node node) 
-        {
-            _currentComponent.Nodes.Add(node);
-            node.Status = LastStep.SecondPass;
-            foreach (Node sibling in node.PreviousNodes.Where(n => n.Status != LastStep.SecondPass)) 
-            {
-                CrawlComponents(sibling);
-            }
-        }
-        */
 
         public int[] GetSCCCounts(int count) 
         {

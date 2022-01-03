@@ -83,6 +83,7 @@ namespace SCCTests
         [TestCase("input_Tim_3_9.txt")]
         [TestCase("input_Tim_1_11.txt")]
         [TestCase("input_forumTestCase_1_5.txt")]
+        [TestCase("input_mostlyCycles_17_128.txt")]
         public void KosarajuRegressionTests(string testFile)
         {
             TestData testCase = _testData.FirstOrDefault(c => c.FileName == testFile);
