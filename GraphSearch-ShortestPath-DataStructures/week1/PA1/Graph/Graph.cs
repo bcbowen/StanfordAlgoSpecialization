@@ -109,23 +109,49 @@ namespace Graph
         /// </summary>
         internal void FirstPass() 
         {
+            Stack<Node> nodeStack = new Stack<Node>();
+            Node node; 
             foreach (int key in Nodes.Keys.OrderByDescending(k => k)) 
             {
-                if (Nodes[key].Status != LastStep.FirstPass) 
+                node = Nodes[key];
+                if (node.Status != LastStep.FirstPass)
                 {
-                    SetFinishTimes(Nodes[key]);
-                }
-            }
-        }
+                    node.Status = LastStep.FirstPass;
+                    nodeStack.Push(node);
+                    Node nextNode; 
+                    do
+                    {
+                        while ((nextNode = node.NextNodes.FirstOrDefault(n => n.Status != LastStep.FirstPass)) != null) 
+                        {
+                            node = nextNode;
+                            node.Status = LastStep.FirstPass;
+                            nodeStack.Push(node);
+                        }
+                        FinishTimes.Add(_nextFinishTime++, node);
+                        int lastValue = node.Value;
+                        do
+                        {
+                            if (nodeStack.Peek().NextNodes.Any(n => n.Status != LastStep.FirstPass))
+                            {
+                                // don't remove a node from the stack if it has other edges to explore
+                                node = nodeStack.Peek();
+                            }
+                            else
+                            {
+                                node = nodeStack.Pop();
+                            }
+                            
+                        } while (node.Value == lastValue && nodeStack.Count > 0);
+                        
+                        //SetFinishTimes(node);
+                    } while (nodeStack.Count > 0);
+                    
+                    // add the final node
+                    FinishTimes.Add(_nextFinishTime++, node);
 
-        internal void SetFinishTimes(Node node) 
-        {
-            node.Status = LastStep.FirstPass;
-            foreach (Node nextNode in node.NextNodes.Where(n => n.Status != LastStep.FirstPass)) 
-            {
-                SetFinishTimes(nextNode);
+                }
+                
             }
-            FinishTimes.Add(_nextFinishTime++, node);
         }
 
         internal void SecondPass() 

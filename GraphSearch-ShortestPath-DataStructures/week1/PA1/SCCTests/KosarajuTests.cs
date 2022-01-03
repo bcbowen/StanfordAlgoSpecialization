@@ -74,14 +74,16 @@ namespace SCCTests
 
         }
 
-
+        
         /// <summary>
         /// Regression test for cases that have been known to fail during development
         /// </summary>
         /// <param name="testFile"></param>
         [TestCase("input_mostlyCycles_3_8.txt")]
         [TestCase("input_Tim_3_9.txt")]
-        public void SmallKosarajuTests(string testFile)
+        [TestCase("input_Tim_1_11.txt")]
+        [TestCase("input_forumTestCase_1_5.txt")]
+        public void KosarajuRegressionTests(string testFile)
         {
             TestData testCase = _testData.FirstOrDefault(c => c.FileName == testFile);
             Assert.NotNull(testCase);
@@ -91,6 +93,7 @@ namespace SCCTests
             int[] results = graph.DoTheKosaraju(5);
             Assert.AreEqual(testCase.ExpectedResults, results, $"Results don't match for testcase {testCase.FileName}");
         }
+        
 
         private void LoadTestData() 
         {
