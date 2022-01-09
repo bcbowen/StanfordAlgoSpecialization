@@ -4,6 +4,7 @@ using Graph.DataStructures;
 
 namespace ShortestPathTests
 {
+    [TestFixture]
     public class HeapTests
     {
         [SetUp]
@@ -66,13 +67,20 @@ namespace ShortestPathTests
             }
         }
 
-        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, 6)]
-        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, 4)]
-        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, 1)]
-        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, 3)]
-        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, 5)]
-        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, 2)]
-        public void HeapFindReturnsExpectedNode(int[] values, int search)
+        /*
+                 1
+               /  \
+              3     2
+             / \   / 
+            6   5 4
+        */
+        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, 6, 3)]
+        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, 4, 5)]
+        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, 1, 0)]
+        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, 3, 1)]
+        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, 5, 4)]
+        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, 2, 2)]
+        public void HeapFindReturnsExpectedNode(int[] values, int search, int expectedIndex)
         {
             MinHeap heap = new MinHeap();
 
@@ -81,9 +89,82 @@ namespace ShortestPathTests
                 heap.Enqueue(new Node(value));
             }
 
-            Node node = heap.Find(search);
+            (int index, Node node) = heap.Find(search);
             Assert.NotNull(node);
             Assert.AreEqual(node.NodeId, search);
+            Assert.AreEqual(expectedIndex, index);
+        }
+
+        /*
+                 1
+               /  \
+              3     2
+             / \   / 
+            6   5 4
+        */
+        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, 6, new[] { 1, 3, 2, 4, 5 })]
+        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, 4, new[] { 1, 3, 2, 6, 5 })]
+        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, 1, new[] { 2, 3, 4, 6, 5 })]
+        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, 3, new[] { 1, 4, 2, 6, 5 })]
+        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, 5, new[] { 1, 3, 2, 6, 4 })]
+        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, 2, new[] { 1, 3, 4, 6, 5 })]
+        public void HeapRemoveReturnsExpectedNodeAndBalancesHeap(int[] nodeValues, int value, int[] expectedHeapState)
+        {
+            MinHeap heap = new MinHeap();
+
+            foreach (int nv in nodeValues)
+            {
+                heap.Enqueue(new Node(nv));
+            }
+
+            Node node = heap.Remove(value);
+            Assert.NotNull(node);
+            Assert.AreEqual(node.NodeId, value);
+            Assert.AreEqual(expectedHeapState, heap.GetValues());
+        }
+
+        /*
+                 1
+               /  \
+              3     2
+             / \   / 
+            6   5 4
+        */
+        [TestCase(new[] { 2, 3, 4, 6, 5, 1 }, new[] { 1, 3, 2, 6, 5, 4 })]
+        [TestCase(new[] { 1, 3, 4, 6, 5, 2 }, new[] { 1, 3, 2, 6, 5, 4 })]
+        public void ReHeapUpLeavesBalancedHeap(int[] beginState, int[] endState)
+        {
+            MinHeap heap = new MinHeap();
+
+            foreach (int nv in beginState)
+            {
+                heap.Enqueue(new Node(nv));
+            }
+
+            heap.ReheapUp();
+            Assert.AreEqual(endState, heap.GetValues());
+        }
+
+        /*
+                 1
+               /  \
+              3     2
+             / \   / 
+            6   5 4
+        */
+        [TestCase(new[] { 4, 3, 2, 6, 5 }, new[] { 2, 3, 4, 6, 5 }, 0)]
+        [TestCase(new[] { 1, 3, 4, 6, 5, 2 }, new[] { 1, 3, 2, 6, 5, 4 }, 2)]
+        public void ReHeapDownLeavesBalancedHeap(int[] beginState, int[] endState, int index)
+        {
+            MinHeap heap = new MinHeap();
+
+            for (int i = 0; i < beginState.Length; i++)
+            {
+                heap._heap.Add(new Node(beginState[i]));
+            }
+
+            heap.ReheapDown(index);
+            Assert.AreEqual(endState, heap.GetValues());
         }
     }
 }

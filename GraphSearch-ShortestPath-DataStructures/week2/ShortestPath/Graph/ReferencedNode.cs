@@ -8,5 +8,7 @@
         {
             Distance = distance;
         }
+
+        public bool Done { get; set; }
     }
 }

@@ -14,6 +14,6 @@ namespace Graph
         public int NodeId { get; set; }
 
         public List<ReferencedNode> ReferencedNodes { get; private set; } = new List<ReferencedNode>();
-        public int MinDistance { get; set; } = 1000000;
+        public int MinDistance { get; set; } 
     }
 }

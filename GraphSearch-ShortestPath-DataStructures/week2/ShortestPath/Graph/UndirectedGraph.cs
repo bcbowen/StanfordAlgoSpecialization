@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using Graph.DataStructures; 
 
@@ -8,34 +9,69 @@ namespace Graph
 {
     public class UndirectedGraph
     {
-        public MinHeap ExploredNodes { get; private set; } = new MinHeap();
+        public List<Node> ExploredNodes { get; private set; } = new List<Node>();
 
         public MinHeap UnexploredNodes { get; private set; } = new MinHeap();
-
+        public List<Node> Frontier { get; private set; } = new List<Node>();
 
         public void CalculateShortestPaths() 
         {
             // add start node to Explored Nodes with distance of 0
             Node node = UnexploredNodes.Dequeue();
             node.MinDistance = 0;
-            ExploredNodes.Enqueue(node);
+            Frontier.Add(node);
             int minDistance;
-            ReferencedNode minNode;
+            ReferencedNode minNode = node.ReferencedNodes[0];
             int distance; 
-            while (UnexploredNodes.Count > 0) 
+            while (Frontier.Count > 0) 
             {
-                foreach (ReferencedNode toNode in node.ReferencedNodes) 
+                minDistance = 1000000;
+                for (int i = 0; i < Frontier.Count; i++) 
                 {
-                    minDistance = 1000000;
-                    distance = node.MinDistance + toNode.Distance;
-                    if (distance < minDistance) 
+                    Node fromNode = Frontier[i];
+                    
+                    foreach (ReferencedNode toNode in fromNode.ReferencedNodes.Where(n => !n.Done)) 
                     {
-                        minDistance = distance;
-                        minNode = toNode;
+                        
+                        distance = fromNode.MinDistance + toNode.Distance;
+                        if (distance < minDistance) 
+                        {
+                            minDistance = distance;
+                            minNode = toNode;
+                        }
                     }
                 }
+                List<ReferencedNode> updateNodes = Frontier.SelectMany(f => f.ReferencedNodes).Where(n => n.NodeId == minNode.NodeId).ToList();
+                foreach (ReferencedNode updateNode in updateNodes) 
+                {
+                    updateNode.Done = true;
+                }
+                node = UnexploredNodes.Remove(minNode.NodeId);
+                node.MinDistance = minDistance;
+                Frontier.Add(node);
+                PruneFrontier();
+
             }
         
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        internal void PruneFrontier() 
+        {
+            List<int> nodeIds = ExploredNodes.Select(n => n.NodeId).ToList().Concat(Frontier.Select(n => n.NodeId)).ToList();
+            for (int i = Frontier.Count - 1; i >= 0; i--) 
+            {
+                Node node = Frontier[i];
+                // referenced nodes where the id is not in nodeids
+                if (node.ReferencedNodes.All(r => nodeIds.Any(n => n == r.NodeId)))
+                {
+                    // all referenced nodes are in explored nodes or the frontier
+                    ExploredNodes.Add(node);
+                    Frontier.Remove(node);
+                }
+            }
         }
 
         public static UndirectedGraph LoadGraph(string path)
