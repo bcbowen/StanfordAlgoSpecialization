@@ -2,18 +2,14 @@
 Fix a destination vertex t, and assume that the graph contains at least one s-t path.  
 Which of the following statements are true?  [Check all that apply.]
 
-
 - The shortest (i.e., minimum-length) s-t path might have as many as n−1 edges, where n is the number of vertices.
 - There is a shortest s-t path with no repeated vertices (i.e., a "simple" or "loopless" such path).
 
 2. Consider a directed graph G with a source vertex s, a destination t, and nonnegative edge lengths.  
 Under what conditions is the shortest s-t path guaranteed to be unique (1)? 
 
-
-- When all edges lengths are distinct positive integers and the graph G contains no directed cycles.
-X None of the other options are correct.
 - When all edge lengths are distinct powers of 2.
-X When all edge lengths are distinct positive integers.
+
 
 3. Consider a directed graph G = (V,E) and a source vertex ss with the following properties: 
 edges that leave the source vertex s have arbitrary (possibly negative) lengths; 

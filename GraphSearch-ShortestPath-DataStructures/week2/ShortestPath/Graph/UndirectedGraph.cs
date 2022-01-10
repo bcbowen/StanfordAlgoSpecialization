@@ -119,7 +119,11 @@ namespace Graph
                     for (int i = 1; i < fields.Length; i++) 
                     {
                         string[] nodeInfo = fields[i].Split(',');
-                        node.ReferencedNodes.Add(new ReferencedNode(int.Parse(nodeInfo[0]), int.Parse(nodeInfo[1])));
+                        if (nodeInfo.Length == 2) 
+                        {
+                            node.ReferencedNodes.Add(new ReferencedNode(int.Parse(nodeInfo[0]), int.Parse(nodeInfo[1])));
+                        }
+                        
                     }
 
                     graph.UnexploredNodes.Enqueue(node);
