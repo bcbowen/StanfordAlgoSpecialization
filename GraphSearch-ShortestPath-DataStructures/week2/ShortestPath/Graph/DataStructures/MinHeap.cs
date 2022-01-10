@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Linq;
 
@@ -54,6 +55,7 @@ namespace Graph.DataStructures
             Node node;
             int index; 
             (index, node) = Find(value);
+            Debug.Assert(index > -1);
             ReplaceWithLast(index);
             ReheapDown(index);
             return node;

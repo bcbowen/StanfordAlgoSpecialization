@@ -18,8 +18,8 @@ namespace Graph
         {
             // add start node to Explored Nodes with distance of 0
             Node node = UnexploredNodes.Dequeue();
-            node.MinDistance = 0;
-            Frontier.Add(node);
+            AddToFrontier(node, 0); 
+            
             int minDistance;
             ReferencedNode minNode = node.ReferencedNodes[0];
             int distance; 
@@ -41,18 +41,48 @@ namespace Graph
                         }
                     }
                 }
-                List<ReferencedNode> updateNodes = Frontier.SelectMany(f => f.ReferencedNodes).Where(n => n.NodeId == minNode.NodeId).ToList();
-                foreach (ReferencedNode updateNode in updateNodes) 
-                {
-                    updateNode.Done = true;
-                }
+                
                 node = UnexploredNodes.Remove(minNode.NodeId);
-                node.MinDistance = minDistance;
-                Frontier.Add(node);
+                AddToFrontier(node, minDistance);
                 PruneFrontier();
 
             }
         
+        }
+
+        internal void AddToFrontier(Node node, int minDistance) 
+        {
+            Frontier.Add(node);
+            // The new node referencing nodes already in the frontier
+            // updateNodes = node.ReferencedNodes.Where(r => Frontier.Any(n => n.NodeId == node.NodeId)).ToList();
+
+            List<ReferencedNode> updateNodes =
+                (from r in node.ReferencedNodes
+                join f in Frontier on r.NodeId equals f.NodeId
+                select r).ToList();
+                //.Where(r => Frontier.Any(n => n.NodeId == node.NodeId)).ToList();
+
+            foreach (ReferencedNode updateNode in updateNodes)
+            {
+                updateNode.Done = true;
+            }
+
+            // nodes in frontier referencing the new node
+            updateNodes = Frontier.SelectMany(f => f.ReferencedNodes).Where(n => n.NodeId == node.NodeId).ToList();
+            foreach (ReferencedNode updateNode in updateNodes)
+            {
+                updateNode.Done = true;
+            }
+
+            // references to nodes already explored (so the arrow is going to wrong way) 
+            updateNodes = node.ReferencedNodes.Where(n => ExploredNodes.Any(e => e.NodeId == n.NodeId)).ToList();
+            foreach (ReferencedNode updateNode in updateNodes)
+            {
+                updateNode.Done = true;
+            }
+            
+            node.MinDistance = minDistance;
+            
         }
 
         /// <summary>
