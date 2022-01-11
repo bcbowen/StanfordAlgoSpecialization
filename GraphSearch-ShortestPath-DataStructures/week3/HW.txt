@@ -1,0 +1,28 @@
+1. Suppose you implement the functionality of a priority queue using a sorted array (e.g., from biggest to smallest). 
+What is the worst-case running time of Insert and Extract-Min, respectively? (Assume that you have a large enough array to 
+accommodate the Insertions that you face.)
+
+- Θ(n) and Θ(1)
+
+2. Suppose you implement the functionality of a priority queue using an unsorted array. What is the worst-case running time of 
+Insert and Extract-Min, respectively? (Assume that you have a large enough array to accommodate the Insertions that you face.)
+
+- Θ(1) and Θ(n)
+
+3. You are given a heap with n elements that supports Insert and Extract-Min. Which of the following tasks can you achieve in 
+O(logn) time?
+
+- Find the fifth-smallest element stored in the heap.
+
+
+4. You are given a binary tree (via a pointer to its root) with n nodes. As in lecture, let size(x) denote the number of nodes 
+in the subtree rooted at the node x. How much time is necessary and sufficient to compute size(x) for every node x of the tree?
+
+- Θ(n) 
+
+5. Question 5
+Suppose we relax the third invariant of red-black trees to the property that there are no three reds in a row. 
+That is, if a node and its parent are both red, then both of its children must be black. Call these relaxed red-black trees. 
+Which of the following statements is not true?
+
+- Every binary search tree can be turned into a relaxed red-black tree (via some coloring of the nodes as black or red).
