@@ -49,9 +49,29 @@ namespace Algorithms.Tests.Sort
 		[TestCase("input_dgrcode_16_100000.txt")]
 		[TestCase("input_dgrcode_17_100000.txt")]
 		[TestCase("input_dgrcode_18_100000.txt")]
-		[TestCase("input_dgrcode_19_1000000.txt")]
-		[TestCase("input_dgrcode_20_1000000.txt")]
 		public void QuickSortTestsBig(string fileName)
+		{
+			QuickSortTestData testData = LoadTestData(fileName);
+
+			testData.Init();
+			int firstComparisons = QuickSort.Sort(testData.TestValuesWorking, PivotType.First);
+			testData.Init();
+			int lastComparisons = QuickSort.Sort(testData.TestValuesWorking, PivotType.Last);
+			testData.Init();
+			int medianComparisons = QuickSort.Sort(testData.TestValuesWorking, PivotType.Median);
+
+			Assert.AreEqual(testData.ExpectedResultFirst, firstComparisons, $"{fileName} test failed for pivot type first");
+			Assert.AreEqual(testData.ExpectedResultMedian, medianComparisons, $"{fileName} test failed for pivot type median");
+			Assert.AreEqual(testData.ExpectedResultLast, lastComparisons, $"{fileName} test failed for pivot type last");
+		}
+
+		/// <summary>
+		/// Since each sort is performed 3 times, and these tests have a million items to sort, they take a while 
+		/// </summary>
+		/// <param name="fileName"></param>
+		[TestCase("input_dgrcode_19_1000000.txt", Ignore="Only run these if you really need to, they take a while")]
+		[TestCase("input_dgrcode_20_1000000.txt", Ignore = "Only run these if you really need to, they take a while")]
+		public void QuickSortTestsHuge(string fileName)
 		{
 			QuickSortTestData testData = LoadTestData(fileName);
 

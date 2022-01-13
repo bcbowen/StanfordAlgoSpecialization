@@ -14,4 +14,8 @@
     <Folder Include="Tests\TestData\QuickSortData\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DataStructures\DataStructures.csproj" />
+  </ItemGroup>
+
 </Project>
