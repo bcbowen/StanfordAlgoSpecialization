@@ -42,7 +42,7 @@ namespace Algorithms.Graph.Dijkstra
                     }
                 }
 
-                node = UnexploredNodes.Remove(minNode.NodeId);
+                node = UnexploredNodes.Remove(minNode.Value);
                 AddToFrontier(node, minDistance);
                 PruneFrontier();
 
@@ -58,7 +58,7 @@ namespace Algorithms.Graph.Dijkstra
 
             List<ReferencedNode> updateNodes =
                 (from r in node.ReferencedNodes
-                 join f in Frontier on r.NodeId equals f.NodeId
+                 join f in Frontier on r.Value equals f.Value
                  select r).ToList();
             //.Where(r => Frontier.Any(n => n.NodeId == node.NodeId)).ToList();
 
@@ -68,14 +68,14 @@ namespace Algorithms.Graph.Dijkstra
             }
 
             // nodes in frontier referencing the new node
-            updateNodes = Frontier.SelectMany(f => f.ReferencedNodes).Where(n => n.NodeId == node.NodeId).ToList();
+            updateNodes = Frontier.SelectMany(f => f.ReferencedNodes).Where(n => n.Value == node.Value).ToList();
             foreach (ReferencedNode updateNode in updateNodes)
             {
                 updateNode.Done = true;
             }
 
             // references to nodes already explored (so the arrow is going to wrong way) 
-            updateNodes = node.ReferencedNodes.Where(n => ExploredNodes.Any(e => e.NodeId == n.NodeId)).ToList();
+            updateNodes = node.ReferencedNodes.Where(n => ExploredNodes.Any(e => e.Value == n.Value)).ToList();
             foreach (ReferencedNode updateNode in updateNodes)
             {
                 updateNode.Done = true;
@@ -90,12 +90,12 @@ namespace Algorithms.Graph.Dijkstra
         /// </summary>
         internal void PruneFrontier()
         {
-            List<int> nodeIds = ExploredNodes.Select(n => n.NodeId).ToList().Concat(Frontier.Select(n => n.NodeId)).ToList();
+            List<int> nodeIds = ExploredNodes.Select(n => n.Value).ToList().Concat(Frontier.Select(n => n.Value)).ToList();
             for (int i = Frontier.Count - 1; i >= 0; i--)
             {
                 DijkstraNode node = Frontier[i];
                 // referenced nodes where the id is not in nodeids
-                if (node.ReferencedNodes.All(r => nodeIds.Any(n => n == r.NodeId)))
+                if (node.ReferencedNodes.All(r => nodeIds.Any(n => n == r.Value)))
                 {
                     // all referenced nodes are in explored nodes or the frontier
                     ExploredNodes.Add(node);

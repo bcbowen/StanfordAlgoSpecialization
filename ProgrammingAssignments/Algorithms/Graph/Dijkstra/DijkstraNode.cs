@@ -8,8 +8,6 @@ namespace Algorithms.Graph.Dijkstra
     {
         public DijkstraNode(int value) : base(value) { }
 
-        public int NodeId { get; set; }
-
         public List<ReferencedNode> ReferencedNodes { get; private set; } = new List<ReferencedNode>();
         public int MinDistance { get; set; }
     }

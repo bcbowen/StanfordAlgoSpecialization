@@ -8,7 +8,7 @@ namespace Algorithms.Shared
 {
     public class MaxHeap<T> : HeapBase<T> where T : NodeBase
     {
-        protected override void ReheapDown(int index)
+        public override void ReheapDown(int index)
         {
             int last = _heap.Count - 1;
             if (last <= index) return;
@@ -43,7 +43,7 @@ namespace Algorithms.Shared
 
         }
 
-        protected override void ReheapUp()
+        public override void ReheapUp()
         {
             int index = _heap.Count - 1;
             if (index <= 0) return;

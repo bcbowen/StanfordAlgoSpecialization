@@ -74,10 +74,10 @@ namespace Algorithms.Shared
             return true;
         }
 
-        protected abstract void ReheapDown(int index);
+        public abstract void ReheapDown(int index);
 
 
-        protected abstract void ReheapUp();
+        public abstract void ReheapUp();
 
         public int[] GetValues()
         {
