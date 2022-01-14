@@ -1,27 +1,24 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 
-using Algorithms.Graph;
-using Algorithms.Tests.Models;
-using DataStructures.Kosaraju;
+using Algorithms.Graph.Kosaraju;
 using NUnit.Framework;
 
-namespace Algorithms.Tests.Graph
+namespace Algorithms.Tests.GraphTests
 {
     [TestFixture]
     public class KosarajuSecondPassTests
     {
-        private DirectedGraph _graph;
+        private KosarajuGraph _graph;
         [OneTimeSetUp]
         public void Setup()
         {
             const string fileName = "input_mostlyCycles_17_128.txt";
             string path = Path.Combine(TestUtils.GetTestCaseDirectory().FullName, "KosarajuData", fileName);
             Assert.IsTrue(File.Exists(path), "Missing test file");
-            _graph = DirectedGraph.Load(path);
-            Kosaraju.FirstPass(_graph);
-            Kosaraju.SecondPass(_graph);
+            _graph = KosarajuGraph.Load(path);
+            Algorithm.FirstPass(_graph);
+            Algorithm.SecondPass(_graph);
         }
 
         [Test]

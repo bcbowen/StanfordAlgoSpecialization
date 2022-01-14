@@ -1,18 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using DataStructures.Kosaraju;
-
-namespace Algorithms.Graph
+namespace Algorithms.Graph.Kosaraju
 {
-    public static class Kosaraju
+    public static class Algorithm
     {
         /// <summary>
         /// Return the n biggest components (node count) in desc order
         /// </summary>
         /// <param name="count"></param>
         /// <returns></returns>
-        public static int[] CalculateStronglyConnectedComponents(int count, DirectedGraph graph) 
+        public static int[] CalculateStronglyConnectedComponents(int count, KosarajuGraph graph) 
         {
             FirstPass(graph);
             SecondPass(graph);
@@ -23,10 +21,10 @@ namespace Algorithms.Graph
         /// <summary>
         /// Traverse the nodes from back to front and do DFS, mark the finishing time value for each node
         /// </summary>
-        internal static void FirstPass(DirectedGraph graph)
+        internal static void FirstPass(KosarajuGraph graph)
         {
-            Stack<Node> nodeStack = new Stack<Node>();
-            Node node;
+            Stack<KosarajuNode> nodeStack = new Stack<KosarajuNode>();
+            KosarajuNode node;
             int nextFinishTime = 1;
             foreach (int key in graph.Nodes.Keys.OrderByDescending(k => k))
             {
@@ -35,7 +33,7 @@ namespace Algorithms.Graph
                 {
                     node.Status = LastStep.FirstPass;
                     nodeStack.Push(node);
-                    Node nextNode;
+                    KosarajuNode nextNode;
                     do
                     {
                         while ((nextNode = node.NextNodes.FirstOrDefault(n => n.Status != LastStep.FirstPass)) != null)
@@ -71,15 +69,15 @@ namespace Algorithms.Graph
             }
         }
 
-        internal static void SecondPass(DirectedGraph graph)
+        internal static void SecondPass(KosarajuGraph graph)
         {
-            Stack<Node> nodeStack = new Stack<Node>();
+            Stack<KosarajuNode> nodeStack = new Stack<KosarajuNode>();
             Component currentComponent;
-            Node previousNode;
+            KosarajuNode previousNode;
             int nextComponentGroupId = 1;
             for (int i = graph.FinishTimes.Count - 1; i >= 0; i--)
             {
-                Node node = graph.FinishTimes[graph.FinishTimes.Keys[i]];
+                KosarajuNode node = graph.FinishTimes[graph.FinishTimes.Keys[i]];
 
                 if (node.Status != LastStep.SecondPass)
                 {
@@ -120,7 +118,7 @@ namespace Algorithms.Graph
             }
         }
 
-        internal static int[] GetSCCCounts(int count, DirectedGraph graph)
+        internal static int[] GetSCCCounts(int count, KosarajuGraph graph)
         {
             int[] result = new[] { 0, 0, 0, 0, 0 };
             var componentCounts = (from component in graph.Components select new { Count = component.Nodes.Count }).OrderByDescending(c => c.Count).Take(count).ToArray();

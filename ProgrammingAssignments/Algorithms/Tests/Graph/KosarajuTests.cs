@@ -4,12 +4,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-using Algorithms.Graph;
 using Algorithms.Tests.Models;
-using DataStructures.Kosaraju;
+using Algorithms.Graph.Kosaraju;
 using NUnit.Framework;
 
-namespace Algorithms.Tests.Graph
+namespace Algorithms.Tests.GraphTests
 {
     [TestFixture]
     public class KosarajuTests
@@ -26,8 +25,8 @@ namespace Algorithms.Tests.Graph
         {
             KosarajuTestData testCase = _testData.FirstOrDefault(c => c.FileName.Contains("classExample"));
 
-            DirectedGraph graph = DirectedGraph.Load(testCase.FilePath);
-            int[] results = Kosaraju.CalculateStronglyConnectedComponents(5, graph);
+            KosarajuGraph graph = KosarajuGraph.Load(testCase.FilePath);
+            int[] results = Algorithm.CalculateStronglyConnectedComponents(5, graph);
             Assert.AreEqual(testCase.ExpectedResults, results, "Results don't match man");
         }
 
@@ -45,12 +44,12 @@ namespace Algorithms.Tests.Graph
             foreach (KosarajuTestData testCase in testCases)
             {
                 Console.WriteLine($"Testing {testCase.FileName}");
-                DirectedGraph graph = DirectedGraph.Load(testCase.FilePath);
+                KosarajuGraph graph = KosarajuGraph.Load(testCase.FilePath);
                 DateTime startTime = DateTime.Now;
                 int[] results;
                 try
                 {
-                    results = Kosaraju.CalculateStronglyConnectedComponents(5, graph); ;
+                    results = Algorithm.CalculateStronglyConnectedComponents(5, graph); ;
                 }
                 catch (Exception ex)
                 {
@@ -93,8 +92,8 @@ namespace Algorithms.Tests.Graph
             Assert.NotNull(testCase);
 
             Console.WriteLine($"Testing {testCase.FileName}");
-            DirectedGraph graph = DirectedGraph.Load(testCase.FilePath);
-            int[] results = Kosaraju.CalculateStronglyConnectedComponents(5, graph);
+            KosarajuGraph graph = KosarajuGraph.Load(testCase.FilePath);
+            int[] results = Algorithm.CalculateStronglyConnectedComponents(5, graph);
             Assert.AreEqual(testCase.ExpectedResults, results, $"Results don't match for testcase {testCase.FileName}");
         }
 

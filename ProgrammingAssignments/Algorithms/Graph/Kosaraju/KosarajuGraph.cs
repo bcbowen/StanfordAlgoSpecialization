@@ -1,32 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-using System.Threading.Tasks;
 
-namespace DataStructures.Kosaraju
+namespace Algorithms.Graph.Kosaraju
 {
-    public class DirectedGraph
+    public class KosarajuGraph
     {
         private int _nextFinishTime = 1;
 
         public List<Component> Components { get; private set; } = new List<Component>();
 
-        public SortedList<int, Node> Nodes { get; private set; } = new SortedList<int, Node>();
+        public SortedList<int, KosarajuNode> Nodes { get; private set; } = new SortedList<int, KosarajuNode>();
 
         /// <summary>
         /// Finish Time
         ///  key: Finish Time
         ///  value: Node
         /// </summary>
-        public SortedList<int, Node> FinishTimes { get; private set; } = new SortedList<int, Node>();
+        public SortedList<int, KosarajuNode> FinishTimes { get; private set; } = new SortedList<int, KosarajuNode>();
 
 
-        public static DirectedGraph Load(string path)
+        public static KosarajuGraph Load(string path)
         {
-            DirectedGraph graph = new DirectedGraph();
+            KosarajuGraph graph = new KosarajuGraph();
             int maxValue = 0;
 
             using (StreamReader reader = new StreamReader(path))
@@ -43,10 +41,10 @@ namespace DataStructures.Kosaraju
                         if (value > maxValue) maxValue = value;
                         referencedValue = int.Parse(fields[1]);
 
-                        Node node;
+                        KosarajuNode node;
                         if (!graph.Nodes.ContainsKey(value))
                         {
-                            node = new Node { Value = value };
+                            node = new KosarajuNode(value);
                             graph.Nodes.Add(value, node);
                         }
                         else
@@ -65,16 +63,16 @@ namespace DataStructures.Kosaraju
             var missingValues = range.Except(graph.Nodes.Keys);
             foreach (int value in missingValues)
             {
-                graph.Nodes.Add(value, new Node { Value = value });
+                graph.Nodes.Add(value, new KosarajuNode(value));
             }
 
             // set up links between nodes in graph
             foreach (int key in graph.Nodes.Keys)
             {
-                Node node = graph.Nodes[key];
+                KosarajuNode node = graph.Nodes[key];
                 foreach (int id in node.NextNodeIds)
                 {
-                    Node referencedNode = graph.Nodes[id];
+                    KosarajuNode referencedNode = graph.Nodes[id];
                     Debug.Assert(referencedNode != null, $"Node {id} not found in graph! This should not happen, man!");
                     referencedNode.PreviousNodes.Add(node);
                     node.NextNodes.Add(referencedNode);

@@ -1,4 +1,4 @@
-﻿using DataStructures;
+﻿using Algorithms.Graph.KargerMinCut;
 
 namespace Algorithms.Tests.Models
 {

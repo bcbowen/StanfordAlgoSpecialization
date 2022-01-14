@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DataStructures.Kosaraju
+namespace Algorithms.Graph.Kosaraju
 {
     public class Component
     {
@@ -10,7 +10,7 @@ namespace DataStructures.Kosaraju
         }
 
         public int Id { get; private set; }
-        public Node Leader { get; set; }
-        public List<Node> Nodes { get; set; } = new List<Node>();
+        public KosarajuNode Leader { get; set; }
+        public List<KosarajuNode> Nodes { get; set; } = new List<KosarajuNode>();
     }
 }

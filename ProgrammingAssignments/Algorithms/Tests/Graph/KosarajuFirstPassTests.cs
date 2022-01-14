@@ -1,25 +1,22 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 
-using Algorithms.Graph;
-using Algorithms.Tests.Models;
-using DataStructures.Kosaraju;
+using Algorithms.Graph.Kosaraju;
 using NUnit.Framework;
 
-namespace Algorithms.Tests.Graph
+namespace Algorithms.Tests.GraphTests
 {
     public class KosarajuFirstPassTests
     {
-        private DirectedGraph _graph;
+        private KosarajuGraph _graph;
         [OneTimeSetUp]
         public void Setup()
         {
             const string fileName = "input_ClassExample_1_11.txt";
             string path = Path.Combine(TestUtils.GetTestCaseDirectory().FullName, "KosarajuData", fileName);
             Assert.IsTrue(File.Exists(path), "Missing test file");
-            _graph = DirectedGraph.Load(path);
-            Kosaraju.FirstPass(_graph);
+            _graph = KosarajuGraph.Load(path);
+            Algorithm.FirstPass(_graph);
         }
 
         [Test]
@@ -44,7 +41,7 @@ namespace Algorithms.Tests.Graph
         [TestCase(9, 6)]
         public void FinishTimesSetToExpectedValues(int expectedNode, int time)
         {
-            Node node = _graph.FinishTimes[time];
+            KosarajuNode node = _graph.FinishTimes[time];
             Assert.AreEqual(expectedNode, node.Value, $"Node {node} does not have the expected f time of {time}");
         }
     }

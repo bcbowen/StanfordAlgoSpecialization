@@ -1,4 +1,4 @@
-﻿namespace DataStructures.Kosaraju
+﻿namespace Algorithms.Graph.Kosaraju
 {
     public enum LastStep
     {

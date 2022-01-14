@@ -1,16 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DataStructures
+using Algorithms.Shared;
+
+namespace Algorithms.Graph.KargerMinCut
 {
-    public class Node : ICloneable
+    public class KargerNode : NodeBase, ICloneable
     {
-        public int Value { get; set; }
+        public KargerNode(int Value) : base(Value)
+        {
+        
+        }
+
+        
         public List<int> LinkedNodes { get; set; } = new List<int>();
 
         public object Clone()
         {
-            Node node = new Node { Value = Value };
+            KargerNode node = new KargerNode(Value);
             node.LinkedNodes.AddRange(LinkedNodes);
 
             return node;

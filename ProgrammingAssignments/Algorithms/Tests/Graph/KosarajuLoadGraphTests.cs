@@ -1,23 +1,22 @@
 ﻿using System.IO;
 using System.Linq;
 
+using Algorithms.Graph.Kosaraju;
 
-using Algorithms.Tests.Models;
-using DataStructures.Kosaraju;
 using NUnit.Framework;
 
-namespace Algorithms.Tests.Graph
+namespace Algorithms.Tests.GraphTests
 {
     public class KosarajuLoadGraphTests
     {
-        private DirectedGraph _graph;
+        private KosarajuGraph _graph;
         [OneTimeSetUp]
         public void Setup()
         {
             const string fileName = "input_Tim_2_14.txt";
             string path = Path.Combine(TestUtils.GetTestCaseDirectory().FullName, "KosarajuData", fileName);
             Assert.IsTrue(File.Exists(path), "Missing test file");
-            _graph = DirectedGraph.Load(path);
+            _graph = KosarajuGraph.Load(path);
         }
 
         [Test]
@@ -30,7 +29,7 @@ namespace Algorithms.Tests.Graph
             const string fileName = "input_mostlyCycles_3_8.txt";
             string path = Path.Combine(TestUtils.GetTestCaseDirectory().FullName, "KosarajuData", fileName);
             Assert.IsTrue(File.Exists(path), "Missing test file");
-            DirectedGraph graph = DirectedGraph.Load(path);
+            KosarajuGraph graph = KosarajuGraph.Load(path);
             Assert.True(graph.Nodes.Values.Any(n => n.Value == 6));
         }
 
@@ -50,7 +49,7 @@ namespace Algorithms.Tests.Graph
         [TestCase(8, new[] { 5, 7 })]
         public void LoadedGraphHasNextNodesSet(int value, int[] nextNodes)
         {
-            Node node = _graph.Nodes.Values.FirstOrDefault(n => n.Value == value);
+            KosarajuNode node = _graph.Nodes.Values.FirstOrDefault(n => n.Value == value);
             Assert.NotNull(node, "Node not found in collection!");
             Assert.AreEqual(nextNodes.Length, node.NextNodes.Count);
             foreach (int id in nextNodes)
@@ -69,7 +68,7 @@ namespace Algorithms.Tests.Graph
         [TestCase(8, new[] { 7 })]
         public void LoadedGraphHasPreviousNodesSet(int value, int[] previousNodes)
         {
-            Node node = _graph.Nodes.Values.FirstOrDefault(n => n.Value == value);
+            KosarajuNode node = _graph.Nodes.Values.FirstOrDefault(n => n.Value == value);
             Assert.NotNull(node, "Node not found in collection!");
             Assert.AreEqual(previousNodes.Length, node.PreviousNodes.Count);
             foreach (int id in previousNodes)

@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace DataStructures
+namespace Algorithms.Graph.KargerMinCut
 {
     public class KargerGraph : ICloneable
     {
 		private Random _random = new Random();
 		private List<Edge> _edges = new List<Edge>();
-		//public List<Edge> Edges { get; private set; }
-		//Dictionary <string, List<string>> _nodes = new Dictionary<string, System.Collections.Generic.List<string>>();
-		List<Node> _nodes = new List<Node>();
+		List<KargerNode> _nodes = new List<KargerNode>();
 
 		public int EdgeCount
 		{
@@ -56,11 +54,11 @@ namespace DataStructures
 			string[] fields = line.Split(delimiter);
 			string key = fields[0];
 			int value;
-			Node node;
+			KargerNode node;
 			if (int.TryParse(key, out value))
 			{
 				//_nodes.Add(key, new List<string>());
-				node = new Node { Value = value };
+				node = new KargerNode(value);
 				for (int i = 1; i < fields.Length; i++)
 				{
 					if (int.TryParse(fields[i], out value))
@@ -105,7 +103,7 @@ namespace DataStructures
 		// remove node 1, update references to point to node2
 		private void RerouteNodes(int node1, int node2)
 		{
-			foreach (Node node in _nodes.Where(n => n.Value != node1))
+			foreach (KargerNode node in _nodes.Where(n => n.Value != node1))
 			{
 				int i1 = node.LinkedNodes.IndexOf(node1);
 				int i2 = node.LinkedNodes.IndexOf(node2);
@@ -125,7 +123,7 @@ namespace DataStructures
 				}
 			}
 
-			Node n = _nodes.FirstOrDefault(n => n.Value == node1);
+			KargerNode n = _nodes.FirstOrDefault(n => n.Value == node1);
 
 			if (n != null) _nodes.Remove(n);
 
@@ -139,9 +137,9 @@ namespace DataStructures
 			{
 				clone.AddEdge(edge.Clone() as Edge);
 			}
-			foreach (Node node in _nodes)
+			foreach (KargerNode node in _nodes)
 			{
-				clone._nodes.Add(node.Clone() as Node);
+				clone._nodes.Add(node.Clone() as KargerNode);
 			}
 
 			return clone;

@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using DataStructures;
 
-namespace Algorithms.Graph
+namespace Algorithms.Graph.KargerMinCut
 {
-    public static class KargerMinCut
+    public static class Algorithm
     {
 		public static int Analyze(KargerGraph graph)
 		{
@@ -31,7 +26,7 @@ namespace Algorithms.Graph
 
 		private static int CalcMinCuts(KargerGraph graph)
 		{
-			KargerGraph testGraph = graph.Clone() as KargerGraph;
+            KargerGraph testGraph = graph.Clone() as KargerGraph;
 
 			while (testGraph.NodeCount > 2)
 			{

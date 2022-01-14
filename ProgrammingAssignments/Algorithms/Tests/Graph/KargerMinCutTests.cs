@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
 
-using Algorithms.Graph;
+using Algorithms.Graph.KargerMinCut;
 using Algorithms.Tests.Models;
-using DataStructures;
+
 using NUnit.Framework;
 
-namespace Algorithms.Tests.Graph
+namespace Algorithms.Tests.GraphTests
 {
     [TestFixture]
     public class KargerMinCutTests
@@ -29,7 +29,7 @@ namespace Algorithms.Tests.Graph
 
 			startTime = DateTime.Now;
 			Console.WriteLine($"Analyzing {testCase.CaseName} with {testCase.TestGraph.NodeCount} nodes and {testCase.TestGraph.EdgeCount} edges");
-			int result = KargerMinCut.Analyze(testCase.TestGraph);
+			int result = Algorithm.Analyze(testCase.TestGraph);
 
 			Assert.AreEqual(result, testCase.ExpectedResult);
 
@@ -58,7 +58,7 @@ namespace Algorithms.Tests.Graph
 
 			startTime = DateTime.Now;
 			Console.WriteLine($"Analyzing {testCase.CaseName} with {testCase.TestGraph.NodeCount} nodes and {testCase.TestGraph.EdgeCount} edges");
-			int result = KargerMinCut.Analyze(testCase.TestGraph);
+			int result = Algorithm.Analyze(testCase.TestGraph);
 
 			Assert.AreEqual(result, testCase.ExpectedResult);
 
@@ -83,7 +83,7 @@ namespace Algorithms.Tests.Graph
 
 			startTime = DateTime.Now;
 			Console.WriteLine($"Analyzing {testCase.CaseName} with {testCase.TestGraph.NodeCount} nodes and {testCase.TestGraph.EdgeCount} edges");
-			int result = KargerMinCut.Analyze(testCase.TestGraph);
+			int result = Algorithm.Analyze(testCase.TestGraph);
 
 			Assert.AreEqual(result, testCase.ExpectedResult);
 
@@ -112,7 +112,7 @@ namespace Algorithms.Tests.Graph
 
 			startTime = DateTime.Now;
 			Console.WriteLine($"Analyzing {testCase.CaseName} with {testCase.TestGraph.NodeCount} nodes and {testCase.TestGraph.EdgeCount} edges");
-			int result = KargerMinCut.Analyze(testCase.TestGraph);
+			int result = Algorithm.Analyze(testCase.TestGraph);
 
 			Assert.AreEqual(result, testCase.ExpectedResult);
 

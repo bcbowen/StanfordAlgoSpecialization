@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DataStructures
+namespace Algorithms.Graph.KargerMinCut
 {
 	public class Edge : ICloneable
 	{
