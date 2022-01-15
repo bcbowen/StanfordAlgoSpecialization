@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Algorithms.Graph.Dijkstra;
 using Algorithms.Shared;
 
 namespace Algorithms.Tests.Datastructures.Heap
 {
     [TestFixture]
-    public class HeapTests
+    public class MinHeapTests
     {
         [Test]
         public void OneNodeHeapInitializes()
@@ -137,9 +131,9 @@ namespace Algorithms.Tests.Datastructures.Heap
         {
             MinHeap<DijkstraNode> heap = new MinHeap<DijkstraNode>();
 
-            foreach (int nv in beginState)
+            for (int i = 0; i < beginState.Length; i++)
             {
-                heap.Enqueue(new DijkstraNode(nv));
+                heap._heap.Add(new DijkstraNode(beginState[i]));
             }
 
             heap.ReheapUp();
