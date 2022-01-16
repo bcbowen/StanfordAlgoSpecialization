@@ -15,6 +15,13 @@ namespace Algorithms.Shared
             ReheapUp();
         }
 
+        public int Peek() 
+        {
+            if (_heap.Count == 0) return -1;
+
+            return _heap[0].Value;
+        }
+
         public T Dequeue()
         {
             T head = null;
