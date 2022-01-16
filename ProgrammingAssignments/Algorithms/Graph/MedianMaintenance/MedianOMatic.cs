@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Algorithms.Shared;
+﻿using Algorithms.Shared;
 
 namespace Algorithms.Graph.MedianMaintenance
 {
-    public class MaintenanceMan
+    public class MedianOMatic
     {
         internal MinHeap<Node> HiHeap { get; set; } = new MinHeap<Node>();
         internal MaxHeap<Node> LoHeap { get; set; } = new MaxHeap<Node>();
@@ -76,7 +70,7 @@ namespace Algorithms.Graph.MedianMaintenance
 
         public int GetMedian() 
         {
-            return 3;
+            return IsEven ? LoHeap.Peek() : HiHeap.Peek();
         }
 
     }
