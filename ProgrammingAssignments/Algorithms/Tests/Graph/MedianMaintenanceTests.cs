@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 using NUnit.Framework;
@@ -78,6 +78,94 @@ namespace Algorithms.Tests.Graph
 
             Assert.AreEqual(expectedMedian, maintenanceMan.GetMedian());
 
+        }
+
+        /*
+         * 
+          	    val median  running total   vals                    e/o m 
+                7	7	    7	            7	                    o	1
+                9	7	    14	            7,9	                    e	1
+                1	7	    21	            1,7,9	                o	2
+                3	3	    24	            1,3,7,9	                e	2
+                6	6	    30	            1,3,6,7,9	            o	3
+                2	3	    33	            1,2,3,6,7,9	            e	3
+                5	5	    38	            1,2,3,5,6,7,9	        o	4
+                10	5	    43	            1,2,3,5,6,7,9,10	    e	4
+                4	5	    48	            1,2,3,4,5,6,7,9,10	    o	5
+                8	5	    53	            1,2,3,4,5,6,7,8,9,10    e	5
+
+         * 
+         * 
+         * 
+         7,9,1,3,6,2,5,10,4,8
+
+         */
+        /// <summary>
+        /// See above comment for explanation of how this total should be calculated for the given test values (from input_random_1_10)
+        /// </summary>
+        [TestCase(new[] { 7 }, 7, 7)]
+        [TestCase(new[] { 7, 9 }, 7, 14)]
+        [TestCase(new[] { 7, 9, 1 }, 7, 21)]
+        [TestCase(new[] { 7, 9, 1, 3 }, 3, 24)]
+        [TestCase(new[] { 7, 9, 1, 3, 6 }, 6, 30)]
+        [TestCase(new[] { 7, 9, 1, 3, 6, 2 }, 3, 33)]
+        [TestCase(new[] { 7, 9, 1, 3, 6, 2, 5 }, 5, 38)]
+        [TestCase(new[] { 7, 9, 1, 3, 6, 2, 5, 10 }, 5, 43)]
+        [TestCase(new[] { 7, 9, 1, 3, 6, 2, 5, 10, 4 }, 5, 48)]
+        [TestCase(new[] { 7, 9, 1, 3, 6, 2, 5, 10, 4, 8 }, 5, 53)]
+        public void RunningMedianTotalIsCorrect(int[] values, int expectedMedian, int expectedRunningTotal) 
+        {
+            
+            MedianOMatic _maintenanceMan = new MedianOMatic();
+            foreach (int value in values) 
+            {
+                _maintenanceMan.Insert(value);
+            }
+
+            Assert.AreEqual(expectedMedian, _maintenanceMan.GetMedian());
+            Assert.AreEqual(expectedRunningTotal, _maintenanceMan.RunningMedianTotalRaw);
+            Assert.AreEqual(expectedRunningTotal, _maintenanceMan.RunningMedianTotalMod);
+        }
+
+        [TestCase("input_random_1_10.txt")]
+        public void MedianTestsTiny(string fileName) 
+        {
+            RunMedianTest(fileName);
+        }
+
+        private void RunMedianTest(string fileName) 
+        {
+            int expectedMedian;
+
+            DirectoryInfo testDirectory = TestUtils.GetTestCaseDirectory().GetDirectories("MedianMaintenanceData").First();
+            FileInfo file = testDirectory.GetFiles(fileName).FirstOrDefault();
+            Assert.NotNull(file, "Test file not found");
+
+            MedianOMatic _maintenanceMan = new MedianOMatic();
+
+            string line;
+            int value; 
+
+            using (StreamReader reader = new StreamReader(file.FullName)) 
+            {
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (int.TryParse(line, out value))
+                    {
+                        _maintenanceMan.Insert(value);
+                    }
+                }
+                reader.Close();
+            }
+
+            using (StreamReader reader = new StreamReader(file.FullName.Replace("input_", "output_"))) 
+            {
+                line = reader.ReadLine();
+                expectedMedian = int.Parse(line);
+                reader.Close();
+            }
+
+            Assert.AreEqual(expectedMedian, _maintenanceMan.RunningMedianTotalMod);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Algorithms.Shared;
+﻿using System;
+using Algorithms.Shared;
 
 namespace Algorithms.Graph.MedianMaintenance
 {
@@ -16,17 +17,35 @@ namespace Algorithms.Graph.MedianMaintenance
         {
             get { return Count % 2 == 0; }
         }
-        
+
+        /// <summary>
+        ///  For assignment we need the sum of all of the medians: 
+        ///  In the box below you should type the sum of these 10000 medians, modulo 10000 (i.e., only the last 4 digits).  
+        ///  That is, you should compute(m_1 + m_2 + m_3 + ... + m_{ 10000}).
+        /// </summary>
+        public int RunningMedianTotalRaw { get; private set; }
+
+        /// <summary>
+        /// Final 4 digits of median history per assignment (course 2 week 3)
+        /// </summary>
+        public int RunningMedianTotalMod
+        {
+            get 
+            {
+                return RunningMedianTotalRaw % 10000;
+            } 
+        }
+
 
         public void Insert(int value) 
         {
-            if (value > HiHeap.Peek())
-            {
-                HiHeap.Enqueue(new Node(value));
-            }
-            else if (value < LoHeap.Peek())
+            if (Count == 0 || value < LoHeap.Peek()) 
             {
                 LoHeap.Enqueue(new Node(value));
+            }
+            else if (value > HiHeap.Peek())
+            {
+                HiHeap.Enqueue(new Node(value));
             }
             else
             {
@@ -34,6 +53,7 @@ namespace Algorithms.Graph.MedianMaintenance
             }
 
             RebalanceHeaps();
+            RunningMedianTotalRaw += GetMedian();
         }
 
         private void InsertMiddle(int value) 
@@ -70,7 +90,9 @@ namespace Algorithms.Graph.MedianMaintenance
 
         public int GetMedian() 
         {
-            return IsEven ? LoHeap.Peek() : HiHeap.Peek();
+            decimal k = System.Math.Ceiling((decimal)Count / 2);
+            
+            return k == LoHeap.Count ? LoHeap.Peek() : HiHeap.Peek();
         }
 
     }
