@@ -17,8 +17,8 @@ namespace ExecuteAssignment
 
                 switch (k.KeyChar) 
                 {
-                    case '7': 
-                        Console.WriteLine("median maintenance dude");
+                    case '7':
+                        Course2.Week3.MedianMaintenanceRunner.Run();
                         Console.WriteLine();
                         break;
                     default:
