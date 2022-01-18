@@ -77,6 +77,54 @@ namespace Algorithms.Tests.HashTable
             RunTest(fileName);
         }
 
+        [TestCase("input_random_41_10000.txt")]
+        [TestCase("input_random_42_10000.txt")]
+        [TestCase("input_random_43_10000.txt")]
+        [TestCase("input_random_44_10000.txt")]
+        [TestCase("input_random_45_20000.txt")]
+        [TestCase("input_random_46_20000.txt")]
+        [TestCase("input_random_47_20000.txt")]
+        [TestCase("input_random_48_20000.txt")]
+        public void TwoSumTestXL(string fileName)
+        {
+            RunTest(fileName);
+        }
+
+        [TestCase("input_random_49_40000.txt")]
+        [TestCase("input_random_50_40000.txt")]
+        [TestCase("input_random_51_40000.txt")]
+        [TestCase("input_random_51_40000.txt")]
+        [TestCase("input_random_53_80000.txt")]
+        [TestCase("input_random_54_80000.txt")]
+        [TestCase("input_random_55_80000.txt")]
+        [TestCase("input_random_56_80000.txt")]
+        public void TwoSumTestHuge(string fileName)
+        {
+            RunTest(fileName);
+        }
+
+        [TestCase("input_random_57_120000.txt")]
+        [TestCase("input_random_58_120000.txt")]
+        [TestCase("input_random_59_120000.txt")]
+        [TestCase("input_random_60_120000.txt")]
+        [TestCase("input_random_61_320000.txt")]
+        [TestCase("input_random_62_320000.txt")]
+        [TestCase("input_random_63_320000.txt")]
+        [TestCase("input_random_64_320000.txt")]
+        public void TwoSumTestGargantuan(string fileName)
+        {
+            RunTest(fileName);
+        }
+
+        [TestCase("input_random_65_640000.txt")]
+        [TestCase("input_random_66_640000.txt")]
+        [TestCase("input_random_67_640000.txt")]
+        [TestCase("input_random_68_640000.txt")]
+        public void TwoSumTestImmense(string fileName)
+        {
+            RunTest(fileName);
+        }
+
         private void RunTest(string fileName) 
         {
             DirectoryInfo testDirectory = TestUtils.GetTestCaseDirectory().GetDirectories("TwoSumData").First();
