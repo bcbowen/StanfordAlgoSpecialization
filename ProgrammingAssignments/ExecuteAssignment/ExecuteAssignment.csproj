@@ -7,10 +7,14 @@
 
   <ItemGroup>
     <None Remove="Course2\Week3\PAData.txt" />
+    <None Remove="Course2\Week4\PAData.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Course2\Week3\PAData.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Course2\Week4\PAData.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
