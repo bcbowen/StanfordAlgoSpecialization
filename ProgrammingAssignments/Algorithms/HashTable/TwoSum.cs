@@ -9,9 +9,9 @@ namespace Algorithms.HashTable
         public static int GetSums(string path) 
         {
           
-                int hits = 0;
+            int hits = 0;
             List<long> negativos = new List<long>();
-            Dictionary<int, long> positivos = new Dictionary<int, long>();
+            Dictionary<int, List<long>> positivos = new Dictionary<int, List<long>>();
             string line;
             using (StreamReader reader = new StreamReader(path)) 
             {
@@ -25,33 +25,36 @@ namespace Algorithms.HashTable
                     else 
                     {
                         int hash = value.GetHashCode();
-                        positivos.Add(hash, value);
+                        if (!positivos.ContainsKey(hash)) 
+                        { 
+                            positivos.Add(hash, new List<long>());  
+                        }
+                        positivos[hash].Add(value);
                     }
                 }
                 reader.Close();
             }
 
 
+            //using (StreamWriter writer = new StreamWriter("matches.log"))
+            //{
 
-            using (StreamWriter writer = new StreamWriter("matches.log"))
+            for (int t = -10000; t <= 10000; t++) 
             {
-
-                for (int t = -10000; t <= 10000; t++) 
+                foreach (long x in negativos) 
                 {
-                    foreach (long x in negativos) 
-                    {
-                        long y = t - x;
-                        int hash = y.GetHashCode();
-                        if (positivos.ContainsKey(hash) && positivos[hash] == y)
-                        { 
-                            writer.WriteLine($"{x}\t{y}\t{t}\t");
-                            hits++;
-                            break;
-                        }
+                    long y = t - x;
+                    int hash = y.GetHashCode();
+                    if (positivos.ContainsKey(hash) && positivos[hash].Contains(y))
+                    { 
+                        //writer.WriteLine($"{x}\t{y}\t{t}\t");
+                        hits++;
+                        break;
                     }
-                }       
-                writer.Close();
-            }
+                }
+            }       
+            //    writer.Close();
+            //}
 
             return hits;
         }

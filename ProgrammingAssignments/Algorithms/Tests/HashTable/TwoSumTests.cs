@@ -103,10 +103,10 @@ namespace Algorithms.Tests.HashTable
             RunTest(fileName);
         }
 
-        [TestCase("input_random_57_120000.txt")]
-        [TestCase("input_random_58_120000.txt")]
-        [TestCase("input_random_59_120000.txt")]
-        [TestCase("input_random_60_120000.txt")]
+        [TestCase("input_random_57_160000.txt")]
+        [TestCase("input_random_58_160000.txt")]
+        [TestCase("input_random_59_160000.txt")]
+        [TestCase("input_random_60_160000.txt")]
         [TestCase("input_random_61_320000.txt")]
         [TestCase("input_random_62_320000.txt")]
         [TestCase("input_random_63_320000.txt")]
