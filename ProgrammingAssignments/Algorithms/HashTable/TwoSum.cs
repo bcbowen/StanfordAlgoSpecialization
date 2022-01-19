@@ -8,7 +8,8 @@ namespace Algorithms.HashTable
 
         public static int GetSums(string path) 
         {
-            int hits = 0;
+          
+                int hits = 0;
             List<long> negativos = new List<long>();
             Dictionary<int, long> positivos = new Dictionary<int, long>();
             string line;
@@ -30,14 +31,26 @@ namespace Algorithms.HashTable
                 reader.Close();
             }
 
-            for (int t = -10000; t <= 10000; t++) 
+
+
+            using (StreamWriter writer = new StreamWriter("matches.log"))
             {
-                foreach (long x in negativos) 
+
+                for (int t = -10000; t <= 10000; t++) 
                 {
-                    long y = t - x;
-                    int hash = y.GetHashCode();
-                    if (positivos.ContainsKey(hash) && positivos[hash] == y) hits++;
-                }
+                    foreach (long x in negativos) 
+                    {
+                        long y = t - x;
+                        int hash = y.GetHashCode();
+                        if (positivos.ContainsKey(hash) && positivos[hash] == y)
+                        { 
+                            writer.WriteLine($"{x}\t{y}\t{t}\t");
+                            hits++;
+                            break;
+                        }
+                    }
+                }       
+                writer.Close();
             }
 
             return hits;
