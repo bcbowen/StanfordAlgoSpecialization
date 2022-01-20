@@ -35,10 +35,6 @@ namespace Algorithms.HashTable
                 reader.Close();
             }
 
-
-            //using (StreamWriter writer = new StreamWriter("matches.log"))
-            //{
-
             for (int t = -10000; t <= 10000; t++) 
             {
                 foreach (long x in negativos) 
@@ -47,15 +43,12 @@ namespace Algorithms.HashTable
                     int hash = y.GetHashCode();
                     if (positivos.ContainsKey(hash) && positivos[hash].Contains(y))
                     { 
-                        //writer.WriteLine($"{x}\t{y}\t{t}\t");
                         hits++;
                         break;
                     }
                 }
             }       
-            //    writer.Close();
-            //}
-
+            
             return hits;
         }
     }
