@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Algorithms.HashTable;
 using NUnit.Framework;
 
@@ -77,6 +73,7 @@ namespace Algorithms.Tests.HashTable
             RunTest(fileName);
         }
 
+        [Ignore(TestUtils.IgnoreLongRunningTestsMessage)]
         [TestCase("input_random_41_10000.txt")]
         [TestCase("input_random_42_10000.txt")]
         [TestCase("input_random_43_10000.txt")]
@@ -90,6 +87,7 @@ namespace Algorithms.Tests.HashTable
             RunTest(fileName);
         }
 
+        [Ignore(TestUtils.IgnoreLongRunningTestsMessage)]
         [TestCase("input_random_49_40000.txt")]
         [TestCase("input_random_50_40000.txt")]
         [TestCase("input_random_51_40000.txt")]
@@ -103,6 +101,7 @@ namespace Algorithms.Tests.HashTable
             RunTest(fileName);
         }
 
+        [Ignore(TestUtils.IgnoreLongRunningTestsMessage)]
         [TestCase("input_random_57_160000.txt")]
         [TestCase("input_random_58_160000.txt")]
         [TestCase("input_random_59_160000.txt")]
@@ -116,6 +115,7 @@ namespace Algorithms.Tests.HashTable
             RunTest(fileName);
         }
 
+        [Ignore(TestUtils.IgnoreLongRunningTestsMessage)]
         [TestCase("input_random_65_640000.txt")]
         [TestCase("input_random_66_640000.txt")]
         [TestCase("input_random_67_640000.txt")]

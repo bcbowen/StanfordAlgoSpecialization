@@ -91,6 +91,7 @@ namespace Algorithms.Tests.GraphTests
 
 		}
 
+		[Ignore(TestUtils.IgnoreLongRunningTestsMessage)]
 		[TestCase("input_random_29_150.txt")]
 		[TestCase("input_random_30_150.txt")]
 		[TestCase("input_random_31_150.txt")]

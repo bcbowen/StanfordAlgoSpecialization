@@ -36,7 +36,7 @@ namespace Algorithms.Tests.GraphTests
         [TestCase("Large", 1600, 12800)]
         [TestCase("Extra Large", 12800, 80000)]
         [TestCase("Massive", 80000, 160000)]
-        [TestCase("Gargantuan", 160000, 1000000)]
+        //[TestCase("Gargantuan", 160000, 1000000)] // uncomment for complete testing... commented to reduce testing run time (can't ignore specific test cases)
         public void CalculateSCCTests(string label, int lowerBound, int upperBound)
         {
             var testCases = _testData.Where(c => c.EdgeCount > lowerBound && c.EdgeCount <= upperBound);
