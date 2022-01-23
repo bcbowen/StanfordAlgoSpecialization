@@ -14,6 +14,14 @@
 
         public int TotalLength { get; set; }
 
+        public int WeightedCompletionTime 
+        {
+            get 
+            {
+                return Weight * TotalLength;
+            }
+        }
+
         public int WeightDifference 
         { 
             get { return Weight - Length; } 

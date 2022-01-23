@@ -38,20 +38,79 @@ namespace Algorithms.Tests.Greedy.SchedulerTests
 
 
         [TestCase(1, 10)]
+        [TestCase(2, 10)]
+        [TestCase(3, 10)]
+        [TestCase(4, 10)]
+        [TestCase(5, 20)]
+        [TestCase(6, 20)]
+        [TestCase(7, 20)]
+        [TestCase(8, 20)]
         public void TestSchedulerTiny(int testNumber, int count)
+        {
+            RunTest(testNumber, count);
+        }
+
+        [TestCase(9, 40)]
+        [TestCase(10, 40)]
+        [TestCase(11, 40)]
+        [TestCase(12, 40)]
+        [TestCase(13, 80)]
+        [TestCase(14, 80)]
+        [TestCase(15, 80)]
+        [TestCase(16, 80)]
+        public void TestSchedulerSmall(int testNumber, int count)
+        {
+            RunTest(testNumber, count);
+        }
+
+        [TestCase(17, 160)]
+        [TestCase(18, 160)]
+        [TestCase(19, 160)]
+        [TestCase(20, 160)]
+        [TestCase(21, 320)]
+        [TestCase(22, 320)]
+        [TestCase(23, 320)]
+        [TestCase(24, 320)]
+        public void TestSchedulerMedium(int testNumber, int count)
         {
             RunTest(testNumber, count);
         }
 
         private void RunTest(int testNumber, int count) 
         {
-            string fileName = $"input_random{testNumber}_{count}.txt";
+            string fileName = $"input_random_{testNumber}_{count}.txt";
             DirectoryInfo testDirectory = TestUtils.GetTestCaseDirectory().GetDirectories("GreedySchedulerData").First();
             FileInfo file = testDirectory.GetFiles(fileName).FirstOrDefault();
             Assert.NotNull(file, "Test file not found");
 
             List<Job> jobs = Scheduler.ScheduleJobsByDifference(file.FullName);
+            int jobTotalByDifference = jobs.Sum(j => j.WeightedCompletionTime);
 
+            jobs = Scheduler.ScheduleJobsByRatio(file.FullName);
+            int jobTotalByRatio = jobs.Sum(j => j.WeightedCompletionTime);
+
+            int expectedTotalByDifference; 
+            int expectedTotalByRatio;
+            (expectedTotalByDifference, expectedTotalByRatio) = GetExpectedOutputs(file.FullName);
+
+            Assert.AreEqual(expectedTotalByDifference, jobTotalByDifference);
+            Assert.AreEqual(expectedTotalByRatio, jobTotalByRatio);
+        }
+
+        private (int, int) GetExpectedOutputs(string fileName) 
+        {
+            int time1, time2;
+            string outputFileName = fileName.Replace("input_", "output_");
+            using (StreamReader reader = new StreamReader(outputFileName)) 
+            {
+                string line = reader.ReadLine();
+                time1 = int.Parse(line);
+                line = reader.ReadLine();
+                time2 = int.Parse(line);
+                reader.Close();
+            }
+
+            return (time1, time2);
         }
     }
 }

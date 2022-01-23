@@ -17,7 +17,7 @@ namespace Algorithms.Greedy
             jobs[0].TotalLength = jobs[0].Length;
             for (int i = 1; i < jobs.Count; i++) 
             {
-                jobs[i].TotalLength = jobs[i].Length + jobs[i - 1].Length;
+                jobs[i].TotalLength = jobs[i].Length + jobs[i - 1].TotalLength;
             }
 
             return jobs;
@@ -29,7 +29,7 @@ namespace Algorithms.Greedy
             jobs[0].TotalLength = jobs[0].Length;
             for (int i = 1; i < jobs.Count; i++)
             {
-                jobs[i].TotalLength = jobs[i].Length + jobs[i - 1].Length;
+                jobs[i].TotalLength = jobs[i].Length + jobs[i - 1].TotalLength;
             }
 
             return jobs;
@@ -79,7 +79,8 @@ namespace Algorithms.Greedy
 
         internal static int CompareJobsByRatio(Job l, Job r) 
         {
-            return l.WeightRatio.CompareTo(r.WeightRatio);
+            // reverse sign to sort in desc order
+            return -l.WeightRatio.CompareTo(r.WeightRatio);
         }
     }
 }
