@@ -12,9 +12,9 @@
         
         public int Length { get; set; }
 
-        public int TotalLength { get; set; }
+        public long TotalLength { get; set; }
 
-        public int WeightedCompletionTime 
+        public long WeightedCompletionTime 
         {
             get 
             {
