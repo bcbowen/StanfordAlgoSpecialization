@@ -1,5 +1,6 @@
 ﻿namespace Algorithms.Graph.Dijkstra
 {
+    /*
     public class ReferencedNode : DijkstraNode
     {
         public int Distance { get; set; }
@@ -11,4 +12,5 @@
 
         public bool Done { get; set; }
     }
+    */
 }

@@ -11,8 +11,8 @@ namespace Algorithms.Tests.Datastructures.Heap
         [Test]
         public void OneNodeHeapInitializes()
         {
-            MaxHeap<DijkstraNode> heap = new MaxHeap<DijkstraNode>();
-            heap.Enqueue(new DijkstraNode(3));
+            MaxHeap<Node> heap = new MaxHeap<Node>();
+            heap.Enqueue(new Node(3));
             int[] values = heap.GetValues();
             Assert.AreEqual(1, values.Length);
             Assert.AreEqual(3, values[0]);
@@ -32,10 +32,10 @@ namespace Algorithms.Tests.Datastructures.Heap
         */
         public void HeapEnqueueSetsNodesInExpectedPlaces(int[] insertNodes, int[] retrievedValues)
         {
-            MaxHeap<DijkstraNode> heap = new MaxHeap<DijkstraNode>();
+            MaxHeap<Node> heap = new MaxHeap<Node>();
             foreach (int value in insertNodes)
             {
-                heap.Enqueue(new DijkstraNode(value));
+                heap.Enqueue(new Node(value));
             }
 
             int[] values = heap.GetValues();
@@ -47,17 +47,17 @@ namespace Algorithms.Tests.Datastructures.Heap
         public void HeapDequeuesValuesInOrder()
         {
             int[] values = GetTestInitValues();
-            MaxHeap<DijkstraNode> heap = new MaxHeap<DijkstraNode>();
+            MaxHeap<Node> heap = new MaxHeap<Node>();
 
             foreach (int value in values)
             {
-                heap.Enqueue(new DijkstraNode(value));
+                heap.Enqueue(new Node(value));
             }
 
             int expectedValue = 6;
             while (expectedValue > 0)
             {
-                DijkstraNode node = heap.Dequeue();
+                Node node = heap.Dequeue();
                 Assert.AreEqual(expectedValue, node.Value);
                 expectedValue--;
             }
@@ -79,14 +79,14 @@ namespace Algorithms.Tests.Datastructures.Heap
         public void HeapFindReturnsExpectedNode(int search, int expectedIndex)
         {
             int[] values = GetTestInitValues();
-            MaxHeap<DijkstraNode> heap = new MaxHeap<DijkstraNode>();
+            MaxHeap<Node> heap = new MaxHeap<Node>();
 
             foreach (int value in values)
             {
-                heap.Enqueue(new DijkstraNode(value));
+                heap.Enqueue(new Node(value));
             }
 
-            (int index, DijkstraNode node) = heap.Find(search);
+            (int index, Node node) = heap.Find(search);
             Assert.NotNull(node);
             Assert.AreEqual(node.Value, search);
             Assert.AreEqual(expectedIndex, index);
@@ -108,14 +108,14 @@ namespace Algorithms.Tests.Datastructures.Heap
         public void HeapRemoveReturnsExpectedNodeAndBalancesHeap(int value, int[] expectedHeapState)
         {
             int[] nodeValues = GetTestInitValues(); 
-            MaxHeap<DijkstraNode> heap = new MaxHeap<DijkstraNode>();
+            MaxHeap<Node> heap = new MaxHeap<Node>();
 
             foreach (int nv in nodeValues)
             {
-                heap.Enqueue(new DijkstraNode(nv));
+                heap.Enqueue(new Node(nv));
             }
 
-            DijkstraNode node = heap.Remove(value);
+            Node node = heap.Remove(value);
             Assert.NotNull(node);
             Assert.AreEqual(node.Value, value);
             Assert.AreEqual(expectedHeapState, heap.GetValues());
@@ -132,12 +132,12 @@ namespace Algorithms.Tests.Datastructures.Heap
         [TestCase(new[] { 6, 4, 3, 1, 2, 5 }, new[] { 6, 4, 5, 1, 2, 3 })]
         public void ReHeapUpLeavesBalancedHeap(int[] beginState, int[] endState)
         {
-            MaxHeap<DijkstraNode> heap = new MaxHeap<DijkstraNode>();
+            MaxHeap<Node> heap = new MaxHeap<Node>();
             // manually add nodes to match test case
-            heap._heap = new List<DijkstraNode>(6);
+            heap._heap = new List<Node>(6);
             for (int i = 0; i < beginState.Length; i++)
             {
-                heap._heap.Add(new DijkstraNode(beginState[i]));
+                heap._heap.Add(new Node(beginState[i]));
             }
             heap.ReheapUp();
             Assert.AreEqual(endState, heap.GetValues());
@@ -154,11 +154,11 @@ namespace Algorithms.Tests.Datastructures.Heap
         [TestCase(new[] { 6, 4, 3, 1, 2, 5 }, new[] { 6, 4, 5, 1, 2, 3 }, 2)]
         public void ReHeapDownLeavesBalancedHeap(int[] beginState, int[] endState, int index)
         {
-            MaxHeap<DijkstraNode> heap = new MaxHeap<DijkstraNode>();
+            MaxHeap<Node> heap = new MaxHeap<Node>();
 
             for (int i = 0; i < beginState.Length; i++)
             {
-                heap._heap.Add(new DijkstraNode(beginState[i]));
+                heap._heap.Add(new Node(beginState[i]));
             }
 
             heap.ReheapDown(index);

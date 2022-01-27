@@ -1,14 +1,21 @@
-﻿using System.Collections.Generic;
-
-using Algorithms.Shared;
+﻿using Algorithms.Shared;
 
 namespace Algorithms.Graph.Dijkstra
 {
     public class DijkstraNode : NodeBase
     {
-        public DijkstraNode(int value) : base(value) { }
+        public DijkstraNode(int nodeId, int distance) : base(nodeId)
+        {
+            Distance = distance;
+            ReferencedNode = null;
+        }
 
-        public List<ReferencedNode> ReferencedNodes { get; private set; } = new List<ReferencedNode>();
-        public int MinDistance { get; set; }
+        public DijkstraNode(int nodeId, int referencedNodeId, int distance) : base(nodeId) 
+        {
+            ReferencedNode = new NodeDistance(referencedNodeId, distance);
+        }
+
+        public NodeDistance ReferencedNode { get; set; }
+        public int Distance { get; set; }
     }
 }

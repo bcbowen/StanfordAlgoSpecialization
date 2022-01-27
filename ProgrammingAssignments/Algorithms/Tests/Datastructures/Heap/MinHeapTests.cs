@@ -10,8 +10,8 @@ namespace Algorithms.Tests.Datastructures.Heap
         [Test]
         public void OneNodeHeapInitializes()
         {
-            MinHeap<DijkstraNode> heap = new MinHeap<DijkstraNode>();
-            heap.Enqueue(new DijkstraNode(3));
+            MinHeap<Node> heap = new MinHeap<Node>();
+            heap.Enqueue(new Node(3));
             int[] values = heap.GetValues();
             Assert.AreEqual(1, values.Length);
             Assert.AreEqual(3, values[0]);
@@ -31,10 +31,10 @@ namespace Algorithms.Tests.Datastructures.Heap
         */
         public void HeapEnqueueSetsNodesInExpectedPlaces(int[] insertNodes, int[] retrievedValues)
         {
-            MinHeap<DijkstraNode> heap = new MinHeap<DijkstraNode>();
+            MinHeap<Node> heap = new MinHeap<Node>();
             foreach (int value in insertNodes)
             {
-                heap.Enqueue(new DijkstraNode(value));
+                heap.Enqueue(new Node(value));
             }
 
             int[] values = heap.GetValues();
@@ -46,17 +46,17 @@ namespace Algorithms.Tests.Datastructures.Heap
         public void HeapDequeuesValuesInOrder()
         {
             int[] values = new[] { 6, 4, 1, 3, 5, 2 };
-            MinHeap<DijkstraNode> heap = new MinHeap<DijkstraNode>();
+            MinHeap<Node> heap = new MinHeap<Node>();
 
             foreach (int value in values)
             {
-                heap.Enqueue(new DijkstraNode(value));
+                heap.Enqueue(new Node(value));
             }
 
             int expectedValue = 1;
             while (expectedValue < 7)
             {
-                DijkstraNode node = heap.Dequeue();
+                Node node = heap.Dequeue();
                 Assert.AreEqual(expectedValue, node.Value);
                 expectedValue++;
             }
@@ -77,14 +77,14 @@ namespace Algorithms.Tests.Datastructures.Heap
         [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, 2, 2)]
         public void HeapFindReturnsExpectedNode(int[] values, int search, int expectedIndex)
         {
-            MinHeap<DijkstraNode> heap = new MinHeap<DijkstraNode>();
+            MinHeap<Node> heap = new MinHeap<Node>();
 
             foreach (int value in values)
             {
-                heap.Enqueue(new DijkstraNode(value));
+                heap.Enqueue(new Node(value));
             }
 
-            (int index, DijkstraNode node) = heap.Find(search);
+            (int index, Node node) = heap.Find(search);
             Assert.NotNull(node);
             Assert.AreEqual(node.Value, search);
             Assert.AreEqual(expectedIndex, index);
@@ -105,14 +105,14 @@ namespace Algorithms.Tests.Datastructures.Heap
         [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, 2, new[] { 1, 3, 4, 6, 5 })]
         public void HeapRemoveReturnsExpectedNodeAndBalancesHeap(int[] nodeValues, int value, int[] expectedHeapState)
         {
-            MinHeap<DijkstraNode> heap = new MinHeap<DijkstraNode>();
+            MinHeap<Node> heap = new MinHeap<Node>();
 
             foreach (int nv in nodeValues)
             {
-                heap.Enqueue(new DijkstraNode(nv));
+                heap.Enqueue(new Node(nv));
             }
 
-            DijkstraNode node = heap.Remove(value);
+            Node node = heap.Remove(value);
             Assert.NotNull(node);
             Assert.AreEqual(node.Value, value);
             Assert.AreEqual(expectedHeapState, heap.GetValues());
@@ -129,11 +129,11 @@ namespace Algorithms.Tests.Datastructures.Heap
         [TestCase(new[] { 1, 3, 4, 6, 5, 2 }, new[] { 1, 3, 2, 6, 5, 4 })]
         public void ReHeapUpLeavesBalancedHeap(int[] beginState, int[] endState)
         {
-            MinHeap<DijkstraNode> heap = new MinHeap<DijkstraNode>();
+            MinHeap<Node> heap = new MinHeap<Node>();
 
             for (int i = 0; i < beginState.Length; i++)
             {
-                heap._heap.Add(new DijkstraNode(beginState[i]));
+                heap._heap.Add(new Node(beginState[i]));
             }
 
             heap.ReheapUp();
@@ -151,11 +151,11 @@ namespace Algorithms.Tests.Datastructures.Heap
         [TestCase(new[] { 1, 3, 4, 6, 5, 2 }, new[] { 1, 3, 2, 6, 5, 4 }, 2)]
         public void ReHeapDownLeavesBalancedHeap(int[] beginState, int[] endState, int index)
         {
-            MinHeap<DijkstraNode> heap = new MinHeap<DijkstraNode>();
+            MinHeap<Node> heap = new MinHeap<Node>();
 
             for (int i = 0; i < beginState.Length; i++)
             {
-                heap._heap.Add(new DijkstraNode(beginState[i]));
+                heap._heap.Add(new Node(beginState[i]));
             }
 
             heap.ReheapDown(index);

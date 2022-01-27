@@ -9,47 +9,73 @@ namespace Algorithms.Graph.Dijkstra
 {
     public class DijkstraGraph 
     {
+        public List<DijkstraNode> Nodes { get; private set; } = new List<DijkstraNode>();
+        public int StartNodeId { get; set; }
+        /*
         public List<DijkstraNode> ExploredNodes { get; private set; } = new List<DijkstraNode>();
 
         public MinHeap<DijkstraNode> UnexploredNodes { get; private set; } = new MinHeap<DijkstraNode>();
         public List<DijkstraNode> Frontier { get; private set; } = new List<DijkstraNode>();
-
-        public void CalculateShortestPaths()
+        */
+        public static List<NodeDistance> CalculateShortestPaths(DijkstraGraph graph)
         {
             // add start node to Explored Nodes with distance of 0
-            DijkstraNode node = UnexploredNodes.Dequeue();
-            AddToFrontier(node, 0);
+            //DijkstraNode node = UnexploredNodes.Dequeue();
+            DijkstraHeap frontier = new DijkstraHeap();
+            List<NodeDistance> processedNodes = new List<NodeDistance>();
+            List<DijkstraNode> transferNodes;
+            //AddToFrontier(node, 0);
+            const int Unreachable = 1000000;
 
-            int minDistance;
-            ReferencedNode minNode = node.ReferencedNodes[0];
-            int distance;
-            while (Frontier.Count > 0)
+            transferNodes = graph.Nodes.Where(n => n.Value == graph.StartNodeId).ToList();
+            foreach (DijkstraNode node in transferNodes)
             {
-                minDistance = 1000000;
-                for (int i = 0; i < Frontier.Count; i++)
+                frontier.Enqueue(node);
+                graph.Nodes.Remove(node);
+            }
+            processedNodes.Add(new NodeDistance(graph.StartNodeId, 0));
+
+            while (frontier.Count > 0) 
+            {
+                DijkstraNode node = frontier.Dequeue();
+                
+                NodeDistance processedNode = processedNodes.FirstOrDefault(n => n.NodeId == node.Value);
+                if (processedNode != null)
                 {
-                    DijkstraNode fromNode = Frontier[i];
-
-                    foreach (ReferencedNode toNode in fromNode.ReferencedNodes.Where(n => !n.Done))
-                    {
-
-                        distance = fromNode.MinDistance + toNode.Distance;
-                        if (distance < minDistance)
-                        {
-                            minDistance = distance;
-                            minNode = toNode;
-                        }
-                    }
+                    if (node.Distance < processedNode.Distance) processedNode.Distance = processedNode.Distance;
+                }
+                else
+                {
+                    processedNodes.Add(new NodeDistance(node.Value, node.Distance));
                 }
 
-                node = UnexploredNodes.Remove(minNode.Value);
-                AddToFrontier(node, minDistance);
-                PruneFrontier();
+                if (node.ReferencedNode == null) continue; 
+                transferNodes = graph.Nodes.Where(n => n.Value == node.ReferencedNode.NodeId).ToList();
+                if (transferNodes.Count > 0)
+                {
+                    foreach (DijkstraNode transferNode in transferNodes)
+                    {
+                        if (transferNode.Distance != Unreachable)
+                        {
+                            transferNode.Distance = node.Distance + node.ReferencedNode.Distance;
+                            frontier.Enqueue(transferNode);
 
+                            DijkstraNode returnNode = graph.Nodes.FirstOrDefault(n => n.Value == transferNode.ReferencedNode.NodeId && n.ReferencedNode.NodeId == transferNode.Value);
+                            if (returnNode != null) returnNode.Distance = Unreachable;
+                        }
+                        graph.Nodes.Remove(transferNode);
+                    }
+                }
+                else
+                {
+                    frontier.Enqueue(new DijkstraNode(node.ReferencedNode.NodeId, node.Distance + node.ReferencedNode.Distance));
+                }
+                
             }
-
+            return processedNodes;
         }
-
+        
+        /*
         internal void AddToFrontier(DijkstraNode node, int minDistance)
         {
             Frontier.Add(node);
@@ -84,7 +110,9 @@ namespace Algorithms.Graph.Dijkstra
             node.MinDistance = minDistance;
 
         }
+        */
 
+        /*
         /// <summary>
         /// 
         /// </summary>
@@ -103,6 +131,7 @@ namespace Algorithms.Graph.Dijkstra
                 }
             }
         }
+        */
 
         public static DijkstraGraph LoadGraph(string path)
         {
@@ -111,22 +140,25 @@ namespace Algorithms.Graph.Dijkstra
             {
                 string line;
                 DijkstraNode node;
+                int nodeId; 
                 while ((line = reader.ReadLine()) != null)
                 {
                     string[] fields = line.Split('\t');
-                    node = new DijkstraNode(int.Parse(fields[0]));
-
+                    nodeId = int.Parse(fields[0]);
+                    if (graph.StartNodeId == 0) 
+                    {
+                        graph.StartNodeId = nodeId;
+                    }
                     for (int i = 1; i < fields.Length; i++)
                     {
+                        
                         string[] nodeInfo = fields[i].Split(',');
                         if (nodeInfo.Length == 2)
                         {
-                            node.ReferencedNodes.Add(new ReferencedNode(int.Parse(nodeInfo[0]), int.Parse(nodeInfo[1])));
+                            node = new DijkstraNode(nodeId, int.Parse(nodeInfo[0]), int.Parse(nodeInfo[1]));
+                            graph.Nodes.Add(node);
                         }
-
-                    }
-
-                    graph.UnexploredNodes.Enqueue(node);
+                    }                    
                 }
                 reader.Close();
             }

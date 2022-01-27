@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 using Algorithms.Graph.Dijkstra;
@@ -9,6 +10,7 @@ namespace Algorithms.Tests.Graph
     [TestFixture]
     public class DijkstraGraphTests
     {
+        /*
         [Test]
         public void GraphUnexploredIsEmptyAfterDijkstra()
         {
@@ -16,7 +18,6 @@ namespace Algorithms.Tests.Graph
             graph.CalculateShortestPaths();
 
             Assert.AreEqual(0, graph.UnexploredNodes.Count);
-
         }
 
         [Test]
@@ -27,7 +28,7 @@ namespace Algorithms.Tests.Graph
 
             Assert.AreEqual(0, graph.Frontier.Count);
         }
-
+        
         [Test]
         public void GraphExploredNodesFullAfterDijkstra()
         {
@@ -36,6 +37,7 @@ namespace Algorithms.Tests.Graph
 
             Assert.AreEqual(4, graph.ExploredNodes.Count);
         }
+*/
 
         [TestCase(1, 0)]
         [TestCase(2, 1)]
@@ -44,16 +46,17 @@ namespace Algorithms.Tests.Graph
         public void NodesHaveCorrectShortestPathAfterDijkstra(int value, int expectedDistance)
         {
             DijkstraGraph graph = LoadTestGraph();
-            graph.CalculateShortestPaths();
+            List<NodeDistance> result = DijkstraGraph.CalculateShortestPaths(graph);
+            //graph.CalculateShortestPaths();
 
-            DijkstraNode node = graph.ExploredNodes.FirstOrDefault(n => n.Value == value);
+            NodeDistance node = result.FirstOrDefault(n => n.NodeId == value);
 
             Assert.NotNull(node);
 
-            Assert.AreEqual(expectedDistance, node.MinDistance);
-
+            Assert.AreEqual(expectedDistance, node.Distance);
         }
 
+        /*
         [Test]
         public void PruneFrontierDoesNotPruneNodesEarly()
         {
@@ -68,7 +71,7 @@ namespace Algorithms.Tests.Graph
             Assert.True(graph.Frontier.Any(n => n.Value == 1));
 
         }
-
+        
         /// <summary>
         /// After adding first 3 nodes to the frontier, node 1 does not have any referenced nodes that are unexplored, 
         /// so it should be pruned
@@ -89,30 +92,72 @@ namespace Algorithms.Tests.Graph
             int[] expectedNodes = { 2, 3 };
             Assert.AreEqual(graph.Frontier.Select(n => n.Value).ToArray(), expectedNodes);
         }
+*/
+
+        [Test]
+        public void SimpleTest() 
+        {
+            // https://www.coursera.org/learn/algorithms-graphs-data-structures/discussions/forums/wuLMg3b0EeahUxJTh9j9Fw/threads/BCALP6nMEea_PRKBTIJnuA
+
+            DijkstraGraph graph = new DijkstraGraph();
+            // 1	2,1	8,2
+            graph.Nodes.Add(new DijkstraNode(1, 2, 1));
+            graph.Nodes.Add(new DijkstraNode(1, 8, 2));
+            // 2   1,1 3,1
+            graph.Nodes.Add(new DijkstraNode(2, 1, 1));
+            graph.Nodes.Add(new DijkstraNode(2, 3, 1));
+            // 3   2,1 4,1
+            graph.Nodes.Add(new DijkstraNode(3, 2, 1));
+            graph.Nodes.Add(new DijkstraNode(3, 4, 1));
+            // 4   3,1 5,1
+            graph.Nodes.Add(new DijkstraNode(4, 3, 1));
+            graph.Nodes.Add(new DijkstraNode(4, 5, 1));
+            // 5   4,1 6,1
+            graph.Nodes.Add(new DijkstraNode(5, 4, 1));
+            graph.Nodes.Add(new DijkstraNode(5, 6, 1));
+            //6   5,1 7,1
+            graph.Nodes.Add(new DijkstraNode(6, 5, 1));
+            graph.Nodes.Add(new DijkstraNode(6, 7, 1));
+            // 7   6,1 8,1
+            graph.Nodes.Add(new DijkstraNode(7, 6, 1));
+            graph.Nodes.Add(new DijkstraNode(7, 8, 1));
+            // 8   7,1 1,2
+            graph.Nodes.Add(new DijkstraNode(8, 7, 1));
+            graph.Nodes.Add(new DijkstraNode(8, 1, 2));
+
+            /*
+                output:
+                1 0[]
+                2 1[2]
+                3 2[2, 3]
+                4 3[2, 3, 4]
+                5 4[2, 3, 4, 5]
+                6 4[8, 7, 6]
+                7 3[8, 7]
+                8 2[8]
+           */
+            graph.StartNodeId = 1;
+            List<NodeDistance> result = DijkstraGraph.CalculateShortestPaths(graph);
+            Assert.AreEqual(0, result.First(n => n.NodeId == 1).Distance);
+            Assert.AreEqual(1, result.First(n => n.NodeId == 2).Distance);
+            Assert.AreEqual(2, result.First(n => n.NodeId == 3).Distance);
+            Assert.AreEqual(3, result.First(n => n.NodeId == 4).Distance);
+            Assert.AreEqual(4, result.First(n => n.NodeId == 5).Distance);
+            Assert.AreEqual(4, result.First(n => n.NodeId == 6).Distance);
+            Assert.AreEqual(3, result.First(n => n.NodeId == 7).Distance);
+            Assert.AreEqual(2, result.First(n => n.NodeId == 8).Distance);
+        }
 
         private DijkstraGraph LoadTestGraph()
         {
             DijkstraGraph graph = new DijkstraGraph();
-
-            DijkstraNode node = new DijkstraNode(1);
-            node.ReferencedNodes.Add(new ReferencedNode(2, 1));
-            node.ReferencedNodes.Add(new ReferencedNode(3, 4));
-
-            graph.UnexploredNodes.Enqueue(node);
-
-            node = new DijkstraNode(2);
-            node.ReferencedNodes.Add(new ReferencedNode(3, 2));
-            node.ReferencedNodes.Add(new ReferencedNode(4, 6));
-
-            graph.UnexploredNodes.Enqueue(node);
-
-            node = new DijkstraNode(3);
-            node.ReferencedNodes.Add(new ReferencedNode(4, 3));
-
-            graph.UnexploredNodes.Enqueue(node);
-
-            node = new DijkstraNode(4);
-            graph.UnexploredNodes.Enqueue(node);
+            graph.StartNodeId = 1;
+           
+            graph.Nodes.Add(new DijkstraNode(1, 2, 1));
+            graph.Nodes.Add(new DijkstraNode(1, 3, 4));
+            graph.Nodes.Add(new DijkstraNode(2, 3, 2));
+            graph.Nodes.Add(new DijkstraNode(2, 4, 6));
+            graph.Nodes.Add(new DijkstraNode(3, 4, 3));
 
             return graph;
         }

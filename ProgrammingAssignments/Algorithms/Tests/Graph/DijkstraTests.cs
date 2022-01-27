@@ -23,14 +23,14 @@ namespace Algorithms.Tests.Graph
             Assert.True(File.Exists(testFile.FullName));
 
             DijkstraGraph graph = DijkstraGraph.LoadGraph(testFile.FullName);
-            graph.CalculateShortestPaths();
+            List<NodeDistance> nodeDistances = DijkstraGraph.CalculateShortestPaths(graph);
             List<int> expectedResult = GetOutputs(GetOutputFileName(testFile.FullName));
 
-            List<int> result = GetTestResults(_testIds, graph);
+            List<int> result = GetTestResults(_testIds, nodeDistances);
             Assert.AreEqual(result.Count(), expectedResult.Count);
             for (int i = 0; i < result.Count(); i++)
             {
-                Assert.AreEqual(expectedResult[i], result[i]);
+                Assert.AreEqual(expectedResult[i], result[i], $"Mismatch on testId {_testIds[i]} expected: {expectedResult[i]} got: {result[i]}");
             }
 
         }
@@ -45,10 +45,10 @@ namespace Algorithms.Tests.Graph
             Assert.True(File.Exists(testFile.FullName));
 
             DijkstraGraph graph = DijkstraGraph.LoadGraph(testFile.FullName);
-            graph.CalculateShortestPaths();
+            List<NodeDistance> nodeDistances = DijkstraGraph.CalculateShortestPaths(graph);
             List<int> expectedResult = GetOutputs(GetOutputFileName(testFile.FullName));
 
-            List<int> result = GetTestResults(_testIds, graph);
+            List<int> result = GetTestResults(_testIds, nodeDistances);
             Assert.AreEqual(result.Count(), expectedResult.Count);
             for (int i = 0; i < result.Count(); i++)
             {
@@ -67,10 +67,10 @@ namespace Algorithms.Tests.Graph
             Assert.True(File.Exists(testFile.FullName));
 
             DijkstraGraph graph = DijkstraGraph.LoadGraph(testFile.FullName);
-            graph.CalculateShortestPaths();
+            List<NodeDistance> nodeDistances = DijkstraGraph.CalculateShortestPaths(graph);
             List<int> expectedResult = GetOutputs(GetOutputFileName(testFile.FullName));
 
-            List<int> result = GetTestResults(_testIds, graph);
+            List<int> result = GetTestResults(_testIds, nodeDistances);
             Assert.AreEqual(result.Count(), expectedResult.Count);
             for (int i = 0; i < result.Count(); i++)
             {
@@ -89,10 +89,10 @@ namespace Algorithms.Tests.Graph
             Assert.True(File.Exists(testFile.FullName));
 
             DijkstraGraph graph = DijkstraGraph.LoadGraph(testFile.FullName);
-            graph.CalculateShortestPaths();
+            List<NodeDistance> nodeDistances = DijkstraGraph.CalculateShortestPaths(graph);
             List<int> expectedResult = GetOutputs(GetOutputFileName(testFile.FullName));
 
-            List<int> result = GetTestResults(_testIds, graph);
+            List<int> result = GetTestResults(_testIds, nodeDistances);
             Assert.AreEqual(result.Count(), expectedResult.Count);
             for (int i = 0; i < result.Count(); i++)
             {
@@ -111,10 +111,10 @@ namespace Algorithms.Tests.Graph
             Assert.True(File.Exists(testFile.FullName));
 
             DijkstraGraph graph = DijkstraGraph.LoadGraph(testFile.FullName);
-            graph.CalculateShortestPaths();
+            List<NodeDistance> nodeDistances = DijkstraGraph.CalculateShortestPaths(graph);
             List<int> expectedResult = GetOutputs(GetOutputFileName(testFile.FullName));
 
-            List<int> result = GetTestResults(_testIds, graph);
+            List<int> result = GetTestResults(_testIds, nodeDistances);
             Assert.AreEqual(result.Count(), expectedResult.Count);
             for (int i = 0; i < result.Count(); i++)
             {
@@ -133,10 +133,10 @@ namespace Algorithms.Tests.Graph
             Assert.True(File.Exists(testFile.FullName));
 
             DijkstraGraph graph = DijkstraGraph.LoadGraph(testFile.FullName);
-            graph.CalculateShortestPaths();
+            List<NodeDistance> nodeDistances = DijkstraGraph.CalculateShortestPaths(graph);
             List<int> expectedResult = GetOutputs(GetOutputFileName(testFile.FullName));
 
-            List<int> result = GetTestResults(_testIds, graph);
+            List<int> result = GetTestResults(_testIds, nodeDistances);
             Assert.AreEqual(result.Count(), expectedResult.Count);
             for (int i = 0; i < result.Count(); i++)
             {
@@ -155,10 +155,10 @@ namespace Algorithms.Tests.Graph
             Assert.True(File.Exists(testFile.FullName));
 
             DijkstraGraph graph = DijkstraGraph.LoadGraph(testFile.FullName);
-            graph.CalculateShortestPaths();
+            List<NodeDistance> nodeDistances = DijkstraGraph.CalculateShortestPaths(graph);
             List<int> expectedResult = GetOutputs(GetOutputFileName(testFile.FullName));
 
-            List<int> result = GetTestResults(_testIds, graph);
+            List<int> result = GetTestResults(_testIds, nodeDistances);
             Assert.AreEqual(result.Count(), expectedResult.Count);
             for (int i = 0; i < result.Count(); i++)
             {
@@ -201,12 +201,12 @@ namespace Algorithms.Tests.Graph
             return outputs;
         }
 
-        private List<int> GetTestResults(int[] values, DijkstraGraph graph)
+        private List<int> GetTestResults(int[] values, List<NodeDistance> nodeDistances)
         {
             List<int> results = new List<int>();
             foreach (int value in values)
             {
-                results.Add(graph.ExploredNodes.First(n => n.Value == value).MinDistance);
+                results.Add(nodeDistances.First(n => n.NodeId == value).Distance);
             }
 
             return results;
