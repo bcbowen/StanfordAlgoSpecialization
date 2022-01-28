@@ -98,15 +98,16 @@ namespace Algorithms.Graph.Dijkstra
                 leftChildIndex = index * 2 + 1;
                 rightChildIndex = leftChildIndex + 1;
 
+
                 if (_heap.Count > leftChildIndex &&
                     _heap[leftChildIndex] != null &&
-                    _heap[leftChildIndex].Distance < _heap[index].Distance)
+                    _heap[leftChildIndex].ReferencedNode.Distance + _heap[leftChildIndex].Distance < _heap[index].ReferencedNode.Distance + _heap[index].Distance)
                     minChildIndex = leftChildIndex;
 
                 if (_heap.Count > rightChildIndex &&
                     _heap[rightChildIndex] != null &&
-                    _heap[rightChildIndex].Distance < _heap[index].Distance &&
-                    _heap[rightChildIndex].Distance < _heap[leftChildIndex].Distance)
+                    _heap[rightChildIndex].ReferencedNode.Distance + _heap[rightChildIndex].Distance < _heap[index].ReferencedNode.Distance + _heap[index].Distance &&
+                    _heap[rightChildIndex].ReferencedNode.Distance + _heap[rightChildIndex].Distance < _heap[leftChildIndex].ReferencedNode.Distance + _heap[leftChildIndex].Distance)
                     minChildIndex = rightChildIndex;
 
                 if (minChildIndex != 0)
@@ -129,7 +130,7 @@ namespace Algorithms.Graph.Dijkstra
             do
             {
                 parentIndex = (index - 1) / 2;
-                if (_heap[index].Distance < _heap[parentIndex].Distance)
+                if (_heap[index].ReferencedNode.Distance + _heap[index].Distance < _heap[parentIndex].ReferencedNode.Distance + _heap[parentIndex].Distance)
                 {
                     DijkstraNode temp = _heap[parentIndex];
                     _heap[parentIndex] = _heap[index];

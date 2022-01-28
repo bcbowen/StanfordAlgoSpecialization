@@ -33,7 +33,7 @@ namespace Algorithms.Graph.Dijkstra
                 frontier.Enqueue(node);
                 graph.Nodes.Remove(node);
             }
-            processedNodes.Add(new NodeDistance(graph.StartNodeId, 0));
+            //processedNodes.Add(new NodeDistance(graph.StartNodeId, 0));
 
             while (frontier.Count > 0) 
             {
@@ -49,7 +49,7 @@ namespace Algorithms.Graph.Dijkstra
                     processedNodes.Add(new NodeDistance(node.Value, node.Distance));
                 }
 
-                if (node.ReferencedNode == null) continue; 
+                //if (node.ReferencedNode == null) continue; 
                 transferNodes = graph.Nodes.Where(n => n.Value == node.ReferencedNode.NodeId).ToList();
                 if (transferNodes.Count > 0)
                 {
@@ -68,7 +68,16 @@ namespace Algorithms.Graph.Dijkstra
                 }
                 else
                 {
-                    frontier.Enqueue(new DijkstraNode(node.ReferencedNode.NodeId, node.Distance + node.ReferencedNode.Distance));
+                    //frontier.Enqueue(new DijkstraNode(node.ReferencedNode.NodeId, node.Distance + node.ReferencedNode.Distance));
+                    processedNode = processedNodes.FirstOrDefault(n => n.NodeId == node.ReferencedNode.NodeId);
+                    if (processedNode != null)
+                    {
+                        if (node.Distance < processedNode.Distance) processedNode.Distance = processedNode.Distance;
+                    }
+                    else
+                    {
+                        processedNodes.Add(new NodeDistance(node.ReferencedNode.NodeId, node.Distance + node.ReferencedNode.Distance));
+                    }
                 }
                 
             }
