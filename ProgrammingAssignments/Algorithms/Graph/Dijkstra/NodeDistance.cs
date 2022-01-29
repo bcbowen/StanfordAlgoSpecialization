@@ -1,4 +1,6 @@
-﻿namespace Algorithms.Graph.Dijkstra
+﻿using System.Collections.Generic; 
+
+namespace Algorithms.Graph.Dijkstra
 {
     public class NodeDistance
     {
@@ -10,5 +12,7 @@
 
         public int NodeId { get; set; }
         public int Distance { get; set; }
+
+        public List<int> Path { get; private set; } = new List<int>();
     }
 }

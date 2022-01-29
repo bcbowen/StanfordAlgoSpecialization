@@ -31,7 +31,7 @@ namespace Algorithms.Graph.Dijkstra
             foreach (DijkstraNode node in transferNodes)
             {
                 frontier.Enqueue(node);
-                graph.Nodes.Remove(node);
+                //graph.Nodes.Remove(node);
             }
             //processedNodes.Add(new NodeDistance(graph.StartNodeId, 0));
 
@@ -42,11 +42,18 @@ namespace Algorithms.Graph.Dijkstra
                 NodeDistance processedNode = processedNodes.FirstOrDefault(n => n.NodeId == node.Value);
                 if (processedNode != null)
                 {
-                    if (node.Distance < processedNode.Distance) processedNode.Distance = processedNode.Distance;
+                    if (node.Distance < processedNode.Distance) 
+                    {
+                        processedNode.Distance = processedNode.Distance;
+                        processedNode.Path.Clear();
+                        processedNode.Path.AddRange(node.Path); 
+                    }
                 }
                 else
                 {
-                    processedNodes.Add(new NodeDistance(node.Value, node.Distance));
+                    NodeDistance nd = new NodeDistance(node.Value, node.Distance);
+                    nd.Path.AddRange(node.Path);    
+                    processedNodes.Add(nd);
                 }
 
                 //if (node.ReferencedNode == null) continue; 
@@ -57,13 +64,15 @@ namespace Algorithms.Graph.Dijkstra
                     {
                         if (transferNode.Distance != Unreachable)
                         {
-                            transferNode.Distance = node.Distance + node.ReferencedNode.Distance;
+                            transferNode.Distance = node.DijkstraValue;
+                            transferNode.Path.AddRange(node.Path);
+                            transferNode.Path.Add(node.Value);
                             frontier.Enqueue(transferNode);
 
-                            DijkstraNode returnNode = graph.Nodes.FirstOrDefault(n => n.Value == transferNode.ReferencedNode.NodeId && n.ReferencedNode.NodeId == transferNode.Value);
-                            if (returnNode != null) returnNode.Distance = Unreachable;
+                            //DijkstraNode returnNode = graph.Nodes.FirstOrDefault(n => n.Value == transferNode.ReferencedNode.NodeId && n.ReferencedNode.NodeId == transferNode.Value);
+                            //if (returnNode != null) returnNode.Distance = Unreachable;
                         }
-                        graph.Nodes.Remove(transferNode);
+                        //graph.Nodes.Remove(transferNode);
                     }
                 }
                 else
@@ -76,7 +85,10 @@ namespace Algorithms.Graph.Dijkstra
                     }
                     else
                     {
-                        processedNodes.Add(new NodeDistance(node.ReferencedNode.NodeId, node.Distance + node.ReferencedNode.Distance));
+                        NodeDistance nd = new NodeDistance(node.ReferencedNode.NodeId, node.DijkstraValue);
+                        nd.Path.AddRange(node.Path);
+                        nd.Path.Add(node.Value);
+                        processedNodes.Add(nd);
                     }
                 }
                 
