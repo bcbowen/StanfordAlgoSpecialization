@@ -9,7 +9,7 @@ namespace Algorithms.Graph.PrimMst
     {
         public List<UndirectedWeightedEdge> Edges { get; private set; } = new List<UndirectedWeightedEdge>();
 
-        public int TotalWeight
+        public long TotalWeight
         {
             get 
             {
