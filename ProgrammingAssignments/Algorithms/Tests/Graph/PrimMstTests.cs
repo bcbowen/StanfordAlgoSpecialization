@@ -47,7 +47,7 @@ namespace Algorithms.Tests.Greedy.PrimMST
             graph.Edges.Add(new UndirectedWeightedEdge(2, 4, 2));
             graph.Edges.Add(new UndirectedWeightedEdge(3, 4, 5));
 
-            PrimTree tree = Algorithm.RunPrimMst(graph);
+            PrimTree tree = Algorithm.RunPrimMstBasic(graph);
             Assert.NotNull(tree.Edges.FirstOrDefault(e => e.ContainsNodes(1, 3)));
             Assert.NotNull(tree.Edges.FirstOrDefault(e => e.ContainsNodes(1, 2)));
             Assert.NotNull(tree.Edges.FirstOrDefault(e => e.ContainsNodes(2, 4)));

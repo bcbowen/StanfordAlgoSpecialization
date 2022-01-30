@@ -18,7 +18,12 @@
 
         public bool ContainsNodes(int id1, int id2)
         {
-            return Nodes[0].NodeId == System.Math.Min(id1, id2) && Nodes[0].NodeId == System.Math.Max(id1, id2);
+            return Nodes[0].NodeId == System.Math.Min(id1, id2) && Nodes[1].NodeId == System.Math.Max(id1, id2);
+        }
+
+        public int OtherNodeId(int nodeId) 
+        {
+            return Nodes[0].NodeId == nodeId ? Nodes[1].NodeId : Nodes[0].NodeId;
         }
     }
 }
