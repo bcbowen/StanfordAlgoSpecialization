@@ -23,9 +23,10 @@ namespace Algorithms.Tests.Graph
         {
             MedianOMatic maintenanceMan = new MedianOMatic();
 
+            int nodeId = 1;
             foreach (int value in values) 
             {
-                maintenanceMan.Insert(value);
+                maintenanceMan.Insert(nodeId++, value);
             }
 
             Assert.AreEqual(hiValues, maintenanceMan.HiHeap.GetValues());
@@ -47,9 +48,10 @@ namespace Algorithms.Tests.Graph
         {
             MedianOMatic maintenanceMan = new MedianOMatic();
 
+            int nodeId = 1;
             foreach (int value in values)
             {
-                maintenanceMan.Insert(value);
+                maintenanceMan.Insert(nodeId++, value);
             }
 
             Assert.AreEqual(hiCount, maintenanceMan.HiHeap.Count);
@@ -71,9 +73,10 @@ namespace Algorithms.Tests.Graph
         {
             MedianOMatic maintenanceMan = new MedianOMatic();
 
+            int nodeId = 1;
             foreach (int value in values)
             {
-                maintenanceMan.Insert(value);
+                maintenanceMan.Insert(nodeId++, value);
             }
 
             Assert.AreEqual(expectedMedian, maintenanceMan.GetMedian());
@@ -117,9 +120,10 @@ namespace Algorithms.Tests.Graph
         {
             
             MedianOMatic _maintenanceMan = new MedianOMatic();
+            int nodeId = 1;
             foreach (int value in values) 
             {
-                _maintenanceMan.Insert(value);
+                _maintenanceMan.Insert(nodeId++, value);
             }
 
             Assert.AreEqual(expectedMedian, _maintenanceMan.GetMedian());
@@ -216,11 +220,12 @@ namespace Algorithms.Tests.Graph
 
             using (StreamReader reader = new StreamReader(file.FullName)) 
             {
+                int nodeId = 1;
                 while ((line = reader.ReadLine()) != null)
                 {
                     if (int.TryParse(line, out value))
                     {
-                        _maintenanceMan.Insert(value);
+                        _maintenanceMan.Insert(nodeId++, value);
                     }
                 }
                 reader.Close();

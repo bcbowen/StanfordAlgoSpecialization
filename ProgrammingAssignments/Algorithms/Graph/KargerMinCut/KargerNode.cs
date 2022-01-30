@@ -7,7 +7,7 @@ namespace Algorithms.Graph.KargerMinCut
 {
     public class KargerNode : NodeBase, ICloneable
     {
-        public KargerNode(int Value) : base(Value)
+        public KargerNode(int nodeId) : base(nodeId, 0)
         {
         
         }

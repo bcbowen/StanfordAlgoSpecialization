@@ -1,31 +1,36 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
-namespace Algorithms.Shared
+using Algorithms.Shared;
+
+namespace Algorithms.Graph.PrimMst
 {
-    public class UndirectedWeightedGraph
+    /*
+    public class PrimGraph
     {
         public List<UndirectedWeightedEdge> Edges { get; private set; } = new List<UndirectedWeightedEdge>();
         public List<Node> Nodes { get; private set; } = new List<Node>();
 
-        public static UndirectedWeightedGraph LoadGraph(string fileName) 
+        public static PrimGraph LoadGraph(string fileName)
         {
-            UndirectedWeightedGraph graph = new UndirectedWeightedGraph();
+            PrimGraph graph = new PrimGraph();
             int edgeCount, nodeCount;
 
-            using (StreamReader reader = new StreamReader(fileName)) 
+            using (StreamReader reader = new StreamReader(fileName))
             {
-                
+
                 string line;
                 line = reader.ReadLine();
                 string[] fields = line.Split(' ');
                 nodeCount = int.Parse(fields[0]);
                 edgeCount = int.Parse(fields[1]);
-                while ((line = reader.ReadLine()) != null) 
-                { 
+                while ((line = reader.ReadLine()) != null)
+                {
                     fields = line.Split(' ');
-                    
+
                     if (fields.Length > 2)
                     {
                         graph.Edges.Add(new UndirectedWeightedEdge(int.Parse(fields[0]), int.Parse(fields[1]), int.Parse(fields[2])));
@@ -34,7 +39,7 @@ namespace Algorithms.Shared
                 reader.Close();
             }
 
-            foreach (UndirectedWeightedEdge e in graph.Edges) 
+            foreach (UndirectedWeightedEdge e in graph.Edges)
             {
                 if (!graph.Nodes.Contains(e.Nodes[0])) graph.Nodes.Add(e.Nodes[0]);
                 if (!graph.Nodes.Contains(e.Nodes[1])) graph.Nodes.Add(e.Nodes[1]);
@@ -48,4 +53,5 @@ namespace Algorithms.Shared
             return graph;
         }
     }
+    */
 }

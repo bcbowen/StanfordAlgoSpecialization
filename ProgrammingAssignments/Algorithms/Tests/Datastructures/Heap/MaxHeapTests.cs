@@ -12,7 +12,7 @@ namespace Algorithms.Tests.Datastructures.Heap
         public void OneNodeHeapInitializes()
         {
             MaxHeap<Node> heap = new MaxHeap<Node>();
-            heap.Enqueue(new Node(3));
+            heap.Enqueue(new Node(1, 3));
             int[] values = heap.GetValues();
             Assert.AreEqual(1, values.Length);
             Assert.AreEqual(3, values[0]);
@@ -33,9 +33,10 @@ namespace Algorithms.Tests.Datastructures.Heap
         public void HeapEnqueueSetsNodesInExpectedPlaces(int[] insertNodes, int[] retrievedValues)
         {
             MaxHeap<Node> heap = new MaxHeap<Node>();
+            int nodeId = 1;
             foreach (int value in insertNodes)
             {
-                heap.Enqueue(new Node(value));
+                heap.Enqueue(new Node(nodeId++, value));
             }
 
             int[] values = heap.GetValues();
@@ -47,11 +48,12 @@ namespace Algorithms.Tests.Datastructures.Heap
         public void HeapDequeuesValuesInOrder()
         {
             int[] values = GetTestInitValues();
+            int nodeId = 1;
             MaxHeap<Node> heap = new MaxHeap<Node>();
 
             foreach (int value in values)
             {
-                heap.Enqueue(new Node(value));
+                heap.Enqueue(new Node(nodeId++, value));
             }
 
             int expectedValue = 6;
@@ -81,9 +83,10 @@ namespace Algorithms.Tests.Datastructures.Heap
             int[] values = GetTestInitValues();
             MaxHeap<Node> heap = new MaxHeap<Node>();
 
+            int nodeId = 1;
             foreach (int value in values)
             {
-                heap.Enqueue(new Node(value));
+                heap.Enqueue(new Node(nodeId, value));
             }
 
             (int index, Node node) = heap.Find(search);
@@ -109,10 +112,10 @@ namespace Algorithms.Tests.Datastructures.Heap
         {
             int[] nodeValues = GetTestInitValues(); 
             MaxHeap<Node> heap = new MaxHeap<Node>();
-
+            int nodeId = 1;
             foreach (int nv in nodeValues)
             {
-                heap.Enqueue(new Node(nv));
+                heap.Enqueue(new Node(nodeId++, nv));
             }
 
             Node node = heap.Remove(value);
@@ -135,9 +138,10 @@ namespace Algorithms.Tests.Datastructures.Heap
             MaxHeap<Node> heap = new MaxHeap<Node>();
             // manually add nodes to match test case
             heap._heap = new List<Node>(6);
+            int nodeId = 1;
             for (int i = 0; i < beginState.Length; i++)
             {
-                heap._heap.Add(new Node(beginState[i]));
+                heap._heap.Add(new Node(nodeId++, beginState[i]));
             }
             heap.ReheapUp();
             Assert.AreEqual(endState, heap.GetValues());
@@ -155,10 +159,10 @@ namespace Algorithms.Tests.Datastructures.Heap
         public void ReHeapDownLeavesBalancedHeap(int[] beginState, int[] endState, int index)
         {
             MaxHeap<Node> heap = new MaxHeap<Node>();
-
+            int nodeId = 1;
             for (int i = 0; i < beginState.Length; i++)
             {
-                heap._heap.Add(new Node(beginState[i]));
+                heap._heap.Add(new Node(nodeId++, beginState[i]));
             }
 
             heap.ReheapDown(index);

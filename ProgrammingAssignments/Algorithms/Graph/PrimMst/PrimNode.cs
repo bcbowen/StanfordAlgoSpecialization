@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Algorithms.Shared;
+﻿using Algorithms.Shared;
 
 namespace Algorithms.Graph.PrimMst
 {
+    
+    /*
     public class PrimNode : Node
     {
-        public PrimNode(int value, int nodeId, int referencedNode) : base(value)
-        { 
-            NodeId = nodeId;
-            ReferencedNode = referencedNode;
-        }
+        /// <summary>
+        ///  Value (weight) initialized to 0, will be set later when running the prim mst algo
+        /// </summary>
+        /// <param name="nodeId"></param>
+        public PrimNode(int nodeId) : base(nodeId, int.MaxValue)
+        { }
 
-        public int NodeId { get; set; }
-        public int ReferencedNode { get; set; }
     }
+    */
+    
 }

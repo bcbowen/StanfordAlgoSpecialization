@@ -2,6 +2,6 @@
 {
     public class Node : NodeBase
     {
-        public Node(int value) : base(value) { }
+        public Node(int nodeId, int value) : base(nodeId, value) { }
     }
 }

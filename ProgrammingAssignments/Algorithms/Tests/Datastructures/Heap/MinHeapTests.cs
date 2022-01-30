@@ -11,7 +11,7 @@ namespace Algorithms.Tests.Datastructures.Heap
         public void OneNodeHeapInitializes()
         {
             MinHeap<Node> heap = new MinHeap<Node>();
-            heap.Enqueue(new Node(3));
+            heap.Enqueue(new Node(1, 3));
             int[] values = heap.GetValues();
             Assert.AreEqual(1, values.Length);
             Assert.AreEqual(3, values[0]);
@@ -32,9 +32,10 @@ namespace Algorithms.Tests.Datastructures.Heap
         public void HeapEnqueueSetsNodesInExpectedPlaces(int[] insertNodes, int[] retrievedValues)
         {
             MinHeap<Node> heap = new MinHeap<Node>();
+            int nodeId = 1;
             foreach (int value in insertNodes)
             {
-                heap.Enqueue(new Node(value));
+                heap.Enqueue(new Node(nodeId++, value));
             }
 
             int[] values = heap.GetValues();
@@ -48,9 +49,10 @@ namespace Algorithms.Tests.Datastructures.Heap
             int[] values = new[] { 6, 4, 1, 3, 5, 2 };
             MinHeap<Node> heap = new MinHeap<Node>();
 
+            int nodeId = 1;
             foreach (int value in values)
             {
-                heap.Enqueue(new Node(value));
+                heap.Enqueue(new Node(nodeId++, value));
             }
 
             int expectedValue = 1;
@@ -79,9 +81,10 @@ namespace Algorithms.Tests.Datastructures.Heap
         {
             MinHeap<Node> heap = new MinHeap<Node>();
 
+            int nodeId = 1;
             foreach (int value in values)
             {
-                heap.Enqueue(new Node(value));
+                heap.Enqueue(new Node(nodeId++, value));
             }
 
             (int index, Node node) = heap.Find(search);
@@ -107,9 +110,10 @@ namespace Algorithms.Tests.Datastructures.Heap
         {
             MinHeap<Node> heap = new MinHeap<Node>();
 
+            int nodeId = 1;
             foreach (int nv in nodeValues)
             {
-                heap.Enqueue(new Node(nv));
+                heap.Enqueue(new Node(nodeId++, nv));
             }
 
             Node node = heap.Remove(value);
@@ -131,9 +135,10 @@ namespace Algorithms.Tests.Datastructures.Heap
         {
             MinHeap<Node> heap = new MinHeap<Node>();
 
+            int nodeId = 1;
             for (int i = 0; i < beginState.Length; i++)
             {
-                heap._heap.Add(new Node(beginState[i]));
+                heap._heap.Add(new Node(nodeId++, beginState[i]));
             }
 
             heap.ReheapUp();
@@ -153,9 +158,10 @@ namespace Algorithms.Tests.Datastructures.Heap
         {
             MinHeap<Node> heap = new MinHeap<Node>();
 
+            int nodeId = 1;
             for (int i = 0; i < beginState.Length; i++)
             {
-                heap._heap.Add(new Node(beginState[i]));
+                heap._heap.Add(new Node(nodeId++, beginState[i]));
             }
 
             heap.ReheapDown(index);

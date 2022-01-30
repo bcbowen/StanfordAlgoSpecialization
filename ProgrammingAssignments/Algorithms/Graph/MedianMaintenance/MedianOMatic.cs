@@ -37,28 +37,28 @@ namespace Algorithms.Graph.MedianMaintenance
         }
 
 
-        public void Insert(int value) 
+        public void Insert(int nodeId, int value) 
         {
             if (Count == 0 || value < LoHeap.Peek()) 
             {
-                LoHeap.Enqueue(new Node(value));
+                LoHeap.Enqueue(new Node(nodeId, value));
             }
             else if (value > HiHeap.Peek())
             {
-                HiHeap.Enqueue(new Node(value));
+                HiHeap.Enqueue(new Node(nodeId, value));
             }
             else
             {
-                InsertMiddle(value);
+                InsertMiddle(nodeId, value);
             }
 
             RebalanceHeaps();
             RunningMedianTotalRaw += GetMedian();
         }
 
-        private void InsertMiddle(int value) 
+        private void InsertMiddle(int nodeId, int value) 
         {
-            Node node = new Node(value);
+            Node node = new Node(nodeId, value);
             if (HiHeap.Count > LoHeap.Count)
             {
                 LoHeap.Enqueue(node);

@@ -6,12 +6,15 @@ namespace Algorithms.Shared
     {
         public int Value { get; set; }
 
-        public NodeBase(int value) 
+        public int NodeId { get; set; }
+
+        public NodeBase(int nodeId, int value) 
         {
+            NodeId = nodeId;
             Value = value;
         }
 
-        public bool Equals(Shared.NodeBase? other)
+        public bool Equals(NodeBase other)
         {
             return Equals(other);
         }
@@ -21,7 +24,7 @@ namespace Algorithms.Shared
             var n = obj as NodeBase;
             if (n == null) return false;
             
-            return Value.Equals(n.Value);
+            return n.Value == Value && n.NodeId == NodeId;
         }
 
         public override int GetHashCode()

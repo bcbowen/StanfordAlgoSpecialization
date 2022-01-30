@@ -6,7 +6,7 @@ namespace Algorithms.Graph.Kosaraju
 {
     public class KosarajuNode : NodeBase
     {
-        public KosarajuNode(int value) : base(value) { }
+        public KosarajuNode(int nodeId) : base(nodeId, 0) { }
 
         public LastStep Status { get; set; } = LastStep.Loaded;
 

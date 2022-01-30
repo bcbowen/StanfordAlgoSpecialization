@@ -14,7 +14,7 @@ namespace Algorithms.Graph.Dijkstra
         }
         */
 
-        public DijkstraNode(int nodeId, int referencedNodeId, int distance) : base(nodeId) 
+        public DijkstraNode(int nodeId, int referencedNodeId, int distance) : base(nodeId, distance) 
         {
             ReferencedNode = new NodeDistance(referencedNodeId, distance);
         }

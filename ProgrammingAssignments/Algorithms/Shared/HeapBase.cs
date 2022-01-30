@@ -42,24 +42,24 @@ namespace Algorithms.Shared
             return Find(0, value);
         }
 
-        private (int, T) Find(int index, int value)
+        private (int, T) Find(int index, int nodeId)
         {
             if (index > _heap.Count - 1) return (-1, null);
-            if (_heap[index].Value == value) return (index, _heap[index]);
+            if (_heap[index].NodeId == nodeId) return (index, _heap[index]);
             T node;
             int leftChildIndex = (index * 2) + 1;
             int i;
-            (i, node) = Find(leftChildIndex, value);
+            (i, node) = Find(leftChildIndex, nodeId);
             if (node != null) return (i, node);
             int rightChildIndex = leftChildIndex + 1;
-            return Find(rightChildIndex, value);
+            return Find(rightChildIndex, nodeId);
         }
 
-        public T Remove(int value)
+        public T Remove(int nodeId)
         {
             T node;
             int index;
-            (index, node) = Find(value);
+            (index, node) = Find(nodeId);
             Debug.Assert(index > -1);
             ReplaceWithLast(index);
             ReheapDown(index);
