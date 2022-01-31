@@ -63,6 +63,101 @@ namespace Algorithms.Tests.Greedy.PrimMST
             RunBasicTest(testNumber, count);
         }
 
+        [TestCase(5, 20)]
+        [TestCase(6, 20)]
+        [TestCase(7, 20)]
+        [TestCase(8, 20)]
+        [TestCase(9, 40)]
+        [TestCase(10, 40)]
+        [TestCase(11, 40)]
+        [TestCase(12, 40)]
+        public void NonHeapPrimTestsSmall(int testNumber, int count)
+        {
+            RunBasicTest(testNumber, count);
+        }
+
+        [TestCase(13, 80)]
+        [TestCase(14, 80)]
+        [TestCase(15, 80)]
+        [TestCase(16, 80)]
+        [TestCase(17, 100)]
+        [TestCase(18, 100)]
+        [TestCase(19, 100)]
+        [TestCase(20, 100)]
+        public void NonHeapPrimTestsMedium(int testNumber, int count)
+        {
+            RunBasicTest(testNumber, count);
+        }
+
+        [TestCase(21, 200)]
+        [TestCase(22, 200)]
+        [TestCase(23, 200)]
+        [TestCase(24, 200)]
+        [TestCase(25, 400)]
+        [TestCase(26, 400)]
+        [TestCase(27, 400)]
+        [TestCase(28, 400)]
+        [TestCase(29, 800)]
+        [TestCase(30, 800)]
+        [TestCase(31, 800)]
+        [TestCase(32, 800)]
+        [TestCase(33, 1000)]
+        [TestCase(34, 1000)]
+        [TestCase(35, 1000)]
+        [TestCase(36, 1000)]
+        public void NonHeapPrimTestsLarge(int testNumber, int count)
+        {
+            RunBasicTest(testNumber, count);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="testNumber"></param>
+        /// <param name="count"></param>
+        [TestCase(37, 2000)]
+        [TestCase(38, 2000)]
+        [TestCase(39, 2000)]
+        [TestCase(40, 2000)]
+        public void NonHeapPrimTestsHuge(int testNumber, int count)
+        {
+            RunBasicTest(testNumber, count);
+        }
+
+        [Ignore("These take far too long to run the straightforward algorithm, try with the heap based version")]
+        [TestCase(41, 4000)]
+        [TestCase(42, 4000)]
+        [TestCase(43, 4000)]
+        [TestCase(44, 4000)]
+        [TestCase(45, 8000)]
+        [TestCase(46, 8000)]
+        [TestCase(47, 8000)]
+        [TestCase(48, 8000)]
+        [TestCase(49, 10000)]
+        [TestCase(50, 10000)]
+        [TestCase(51, 10000)]
+        [TestCase(52, 10000)]
+        [TestCase(53, 20000)]
+        [TestCase(54, 20000)]
+        [TestCase(55, 20000)]
+        [TestCase(56, 20000)]
+        [TestCase(57, 40000)]
+        [TestCase(58, 40000)]
+        [TestCase(59, 40000)]
+        [TestCase(60, 40000)]
+        [TestCase(61, 80000)]
+        [TestCase(62, 80000)]
+        [TestCase(63, 80000)]
+        [TestCase(64, 80000)]
+        [TestCase(65, 100000)]
+        [TestCase(66, 100000)]
+        [TestCase(67, 100000)]
+        [TestCase(68, 100000)]
+        public void NonHeapPrimTestsGargantuan(int testNumber, int count)
+        {
+            RunBasicTest(testNumber, count);
+        }
+
         /// <summary>
         /// Run the non-heap version
         /// </summary>
