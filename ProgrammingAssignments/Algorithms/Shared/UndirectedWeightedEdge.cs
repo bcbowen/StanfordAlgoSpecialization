@@ -25,5 +25,10 @@
         {
             return Nodes[0].NodeId == nodeId ? Nodes[1].NodeId : Nodes[0].NodeId;
         }
+
+        public static int WeightAsecendingComparison(UndirectedWeightedEdge e1, UndirectedWeightedEdge e2)
+        {
+            return e1.Weight.CompareTo(e2.Weight);
+        }
     }
 }
