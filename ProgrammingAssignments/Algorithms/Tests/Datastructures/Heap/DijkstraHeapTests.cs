@@ -74,16 +74,16 @@ namespace Algorithms.Tests.Datastructures.Heap
             }
 
             int expectedValue = 1;
-            while (expectedValue < 7)
+            while (expectedValue < 6)
             {
                 node = heap.Dequeue();
-                Assert.AreEqual(expectedValue, node.Value);
+                Assert.AreEqual(expectedValue, node.DijkstraValue);
                 expectedValue++;
             }
         }
 
 
-        /*
+        /* nodes depicted like 6-5+1: node 6, distance 5, referenced Node distance 1
          
                     1-0+1
                  /        \
@@ -109,7 +109,7 @@ namespace Algorithms.Tests.Datastructures.Heap
             Assert.AreEqual(expectedNodeIdsFromHeap, heap.GetValues());
         }
 
-        /*
+        /* nodes depicted like 6-5+1: node 6, distance 5, referenced Node distance 1
          
                     1-0+1
                  /        \
@@ -119,7 +119,7 @@ namespace Algorithms.Tests.Datastructures.Heap
         */
         [TestCase(new[] { 4, 3, 2, 6, 5 }, new[] { 3, 2, 1, 5, 4}, new[] { 5, 4, 3, 1, 6 }, new[] { 1, 1, 1, 1, 1}, new[] { 2, 3, 4, 6, 5 }, 0)]
         [TestCase(new[] { 1, 3, 4, 6, 5, 2 }, new[] { 0, 2, 3, 5, 4, 1 }, new[] { 2, 4, 5, 1, 6, 3 }, new[] { 1, 1, 1, 1, 1, 1 }, new[] { 1, 3, 2, 6, 5, 4 }, 2)]
-        public void ReHeapDownLeavesBalancedHeap(int[] nodeIds, int[] distances, int[] referencedNodeIds, int[] referencedNodeDistances, int[] expectedNodeIdsFromHeap, int index)
+        public void ReHeapDownLeavesBalancedHeap(int[] nodeIds, int[] distances, int[] referencedNodeIds, int[] referencedNodeDistances, int[] expectedDijkstraValuesFromHeap, int index)
         {
             DijkstraHeap heap = new DijkstraHeap();
             DijkstraNode node;
@@ -132,7 +132,8 @@ namespace Algorithms.Tests.Datastructures.Heap
             }
 
             heap.ReheapDown(index);
-            Assert.AreEqual(expectedNodeIdsFromHeap, heap.GetValues());
+            int[] heapDValues = heap.GetValues();
+            Assert.AreEqual(expectedDijkstraValuesFromHeap, heapDValues);
         }
     }
 }

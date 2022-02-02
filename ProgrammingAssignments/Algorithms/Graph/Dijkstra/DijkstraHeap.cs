@@ -142,7 +142,7 @@ namespace Algorithms.Graph.Dijkstra
 
         public int[] GetValues()
         {
-            int[] values = _heap.Select(h => h.Value).ToArray();
+            int[] values = _heap.Select(h => h.DijkstraValue).ToArray();
 
             return values;
         }

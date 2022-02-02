@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using Algorithms.Graph.Dijkstra;
 using Algorithms.Shared;
 
 namespace Algorithms.Tests.Datastructures.Heap
@@ -30,17 +29,17 @@ namespace Algorithms.Tests.Datastructures.Heap
                           /       / \       / \   / 
                          1       1   2     1   2 3
         */
-        public void HeapEnqueueSetsNodesInExpectedPlaces(int[] insertNodes, int[] retrievedValues)
+        public void HeapEnqueueSetsNodesInExpectedPlaces(int[] nodeValues, int[] retrievedValues)
         {
             MaxHeap<Node> heap = new MaxHeap<Node>();
             int nodeId = 1;
-            foreach (int value in insertNodes)
+            foreach (int value in nodeValues)
             {
                 heap.Enqueue(new Node(nodeId++, value));
             }
 
             int[] values = heap.GetValues();
-            Assert.AreEqual(insertNodes.Length, values.Length);
+            Assert.AreEqual(nodeValues.Length, values.Length);
             Assert.AreEqual(retrievedValues, values);
         }
 
@@ -83,10 +82,9 @@ namespace Algorithms.Tests.Datastructures.Heap
             int[] values = GetTestInitValues();
             MaxHeap<Node> heap = new MaxHeap<Node>();
 
-            int nodeId = 1;
             foreach (int value in values)
             {
-                heap.Enqueue(new Node(nodeId, value));
+                heap.Enqueue(new Node(value, value));
             }
 
             (int index, Node node) = heap.Find(search);
@@ -112,10 +110,9 @@ namespace Algorithms.Tests.Datastructures.Heap
         {
             int[] nodeValues = GetTestInitValues(); 
             MaxHeap<Node> heap = new MaxHeap<Node>();
-            int nodeId = 1;
             foreach (int nv in nodeValues)
             {
-                heap.Enqueue(new Node(nodeId++, nv));
+                heap.Enqueue(new Node(nv, nv));
             }
 
             Node node = heap.Remove(value);
