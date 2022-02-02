@@ -103,7 +103,7 @@ namespace Algorithms.Graph.KargerMinCut
 		// remove node 1, update references to point to node2
 		private void RerouteNodes(int node1, int node2)
 		{
-			foreach (KargerNode node in _nodes.Where(n => n.Value != node1))
+			foreach (KargerNode node in _nodes.Where(n => n.NodeId != node1))
 			{
 				int i1 = node.LinkedNodes.IndexOf(node1);
 				int i2 = node.LinkedNodes.IndexOf(node2);
@@ -123,7 +123,7 @@ namespace Algorithms.Graph.KargerMinCut
 				}
 			}
 
-			KargerNode n = _nodes.FirstOrDefault(n => n.Value == node1);
+			KargerNode n = _nodes.FirstOrDefault(n => n.NodeId == node1);
 
 			if (n != null) _nodes.Remove(n);
 

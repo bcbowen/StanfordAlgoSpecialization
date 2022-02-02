@@ -69,5 +69,39 @@ namespace Algorithms.Greedy
 
             return (edges, clusterCount);
         }
+
+        public static Dictionary<string, int> LoadBinaryCluster(string fileName) 
+        {
+            /*
+                4 14
+                1 1 0 0 1 0 1 0 1 1 1 0 1 1
+                1 1 0 1 0 1 1 0 0 0 1 1 0 0
+                0 0 1 0 1 0 0 0 0 0 1 1 0 0
+                0 1 0 1 0 1 1 0 0 1 1 1 0 0
+            */
+            Dictionary<string, int> cluster = new Dictionary<string, int>();
+
+            using (StreamReader reader = new StreamReader(fileName))
+            {   
+                string line;
+                // first line has info we don't need (number of lines and number of bits per line)
+                int.Parse(reader.ReadLine());
+                while ((line = reader.ReadLine()) != null)
+                {
+                    line = line.Replace(" ", "");
+                    if (!cluster.ContainsKey(line))
+                    {
+                        cluster[line] = 0;
+                    }
+
+                    cluster[line]++;
+
+                }
+                reader.Close();
+            }
+
+            return cluster;
+
+        }
     }
 }

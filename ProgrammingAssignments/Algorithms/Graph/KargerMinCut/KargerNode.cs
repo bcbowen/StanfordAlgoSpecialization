@@ -17,7 +17,7 @@ namespace Algorithms.Graph.KargerMinCut
 
         public object Clone()
         {
-            KargerNode node = new KargerNode(Value);
+            KargerNode node = new KargerNode(NodeId);
             node.LinkedNodes.AddRange(LinkedNodes);
 
             return node;
