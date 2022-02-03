@@ -5,17 +5,17 @@ namespace Algorithms.Greedy
 {
     public class UnionFind
     {
-        private List<Cluster<int>> _clusters;
+        private List<Cluster> _clusters;
         public int ClusterCount 
         {
             get { return _clusters.Count; }
         }
         public UnionFind(int n) 
         {
-            _clusters = new List<Cluster<int>>(n);
+            _clusters = new List<Cluster>(n);
             
             // Initially there is one set per number with rank 1; add extra node at the end to compensate for index offset
-            for (int i = 0; i <= n; i++) _clusters.Add(new Cluster<int>(i, 1));
+            for (int i = 0; i <= n; i++) _clusters.Add(new Cluster(i, 1));
         }
 
         public int Find(int x)

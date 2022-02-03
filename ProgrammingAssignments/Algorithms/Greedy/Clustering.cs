@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 using Algorithms.Shared;
 
@@ -48,7 +49,59 @@ namespace Algorithms.Greedy
         /// <returns></returns>
         public static int RunBinaryCluster(Dictionary<string, int> clusters) 
         {
-            return 0;
+            UnionFind unionFind = new UnionFind(clusters.Keys.Count);
+            int runningClusterCount = clusters.Keys.Count;
+
+            Func<char, char> flip = (char c) => 
+            {
+                return c == '0' ? '1' : '0';
+            };
+
+            StringBuilder temp; 
+            // merge clusters off by 1
+            foreach (string key in clusters.Keys) 
+            {
+                for (int i = 0; i < key.Length; i++) 
+                {
+                    temp = new StringBuilder(key);
+                    temp[i] = flip(key[i]);
+                    string searchKey = temp.ToString();
+                    if (clusters.ContainsKey(searchKey)) 
+                    {
+                        if (unionFind.Find(clusters[key]) != unionFind.Find(clusters[searchKey])) 
+                        {
+                            unionFind.Union(clusters[key], clusters[searchKey]);
+                            runningClusterCount--;
+                        }
+                    }
+                }
+            }
+
+            // merge clusters off by 2
+            foreach (string key in clusters.Keys)
+            {
+                for (int i = 0; i < key.Length; i++)
+                {
+                    for (int j = i + 1; j < key.Length - 1; j++) 
+                    {
+                        temp = new StringBuilder(key);
+                        temp[i] = flip(key[i]);
+                        temp[j] = flip(key[j]);
+                        string searchKey = temp.ToString();
+                        if (clusters.ContainsKey(searchKey))
+                        {
+                            if (unionFind.Find(clusters[key]) != unionFind.Find(clusters[searchKey]))
+                            {
+                                unionFind.Union(clusters[key], clusters[searchKey]);
+                                runningClusterCount--;
+                            }
+                        }
+                    }
+                    
+                }
+            }
+
+            return runningClusterCount;
         }
 
         public static (List<UndirectedWeightedEdge>, int) LoadEdgeCollection(string fileName) 
@@ -97,16 +150,14 @@ namespace Algorithms.Greedy
                 string line;
                 // first line has info we don't need (number of lines and number of bits per line)
                 reader.ReadLine();
+                int index = 0;
                 while ((line = reader.ReadLine()) != null)
                 {
                     line = line.Replace(" ", "");
                     if (!cluster.ContainsKey(line))
                     {
-                        cluster[line] = 0;
+                        cluster[line] = index++;
                     }
-
-                    cluster[line]++;
-
                 }
                 reader.Close();
             }
