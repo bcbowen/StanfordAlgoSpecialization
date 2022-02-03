@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace Algorithms.Greedy
 {
-    public class Cluster
+    public class Cluster<T>
     {
-        public Cluster(int parent, int rank) 
+        public Cluster(T parent, int rank) 
         {
             Parent = parent;
             Rank = rank;
         }
 
-        public int Parent { get; set; }
+        public T Parent { get; set; }
         public int Rank { get; set; }
     }
 }

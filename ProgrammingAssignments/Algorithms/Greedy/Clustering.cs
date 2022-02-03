@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 using Algorithms.Shared;
@@ -38,6 +39,16 @@ namespace Algorithms.Greedy
                 }
             }
             return maxSpace;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="clusters">Key is integer that represents the cluster, value is the number of occurrences of the key within the cluster</param>
+        /// <returns></returns>
+        public static int RunBinaryCluster(Dictionary<string, int> clusters) 
+        {
+            return 0;
         }
 
         public static (List<UndirectedWeightedEdge>, int) LoadEdgeCollection(string fileName) 
@@ -85,7 +96,7 @@ namespace Algorithms.Greedy
             {   
                 string line;
                 // first line has info we don't need (number of lines and number of bits per line)
-                int.Parse(reader.ReadLine());
+                reader.ReadLine();
                 while ((line = reader.ReadLine()) != null)
                 {
                     line = line.Replace(" ", "");
