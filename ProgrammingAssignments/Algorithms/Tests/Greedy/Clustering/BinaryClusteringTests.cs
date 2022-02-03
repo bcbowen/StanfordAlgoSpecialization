@@ -22,5 +22,49 @@ namespace Algorithms.Tests.Greedy.Clustering
             Dictionary<string, int> clusters = Algorithms.Greedy.Clustering.LoadBinaryCluster(file.FullName);
             Assert.AreEqual(4, clusters.Keys.Count);
         }
+
+        [TestCase(1, 4, 14)]
+        [TestCase(2, 4, 10)]
+        [TestCase(3, 4, 8)]
+        [TestCase(4, 4, 6)]
+        [TestCase(5, 4, 4)]
+        [TestCase(6, 8, 12)]
+        [TestCase(7, 8, 10)]
+        [TestCase(8, 8, 8)]
+        [TestCase(9, 8, 6)]
+        public void BinaryClusterTestTiny(int testNumber, int count, int bits) 
+        {
+            RunTest(testNumber, count, bits);   
+        }
+
+        private void RunTest(int testNumber, int count, int bits)
+        {
+            string fileName = $"input_random_{testNumber}_{count}_{bits}.txt";
+            DirectoryInfo testDirectory = TestUtils.GetTestCaseDirectory().GetDirectories("Clustering2Data").First();
+            FileInfo file = testDirectory.GetFiles(fileName).FirstOrDefault();
+            Assert.NotNull(file, "Test file not found");
+
+            Dictionary<string, int> clusters = Algorithms.Greedy.Clustering.LoadBinaryCluster(file.FullName);
+            
+            int kValue = Algorithms.Greedy.Clustering.RunBinaryCluster(clusters);
+
+            int expectedKValue = GetExpectedOutput(file.FullName);
+
+            Assert.AreEqual(expectedKValue, kValue);
+        }
+
+        private int GetExpectedOutput(string fileName)
+        {
+            int kValue;
+            string outputFileName = fileName.Replace("input_", "output_");
+            using (StreamReader reader = new StreamReader(outputFileName))
+            {
+                string line = reader.ReadLine();
+                kValue = int.Parse(line);
+                reader.Close();
+            }
+
+            return kValue;
+        }
     }
 }
