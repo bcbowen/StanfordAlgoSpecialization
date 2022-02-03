@@ -37,6 +37,12 @@ namespace Algorithms.Tests.Greedy.Clustering
             RunTest(testNumber, count, bits);   
         }
 
+        [TestCase(83, 262144, 24)]
+        public void BinaryClusterTestGinormous(int testNumber, int count, int bits)
+        {
+            RunTest(testNumber, count, bits);
+        }
+
         private void RunTest(int testNumber, int count, int bits)
         {
             string fileName = $"input_random_{testNumber}_{count}_{bits}.txt";
