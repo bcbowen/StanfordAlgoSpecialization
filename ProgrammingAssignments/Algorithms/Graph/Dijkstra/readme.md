@@ -1,4 +1,4 @@
-﻿#Dijkstra Shortest Path Algorithm#
+**Dijkstra Shortest Path Algorithm**
 
 This is currently broken. 
 
