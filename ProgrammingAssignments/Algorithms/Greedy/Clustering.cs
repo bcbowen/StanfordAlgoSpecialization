@@ -82,7 +82,7 @@ namespace Algorithms.Greedy
             {
                 for (int i = 0; i < key.Length; i++)
                 {
-                    for (int j = i + 1; j < key.Length - 1; j++) 
+                    for (int j = i + 1; j < key.Length; j++) 
                     {
                         temp = new StringBuilder(key);
                         temp[i] = flip(key[i]);
