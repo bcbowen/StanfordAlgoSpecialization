@@ -92,6 +92,49 @@ namespace Algorithms.Tests.Greedy.Clustering
             RunTest(testNumber, count, bits);
         }
 
+        [TestCase(50, 512, 14)]
+        [TestCase(51, 512, 12)]
+        [TestCase(52, 1024, 24)]
+        [TestCase(53, 1024, 22)]
+        [TestCase(54, 1024, 20)]
+        [TestCase(55, 1024, 18)]
+        [TestCase(56, 1024, 16)]
+        [TestCase(57, 1024, 14)]
+        [TestCase(58, 2048, 24)]
+        [TestCase(59, 2048, 22)]
+        [TestCase(60, 2048, 20)]
+        [TestCase(61, 2048, 18)]
+        [TestCase(62, 2048, 16)]
+        [TestCase(63, 4096, 24)]
+        [TestCase(64, 4096, 22)]
+        [TestCase(65, 4096, 20)]
+        [TestCase(66, 4096, 18)]
+        [TestCase(67, 4096, 16)]
+        [TestCase(68, 8192, 24)]
+        [TestCase(69, 8192, 22)]
+        public void BinaryClusterTestXL(int testNumber, int count, int bits)
+        {
+            RunTest(testNumber, count, bits);
+        }
+
+        [TestCase(70, 8192, 20)]
+        [TestCase(71, 8192, 18)]
+        [TestCase(72, 16384, 24)]
+        [TestCase(73, 16384, 22)]
+        [TestCase(74, 16384, 20)]
+        [TestCase(75, 16384, 18)]
+        [TestCase(76, 32768, 24)]
+        [TestCase(77, 32768, 22)]
+        [TestCase(78, 32768, 20)]
+        [TestCase(79, 65536, 24)]
+        [TestCase(80, 65536, 22)]
+        public void BinaryClusterTestHuge(int testNumber, int count, int bits)
+        {
+            RunTest(testNumber, count, bits);
+        }
+
+        [TestCase(81, 131072, 24)]
+        [TestCase(82, 131072, 22)]
         [TestCase(83, 262144, 24)]
         public void BinaryClusterTestGinormous(int testNumber, int count, int bits)
         {
