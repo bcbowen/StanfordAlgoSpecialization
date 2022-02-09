@@ -113,8 +113,8 @@ namespace Algorithms.Tests.Greedy.HuffmanCodes
             HuffmanTree tree = Algorithm.BuildTree(forest);
             (int expectedMax, int expectedMin) = GetExpectedOutput(file.FullName);
 
-            Assert.AreEqual(expectedMin, tree.MinSize);
-            Assert.AreEqual(expectedMax, tree.MaxSize);
+            Assert.AreEqual(expectedMin, tree.MinSize, "Min size is off, man");
+            Assert.AreEqual(expectedMax, tree.MaxSize, "Max size is off, dude");
         }
 
         private (int, int) GetExpectedOutput(string fileName)
