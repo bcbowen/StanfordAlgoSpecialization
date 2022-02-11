@@ -34,7 +34,7 @@ namespace Algorithms.Greedy.HuffmanCodes
                 for (int i = 0; i < nodeCount; i++) 
                 {
                     line = reader.ReadLine();
-                    forest.Enqueue(new HuffmanTree(int.Parse(line)));
+                    forest.Enqueue(new HuffmanTree(int.Parse(line)) { Rank = 1});
                 }
             }
 

@@ -24,19 +24,34 @@ namespace Algorithms.Greedy.HuffmanCodes
             get
             {
                 int size = 0;
-                HuffmanTree tree = Left;
-                while (tree != null)
+                if (Left == null && Right == null) return size; 
+
+                Queue<HuffmanTree> queue = new Queue<HuffmanTree>();
+                queue.Enqueue(Left);
+                queue.Enqueue(Right);
+                HuffmanTree tree;
+                while (queue.Count > 0)
                 {
-                    size++;
-                    tree = tree.Left;
+                    tree = queue.Dequeue();
+                    if (tree.Left == null && tree.Right == null)
+                    {
+                        size = Rank - tree.Rank;
+                        break;
+                    }
+                    else 
+                    {
+                        queue.Enqueue(tree.Left);
+                        queue.Enqueue(tree.Right);
+                    }
                 }
+
                 return size;
             }
         }
 
         public int MaxSize
         {
-            get{ return Rank; }
+            get{ return Rank - 1; }
         }
 
         public HuffmanTree Left { get; set; } = null;
@@ -51,7 +66,7 @@ namespace Algorithms.Greedy.HuffmanCodes
                 Value = t1.Value + t2.Value,
                 Rank = System.Math.Max(t1.Rank, t2.Rank) + 1
             };
-
+           
             if (t1.Value < t2.Value)
             {
                 parent.Left = t1;
@@ -63,7 +78,42 @@ namespace Algorithms.Greedy.HuffmanCodes
                 parent.Right = t1;
             }
 
+            SetRanks(parent);
+            
             return parent;
+
+        }
+
+        public static void SetRanks(HuffmanTree tree)
+        {
+            Queue<HuffmanTree> queue = new Queue<HuffmanTree>();
+            if (tree.Left != null) 
+            {
+                tree.Left.Rank = tree.Rank - 1;
+                queue.Enqueue(tree.Left); 
+            }
+
+            if (tree.Right != null)
+            {
+                tree.Right.Rank = tree.Rank - 1;    
+                queue.Enqueue(tree.Right); 
+            }
+
+            HuffmanTree current; 
+            while (queue.Count > 0) 
+            {
+                current = queue.Dequeue();
+                if (current.Left != null) 
+                {
+                    current.Left.Rank = current.Rank - 1;
+                    queue.Enqueue(current.Left);
+                }
+                if (current.Right != null)
+                {
+                    current.Right.Rank = current.Rank - 1;
+                    queue.Enqueue(current.Right);
+                }
+            }
 
         }
     }
