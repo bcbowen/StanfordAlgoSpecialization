@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Algorithms.Greedy
 {
@@ -14,26 +12,31 @@ namespace Algorithms.Greedy
         public static string RunAlgorithm(string fileName) 
         {
             int[] nodes = LoadNodes(fileName);
-            Dictionary<int, int> maxPath = new Dictionary<int, int>();
-            int i = nodes.Length;
-            StringBuilder result = new StringBuilder();
-            while (i >= 1) 
+            List<int> maxWeights = new List<int>();
+
+            maxWeights.Add(0);
+            maxWeights.Add(nodes[0]);
+            for (int i = 1; i < nodes.Length; i++) 
             {
-                if (nodes[i - 1] >= nodes[i - 2]) 
+                maxWeights.Add(System.Math.Max(maxWeights[i], maxWeights[i - 1] + nodes[i]));
+            }
+
+            Dictionary<int, int> maxPath = new Dictionary<int, int>();
+
+            for (int i = maxWeights.Count - 1; i >= 1;) 
+            {
+                if (maxWeights[i] > maxWeights[i - 1])
+                {
+                    maxPath.Add(i, nodes[i - 1]);
+                    i -= 2;
+                }
+                else
                 {
                     i -= 1;
                 }
-                else 
-                {
-                    maxPath.Add(i + 1, nodes[i - i]);
-                    i -= 2;
-                }
             }
-            if (i == 0) 
-            {
-                maxPath.Add(i + 1, nodes[i]);
-            }
-
+            
+            StringBuilder result = new StringBuilder();
             foreach (int checkNode in _checkNodes) 
             {
                 if (maxPath.ContainsKey(checkNode))
