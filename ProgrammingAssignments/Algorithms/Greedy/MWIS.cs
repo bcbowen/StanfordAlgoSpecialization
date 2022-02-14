@@ -12,7 +12,7 @@ namespace Algorithms.Greedy
         public static string RunAlgorithm(string fileName) 
         {
             int[] nodes = LoadNodes(fileName);
-            List<int> maxWeights = new List<int>();
+            List<long> maxWeights = new List<long>();
 
             maxWeights.Add(0);
             maxWeights.Add(nodes[0]);
@@ -21,7 +21,7 @@ namespace Algorithms.Greedy
                 maxWeights.Add(System.Math.Max(maxWeights[i], maxWeights[i - 1] + nodes[i]));
             }
 
-            Dictionary<int, int> maxPath = new Dictionary<int, int>();
+            Dictionary<int, long> maxPath = new Dictionary<int, long>();
 
             for (int i = maxWeights.Count - 1; i >= 1;) 
             {
