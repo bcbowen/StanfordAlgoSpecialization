@@ -48,6 +48,67 @@ namespace Algorithms.Tests.Greedy.MWIS
             RunTest(testNumber, count);
         }
 
+        [TestCase(13, 80)]
+        [TestCase(14, 80)]
+        [TestCase(15, 80)]
+        [TestCase(16, 80)]
+        [TestCase(17, 160)]
+        [TestCase(18, 160)]
+        [TestCase(19, 160)]
+        [TestCase(20, 160)]
+        public void MWISTestsMedium(int testNumber, int count)
+        {
+            RunTest(testNumber, count);
+        }
+
+        [TestCase(21, 320)]
+        [TestCase(22, 320)]
+        [TestCase(23, 320)]
+        [TestCase(24, 320)]
+        [TestCase(25, 640)]
+        [TestCase(26, 640)]
+        [TestCase(27, 640)]
+        [TestCase(28, 640)]
+        public void MWISTestsLarge(int testNumber, int count)
+        {
+            RunTest(testNumber, count);
+        }
+
+        [TestCase(29, 1000)]
+        [TestCase(30, 1000)]
+        [TestCase(31, 1000)]
+        [TestCase(32, 1000)]
+        [TestCase(33, 2000)]
+        [TestCase(34, 2000)]
+        [TestCase(35, 2000)]
+        [TestCase(36, 2000)]
+        public void MWISTestsXL(int testNumber, int count)
+        {
+            RunTest(testNumber, count);
+        }
+
+        [TestCase(37, 4000)]
+        [TestCase(38, 4000)]
+        [TestCase(39, 4000)]
+        [TestCase(40, 4000)]
+        [TestCase(41, 8000)]
+        [TestCase(42, 8000)]
+        [TestCase(43, 8000)]
+        [TestCase(44, 8000)]
+        public void MWISTestsHuge(int testNumber, int count)
+        {
+            RunTest(testNumber, count);
+        }
+
+        [TestCase(45, 10000)]
+        [TestCase(46, 10000)]
+        [TestCase(47, 10000)]
+        [TestCase(48, 10000)]
+        public void MWISTestsGinormous(int testNumber, int count)
+        {
+            RunTest(testNumber, count);
+        }
+
         private void RunTest(int testNumber, int count)
         {
             string fileName = $"input_random_{testNumber}_{count}.txt";
