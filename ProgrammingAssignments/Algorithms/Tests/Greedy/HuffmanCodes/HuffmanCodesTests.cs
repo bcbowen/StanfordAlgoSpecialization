@@ -102,6 +102,22 @@ namespace Algorithms.Tests.Greedy.HuffmanCodes
             RunTest(testNumber, count);
         }
 
+        [Test]
+        public void CheckFinal() 
+        {
+            string fileName = $"input_final_49_5.txt";
+            DirectoryInfo testDirectory = TestUtils.GetTestCaseDirectory().GetDirectories("HuffmanCodeData").First();
+            FileInfo file = testDirectory.GetFiles(fileName).FirstOrDefault();
+            Assert.NotNull(file, "Test file not found");
+
+            MinHeap forest = Algorithm.LoadCodeWeights(file.FullName);
+            HuffmanTree tree = Algorithm.BuildTree(forest);
+            (int expectedMax, int expectedMin) = GetExpectedOutput(file.FullName);
+
+            Assert.AreEqual(expectedMin, tree.MinSize, "Min size is off, man");
+            Assert.AreEqual(expectedMax, tree.MaxSize, "Max size is off, dude");
+        }
+
         private void RunTest(int testNumber, int count)
         {
             string fileName = $"input_random_{testNumber}_{count}.txt";

@@ -28,6 +28,8 @@ namespace Algorithms.Tests.Tree
         }
 
         [TestCase(1, 3)]
+        [TestCase(2, 7)]
+        [TestCase(3, 7)]
         public void RunDataTests(int testNumber, int count)
         {
             RunTest(testNumber, count);
