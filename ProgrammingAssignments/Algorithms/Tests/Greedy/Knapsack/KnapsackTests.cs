@@ -44,5 +44,39 @@ namespace Algorithms.Tests.Greedy.Knapsack
             Assert.AreEqual(expectedValue, result);
         }
 
+        [TestCase(1, 4, 4)]
+        public void KnapsackDataTestsTiny(int testNumber, int capacity, int count)
+        {
+            RunTest(testNumber, capacity, count);
+        }
+
+
+        private void RunTest(int testNumber, int capacity, int count)
+        {
+            string fileName = $"input_random_{testNumber}_{capacity}_{count}.txt";
+            DirectoryInfo testDirectory = TestUtils.GetTestCaseDirectory().GetDirectories(DataFileName).First();
+            FileInfo file = testDirectory.GetFiles(fileName).FirstOrDefault();
+            Assert.NotNull(file, "Test file not found");
+
+            int result = Algorithms.Greedy.Knapsack.RunAlgorithm(file.FullName);
+            int expectedResult = GetExpectedOutput(file.FullName);
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        private int GetExpectedOutput(string fileName)
+        {
+            string outputFileName = fileName.Replace("input_", "output_");
+            int result;
+            using (StreamReader reader = new StreamReader(outputFileName))
+            {
+                string line = reader.ReadLine();
+                result = int.Parse(line);
+                reader.Close();
+            }
+
+            return result;
+        }
+
     }
 }
