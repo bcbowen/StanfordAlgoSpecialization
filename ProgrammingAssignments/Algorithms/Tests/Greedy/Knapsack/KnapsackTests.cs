@@ -45,11 +45,71 @@ namespace Algorithms.Tests.Greedy.Knapsack
         }
 
         [TestCase(1, 4, 4)]
+        [TestCase(2, 4, 4)]
+        [TestCase(3, 4, 4)]
+        [TestCase(4, 4, 4)]
+        [TestCase(5, 10, 10)]
+        [TestCase(6, 10, 10)]
+        [TestCase(7, 10, 10)]
+        [TestCase(8, 10, 10)]
         public void KnapsackDataTestsTiny(int testNumber, int capacity, int count)
         {
             RunTest(testNumber, capacity, count);
         }
 
+        [TestCase(9, 100, 10)]
+        [TestCase(10, 100, 10)]
+        [TestCase(11, 100, 10)]
+        [TestCase(12, 100, 10)]
+        [TestCase(13, 100, 100)]
+        [TestCase(14, 100, 100)]
+        [TestCase(15, 100, 100)]
+        [TestCase(16, 100, 100)]
+        [TestCase(17, 100, 1000)]
+        [TestCase(18, 100, 1000)]
+        [TestCase(19, 100, 1000)]
+        [TestCase(20, 100, 1000)]
+
+        public void KnapsackDataTestsSmall(int testNumber, int capacity, int count)
+        {
+            RunTest(testNumber, capacity, count);
+        }
+
+        [TestCase(21, 1000, 100)]
+        [TestCase(22, 1000, 100)]
+        [TestCase(23, 1000, 100)]
+        [TestCase(24, 1000, 100)]
+        [TestCase(25, 1000, 1000)]
+        [TestCase(26, 1000, 1000)]
+        [TestCase(27, 1000, 1000)]
+        [TestCase(28, 1000, 1000)]
+        [TestCase(29, 10000, 1000)]
+        [TestCase(30, 10000, 1000)]
+        [TestCase(31, 10000, 1000)]
+        [TestCase(32, 10000, 1000)]
+
+        public void KnapsackDataTestsMedium(int testNumber, int capacity, int count)
+        {
+            RunTest(testNumber, capacity, count);
+        }
+
+        [TestCase(33, 100000, 2000)]
+        [TestCase(34, 100000, 2000)]
+        [TestCase(35, 100000, 2000)]
+        [TestCase(36, 100000, 2000)]
+        [TestCase(37, 1000000, 2000)]
+        [TestCase(38, 1000000, 2000)]
+        [TestCase(39, 1000000, 2000)]
+        [TestCase(40, 1000000, 2000)]
+        [TestCase(41, 2000000, 2000)]
+        [TestCase(42, 2000000, 2000)]
+        [TestCase(43, 2000000, 2000)]
+        [TestCase(44, 2000000, 2000)]
+
+        public void KnapsackDataTestsLarge(int testNumber, int capacity, int count)
+        {
+            RunTest(testNumber, capacity, count);
+        }
 
         private void RunTest(int testNumber, int capacity, int count)
         {

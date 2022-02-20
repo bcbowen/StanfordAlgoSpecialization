@@ -31,44 +31,10 @@ namespace Algorithms.Greedy
                     }
                     else
                     {
-                        /*            
-                        K[i, w] = Math.Max(
-                        val[i - 1] + K[i - 1, w - wt[i - 1]],
-                        K[i - 1, w]);
-                        */
                         table[i][c] = System.Math.Max(table[i - 1][c], table[i - 1][c - nodes[i - 1].Value] + nodes[i - 1].NodeId);
                     }
                 }
             }
-
-            /*
-                 {
-        int i, w;
-        int[, ] K = new int[n + 1, W + 1];
- 
-        // Build table K[][] in bottom
-        // up manner
-        for (i = 0; i <= n; i++)
-        {
-            for (w = 0; w <= W; w++)
-            {
-                if (i == 0 || w == 0)
-                    K[i, w] = 0;
-                 
-                else if (wt[i - 1] <= w)
-                    K[i, w] = Math.Max(
-                        val[i - 1]
-                        + K[i - 1, w - wt[i - 1]],
-                        K[i - 1, w]);
-                else
-                    K[i, w] = K[i - 1, w];
-            }
-        }
- 
-        return K[n, W];
-    }
-             */
-
 
             return table[nodes.Count][capacity];
         }
