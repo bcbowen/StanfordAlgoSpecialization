@@ -29,5 +29,20 @@ namespace Algorithms.Tests.Greedy.Knapsack
             Assert.AreEqual(100, capacity);
         }
 
+        /// <summary>
+        /// Example from Algorithms Illuminated 3 page 128 (16.5.5) 
+        /// </summary>
+        [Test]
+        public void TestExampleFromBook() 
+        {
+            string fileName = $"BookExample.txt";
+            DirectoryInfo testDirectory = TestUtils.GetTestCaseDirectory().GetDirectories(DataFileName).First();
+            FileInfo file = testDirectory.GetFiles(fileName).FirstOrDefault();
+
+            long result = Algorithms.Greedy.Knapsack.RunAlgorithm(file.FullName);
+            long expectedValue = 8;
+            Assert.AreEqual(expectedValue, result);
+        }
+
     }
 }

@@ -11,12 +11,30 @@ namespace Algorithms.Greedy
 {
     public static class Knapsack
     {
-        public static int RunAlgorithm(List<Node> nodes, int capacity) 
+        public static long RunAlgorithm(List<Node> nodes, int capacity) 
         {
-            return 42;
+            long[][] table = new long[nodes.Count][];
+
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                for (int c = 0; c < capacity; c++) 
+                {
+                    if (nodes[i].Value > c)
+                    {
+                        table[i][c] = table[i - 1][c];
+                    }
+                    else
+                    {
+                        table[i][c] = System.Math.Max(table[i - 1][c], table[i - 1][c - nodes[i].Value] + nodes[i].NodeId);
+                    }
+                }
+            }
+
+
+            return table[nodes.Count - 1][capacity - 1];
         }
 
-        public static int RunAlgorithm(string fileName) 
+        public static long RunAlgorithm(string fileName) 
         {
             (List<Node> nodes, int capacity) = LoadKnapsackData(fileName);
             return RunAlgorithm(nodes, capacity);

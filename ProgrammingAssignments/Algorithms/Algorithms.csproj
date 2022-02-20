@@ -13,7 +13,6 @@
   <ItemGroup>
     <Folder Include="Tests\TestData\KosarajuData\" />
     <Folder Include="Tests\TestData\GreedySchedulerData\" />
-    <Folder Include="Tests\TestData\KnapsackData\" />
     <Folder Include="Tests\TestData\QuickSortData\" />
   </ItemGroup>
 
