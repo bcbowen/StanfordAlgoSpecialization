@@ -11,7 +11,7 @@ namespace Algorithms.Tests.Datastructures.Heap
         public void OneNodeHeapInitializes()
         {
             DijkstraHeap heap = new DijkstraHeap();
-            heap.Enqueue(new DijkstraNode(1, 2, 1));
+            heap.Enqueue(new DijkstraNode(1, 0, 2, 1));
             int[] values = heap.GetValues();
             Assert.AreEqual(1, values.Length);
             Assert.AreEqual(1, values[0]);
@@ -42,8 +42,7 @@ namespace Algorithms.Tests.Datastructures.Heap
             DijkstraNode node;
             for (int i = 0; i < nodeIds.Length; i++) 
             {
-                node = new DijkstraNode(nodeIds[i], referencedNodeIds[i], referencedNodeDistances[i]); 
-                node.Distance = distances[i];
+                node = new DijkstraNode(nodeIds[i], distances[i], referencedNodeIds[i], referencedNodeDistances[i]); 
                 heap.Enqueue(node);
             }
 
@@ -68,8 +67,7 @@ namespace Algorithms.Tests.Datastructures.Heap
             DijkstraNode node;
             for (int i = 0; i < nodeIds.Length; i++)
             {
-                node = new DijkstraNode(nodeIds[i], referencedNodeIds[i], referencedNodeDistances[i]);
-                node.Distance = distances[i];
+                node = new DijkstraNode(nodeIds[i], distances[i], referencedNodeIds[i], referencedNodeDistances[i]);
                 heap.Enqueue(node);
             }
 
@@ -100,8 +98,7 @@ namespace Algorithms.Tests.Datastructures.Heap
 
             for (int i = 0; i < nodeIds.Length; i++)
             {
-                node = new DijkstraNode(nodeIds[i], referencedNodeIds[i], referencedNodeDistances[i]);
-                node.Distance = distances[i];
+                node = new DijkstraNode(nodeIds[i], distances[i], referencedNodeIds[i], referencedNodeDistances[i]);
                 heap._heap.Add(node);
             }
 
@@ -126,8 +123,7 @@ namespace Algorithms.Tests.Datastructures.Heap
 
             for (int i = 0; i < nodeIds.Length; i++)
             {
-                node = new DijkstraNode(nodeIds[i], referencedNodeIds[i], referencedNodeDistances[i]);
-                node.Distance = distances[i];
+                node = new DijkstraNode(nodeIds[i], distances[i], referencedNodeIds[i], referencedNodeDistances[i]);
                 heap._heap.Add(node);
             }
 

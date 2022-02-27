@@ -6,29 +6,27 @@ namespace Algorithms.Graph.Dijkstra
 {
     public class DijkstraNode : NodeBase
     {
-        /*
-        public DijkstraNode(int nodeId, int distance) : base(nodeId)
+        public DijkstraNode(int nodeId, int distance) : base(nodeId, distance)
         {
-            Distance = distance;
             ReferencedNode = null;
         }
-        */
 
-        public DijkstraNode(int nodeId, int referencedNodeId, int distance) : base(nodeId, distance) 
+        public DijkstraNode(int nodeId, int distance, int referencedNodeId, int referencedNodeDistance) : base(nodeId, distance) 
         {
-            ReferencedNode = new NodeDistance(referencedNodeId, distance);
+            ReferencedNode = new NodeDistance(referencedNodeId, referencedNodeDistance);
         }
 
         public NodeDistance ReferencedNode { get; set; }
-        public int Distance { get; set; }
 
         public int DijkstraValue 
         {
             get 
             {
-                return ReferencedNode != null ? ReferencedNode.Distance + Distance : Distance;
+                return ReferencedNode != null ? ReferencedNode.Distance + Value : Value;
             }
         }
+
+        public bool Processed { get; set; }
 
         public List<int> Path { get; private set; } = new List<int>();
     }

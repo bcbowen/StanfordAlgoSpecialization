@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Graph\AllPairsShortestPath\" />
     <Folder Include="Tests\TestData\KosarajuData\" />
     <Folder Include="Tests\TestData\GreedySchedulerData\" />
     <Folder Include="Tests\TestData\QuickSortData\" />

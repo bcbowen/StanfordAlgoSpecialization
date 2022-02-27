@@ -14,165 +14,86 @@ namespace Algorithms.Tests.Graph
         private const string IgnoreMessage = "Dijkstra tests are currently disabled while the files are broken... need to finish refactoring "; 
         private int[] _testIds = { 7, 37, 59, 82, 99, 115, 133, 165, 188, 197 };
 
-        [Ignore(IgnoreMessage)]
-        [TestCase("input_random_1_4.txt")]
-        [TestCase("input_random_2_4.txt")]
-        [TestCase("input_random_3_4.txt")]
-        [TestCase("input_random_4_4.txt")]
-        public void TinyGraphTests(string fileName)
+        [TestCase(1, 4)]
+        [TestCase(2, 4)]
+        [TestCase(3, 4)]
+        [TestCase(4, 4)]
+        public void TinyGraphTests(int testNumber, int nodeCount)
         {
+            RunTests(testNumber, nodeCount);
+        }
+
+        [TestCase(5, 8)]
+        [TestCase(6, 8)]
+        [TestCase(7, 8)]
+        [TestCase(8, 8)]
+        public void SmallGraphTests(int testNumber, int nodeCount)
+        {
+            RunTests(testNumber, nodeCount);
+        }
+
+        [TestCase(9, 16)]
+        [TestCase(10, 16)]
+        [TestCase(11, 16)]
+        [TestCase(12, 16)]
+        public void MediumGraphTests(int testNumber, int nodeCount)
+        {
+            RunTests(testNumber, nodeCount);
+        }
+
+        [TestCase(13, 32)]
+        [TestCase(14, 32)]
+        [TestCase(15, 32)]
+        [TestCase(16, 32)]
+        public void LargeGraphTests(int testNumber, int nodeCount)
+        {
+            RunTests(testNumber, nodeCount);
+        }
+
+        [TestCase(17, 64)]
+        [TestCase(18, 64)]
+        [TestCase(19, 64)]
+        [TestCase(20, 64)]
+        public void LargerGraphTests(int testNumber, int nodeCount)
+        {
+            RunTests(testNumber, nodeCount);
+        }
+
+        [TestCase(21, 128)]
+        [TestCase(22, 128)]
+        [TestCase(23, 128)]
+        [TestCase(24, 128)]
+        public void HugeGraphTests(int testNumber, int nodeCount)
+        {
+            RunTests(testNumber, nodeCount);
+
+        }
+
+        //[Ignore(IgnoreMessage)]
+        [TestCase(25, 256)]
+        [TestCase(26, 256)]
+        [TestCase(27, 256)]
+        [TestCase(28, 256)]
+        public void MassiveGraphTests(int testNumber, int nodeCount)
+        {
+            RunTests(testNumber, nodeCount);
+        }
+
+        private void RunTests(int testNumber, int nodeCount) 
+        {
+            string fileName = $"input_random_{testNumber}_{nodeCount}.txt";
             FileInfo testFile = GetTestFile(fileName);
             Assert.True(File.Exists(testFile.FullName));
 
-            DijkstraGraph graph = DijkstraGraph.LoadGraph(testFile.FullName);
-            List<NodeDistance> nodeDistances = DijkstraGraph.CalculateShortestPaths(graph);
+            List<DijkstraNode> nodes = Algorithm.CalculateShortestPaths(testFile.FullName, 1);
             List<int> expectedResult = GetOutputs(GetOutputFileName(testFile.FullName));
 
-            List<int> result = GetTestResults(_testIds, nodeDistances);
+            List<int> result = GetTestResults(_testIds, nodes);
             Assert.AreEqual(result.Count(), expectedResult.Count);
             for (int i = 0; i < result.Count(); i++)
             {
                 Assert.AreEqual(expectedResult[i], result[i], $"Mismatch on testId {_testIds[i]} expected: {expectedResult[i]} got: {result[i]}");
             }
-
-        }
-
-        [Ignore(IgnoreMessage)]
-        [TestCase("input_random_5_8.txt")]
-        [TestCase("input_random_6_8.txt")]
-        [TestCase("input_random_7_8.txt")]
-        [TestCase("input_random_8_8.txt")]
-        public void SmallGraphTests(string fileName)
-        {
-            FileInfo testFile = GetTestFile(fileName);
-            Assert.True(File.Exists(testFile.FullName));
-
-            DijkstraGraph graph = DijkstraGraph.LoadGraph(testFile.FullName);
-            List<NodeDistance> nodeDistances = DijkstraGraph.CalculateShortestPaths(graph);
-            List<int> expectedResult = GetOutputs(GetOutputFileName(testFile.FullName));
-
-            List<int> result = GetTestResults(_testIds, nodeDistances);
-            Assert.AreEqual(result.Count(), expectedResult.Count);
-            for (int i = 0; i < result.Count(); i++)
-            {
-                Assert.AreEqual(expectedResult[i], result[i]);
-            }
-
-        }
-
-        [Ignore(IgnoreMessage)]
-        [TestCase("input_random_9_16.txt")]
-        [TestCase("input_random_10_16.txt")]
-        [TestCase("input_random_11_16.txt")]
-        [TestCase("input_random_12_16.txt")]
-        public void MediumGraphTests(string fileName)
-        {
-            FileInfo testFile = GetTestFile(fileName);
-            Assert.True(File.Exists(testFile.FullName));
-
-            DijkstraGraph graph = DijkstraGraph.LoadGraph(testFile.FullName);
-            List<NodeDistance> nodeDistances = DijkstraGraph.CalculateShortestPaths(graph);
-            List<int> expectedResult = GetOutputs(GetOutputFileName(testFile.FullName));
-
-            List<int> result = GetTestResults(_testIds, nodeDistances);
-            Assert.AreEqual(result.Count(), expectedResult.Count);
-            for (int i = 0; i < result.Count(); i++)
-            {
-                Assert.AreEqual(expectedResult[i], result[i]);
-            }
-
-        }
-
-        [Ignore(IgnoreMessage)]
-        [TestCase("input_random_13_32.txt")]
-        [TestCase("input_random_14_32.txt")]
-        [TestCase("input_random_15_32.txt")]
-        [TestCase("input_random_16_32.txt")]
-        public void LargeGraphTests(string fileName)
-        {
-            FileInfo testFile = GetTestFile(fileName);
-            Assert.True(File.Exists(testFile.FullName));
-
-            DijkstraGraph graph = DijkstraGraph.LoadGraph(testFile.FullName);
-            List<NodeDistance> nodeDistances = DijkstraGraph.CalculateShortestPaths(graph);
-            List<int> expectedResult = GetOutputs(GetOutputFileName(testFile.FullName));
-
-            List<int> result = GetTestResults(_testIds, nodeDistances);
-            Assert.AreEqual(result.Count(), expectedResult.Count);
-            for (int i = 0; i < result.Count(); i++)
-            {
-                Assert.AreEqual(expectedResult[i], result[i]);
-            }
-
-        }
-
-        [Ignore(IgnoreMessage)]
-        [TestCase("input_random_17_64.txt")]
-        [TestCase("input_random_18_64.txt")]
-        [TestCase("input_random_19_64.txt")]
-        [TestCase("input_random_20_64.txt")]
-        public void LargerGraphTests(string fileName)
-        {
-            FileInfo testFile = GetTestFile(fileName);
-            Assert.True(File.Exists(testFile.FullName));
-
-            DijkstraGraph graph = DijkstraGraph.LoadGraph(testFile.FullName);
-            List<NodeDistance> nodeDistances = DijkstraGraph.CalculateShortestPaths(graph);
-            List<int> expectedResult = GetOutputs(GetOutputFileName(testFile.FullName));
-
-            List<int> result = GetTestResults(_testIds, nodeDistances);
-            Assert.AreEqual(result.Count(), expectedResult.Count);
-            for (int i = 0; i < result.Count(); i++)
-            {
-                Assert.AreEqual(expectedResult[i], result[i]);
-            }
-
-        }
-
-        [Ignore(IgnoreMessage)]
-        [TestCase("input_random_21_128.txt")]
-        [TestCase("input_random_22_128.txt")]
-        [TestCase("input_random_23_128.txt")]
-        [TestCase("input_random_24_128.txt")]
-        public void HugeGraphTests(string fileName)
-        {
-            FileInfo testFile = GetTestFile(fileName);
-            Assert.True(File.Exists(testFile.FullName));
-
-            DijkstraGraph graph = DijkstraGraph.LoadGraph(testFile.FullName);
-            List<NodeDistance> nodeDistances = DijkstraGraph.CalculateShortestPaths(graph);
-            List<int> expectedResult = GetOutputs(GetOutputFileName(testFile.FullName));
-
-            List<int> result = GetTestResults(_testIds, nodeDistances);
-            Assert.AreEqual(result.Count(), expectedResult.Count);
-            for (int i = 0; i < result.Count(); i++)
-            {
-                Assert.AreEqual(expectedResult[i], result[i]);
-            }
-
-        }
-
-        [Ignore(IgnoreMessage)]
-        [TestCase("input_random_25_256.txt")]
-        [TestCase("input_random_26_256.txt")]
-        [TestCase("input_random_27_256.txt")]
-        [TestCase("input_random_28_256.txt")]
-        public void MassiveGraphTests(string fileName)
-        {
-            FileInfo testFile = GetTestFile(fileName);
-            Assert.True(File.Exists(testFile.FullName));
-
-            DijkstraGraph graph = DijkstraGraph.LoadGraph(testFile.FullName);
-            List<NodeDistance> nodeDistances = DijkstraGraph.CalculateShortestPaths(graph);
-            List<int> expectedResult = GetOutputs(GetOutputFileName(testFile.FullName));
-
-            List<int> result = GetTestResults(_testIds, nodeDistances);
-            Assert.AreEqual(result.Count(), expectedResult.Count);
-            for (int i = 0; i < result.Count(); i++)
-            {
-                Assert.AreEqual(expectedResult[i], result[i]);
-            }
-
         }
 
         private FileInfo GetTestFile(string path)
@@ -209,12 +130,12 @@ namespace Algorithms.Tests.Graph
             return outputs;
         }
 
-        private List<int> GetTestResults(int[] values, List<NodeDistance> nodeDistances)
+        private List<int> GetTestResults(int[] values, List<DijkstraNode> nodes)
         {
             List<int> results = new List<int>();
             foreach (int value in values)
             {
-                results.Add(nodeDistances.First(n => n.NodeId == value).Distance);
+                results.Add(nodes.First(n => n.NodeId == value).Value);
             }
 
             return results;
