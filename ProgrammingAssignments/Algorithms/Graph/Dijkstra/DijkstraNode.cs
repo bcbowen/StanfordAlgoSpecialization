@@ -29,5 +29,7 @@ namespace Algorithms.Graph.Dijkstra
         public bool Processed { get; set; }
 
         public List<int> Path { get; private set; } = new List<int>();
+
+        public int Index { get; set; }
     }
 }

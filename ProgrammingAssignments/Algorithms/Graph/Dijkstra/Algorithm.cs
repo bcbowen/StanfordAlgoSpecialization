@@ -9,7 +9,7 @@ namespace Algorithms.Graph.Dijkstra
 {
     public static class Algorithm
     {
-        public static void CalculateShortestPaths(List<DijkstraNode> nodes, int startNodeId) 
+        public static void CalculateShortestPaths_old(List<DijkstraNode> nodes, int startNodeId) 
         {
             DijkstraHeap heap = new DijkstraHeap();
             DijkstraNode node = nodes.First(n => n.NodeId == startNodeId);
@@ -27,6 +27,43 @@ namespace Algorithms.Graph.Dijkstra
                     if (!nodes.Any(n => n.NodeId == node.ReferencedNode.NodeId))
                     {
                         nodes.Add(new DijkstraNode(node.ReferencedNode.NodeId, int.MaxValue)); 
+                    }
+
+                    DijkstraNode leaf = nodes.First(n => n.NodeId == node.ReferencedNode.NodeId);
+                    if (leaf.Value > node.DijkstraValue) leaf.Value = node.DijkstraValue;
+                }
+            }
+
+        }
+
+        public static void CalculateShortestPaths(List<DijkstraNode> nodes, int startNodeId)
+        {
+            DijkstraHeap heap = new DijkstraHeap();
+            List<DijkstraNode> processed = new List<DijkstraNode>();
+            Dictionary<int, int> lengths = new Dictionary<int, int>();
+            lengths.Add(startNodeId, 0);
+            foreach (DijkstraNode node in nodes) 
+            {
+                heap.Enqueue(node);
+            }
+            
+            while (heap.Count > 0)
+            {
+                DijkstraNode node = heap.Dequeue();
+                processed.Add(node);
+                node.Value = lengths[node.NodeId];
+
+
+                if (nodes.Any(n => n.NodeId == node.ReferencedNode.NodeId && n.ReferencedNode != null))
+                {
+                    AddNodesToHeap(node.ReferencedNode.NodeId, nodes, heap, node.DijkstraValue);
+                    node.Processed = true;
+                }
+                else
+                {
+                    if (!nodes.Any(n => n.NodeId == node.ReferencedNode.NodeId))
+                    {
+                        nodes.Add(new DijkstraNode(node.ReferencedNode.NodeId, int.MaxValue));
                     }
 
                     DijkstraNode leaf = nodes.First(n => n.NodeId == node.ReferencedNode.NodeId);
