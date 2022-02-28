@@ -15,16 +15,15 @@ namespace Algorithms.Tests.Graph
         [TestCase(2, 1)]
         [TestCase(3, 3)]
         [TestCase(4, 6)]
-        public void NodesHaveCorrectShortestPathAfterDijkstra(int value, int expectedDistance)
+        public void NodesHaveCorrectShortestPathAfterDijkstra(int nodeId, int expectedDistance)
         {
             List<DijkstraNode> nodes= LoadTestNodes();
-            Algorithm.CalculateShortestPaths(nodes, 1);
+            Dictionary<int, int> paths = Algorithm.CalculateShortestPaths(nodes, 1);
+            Assert.True(paths.ContainsKey(nodeId));
 
-            DijkstraNode node = nodes.FirstOrDefault(n => n.NodeId == value);
+            int length = paths[nodeId];
 
-            Assert.NotNull(node);
-
-            Assert.AreEqual(expectedDistance, node.Value);
+            Assert.AreEqual(expectedDistance, length);
         }
 
        
@@ -35,29 +34,29 @@ namespace Algorithms.Tests.Graph
 
             List<DijkstraNode> nodes = new List<DijkstraNode>();
             // 1	2,1	8,2
-            nodes.Add(new DijkstraNode(1, int.MaxValue, 2, 1));
-            nodes.Add(new DijkstraNode(1, int.MaxValue, 8, 2));
+            nodes.Add(new DijkstraNode(1, DijkstraNode.NoPathDistance, 2, 1));
+            nodes.Add(new DijkstraNode(1, DijkstraNode.NoPathDistance, 8, 2));
             // 2   1,1 3,1
-            nodes.Add(new DijkstraNode(2, int.MaxValue, 1, 1));
-            nodes.Add(new DijkstraNode(2, int.MaxValue, 3, 1));
+            nodes.Add(new DijkstraNode(2, DijkstraNode.NoPathDistance, 1, 1));
+            nodes.Add(new DijkstraNode(2, DijkstraNode.NoPathDistance, 3, 1));
             // 3   2,1 4,1
-            nodes.Add(new DijkstraNode(3, int.MaxValue, 2, 1));
-            nodes.Add(new DijkstraNode(3, int.MaxValue, 4, 1));
+            nodes.Add(new DijkstraNode(3, DijkstraNode.NoPathDistance, 2, 1));
+            nodes.Add(new DijkstraNode(3, DijkstraNode.NoPathDistance, 4, 1));
             // 4   3,1 5,1
-            nodes.Add(new DijkstraNode(4, int.MaxValue, 3, 1));
-            nodes.Add(new DijkstraNode(4, int.MaxValue, 5, 1));
+            nodes.Add(new DijkstraNode(4, DijkstraNode.NoPathDistance, 3, 1));
+            nodes.Add(new DijkstraNode(4, DijkstraNode.NoPathDistance, 5, 1));
             // 5   4,1 6,1
-            nodes.Add(new DijkstraNode(5, int.MaxValue, 4, 1));
-            nodes.Add(new DijkstraNode(5, int.MaxValue, 6, 1));
+            nodes.Add(new DijkstraNode(5, DijkstraNode.NoPathDistance, 4, 1));
+            nodes.Add(new DijkstraNode(5, DijkstraNode.NoPathDistance, 6, 1));
             //6   5,1 7,1
-            nodes.Add(new DijkstraNode(6, int.MaxValue, 5, 1));
-            nodes.Add(new DijkstraNode(6, int.MaxValue, 7, 1));
+            nodes.Add(new DijkstraNode(6, DijkstraNode.NoPathDistance, 5, 1));
+            nodes.Add(new DijkstraNode(6, DijkstraNode.NoPathDistance, 7, 1));
             // 7   6,1 8,1
-            nodes.Add(new DijkstraNode(7, int.MaxValue, 6, 1));
-            nodes.Add(new DijkstraNode(7, int.MaxValue, 8, 1));
+            nodes.Add(new DijkstraNode(7, DijkstraNode.NoPathDistance, 6, 1));
+            nodes.Add(new DijkstraNode(7, DijkstraNode.NoPathDistance, 8, 1));
             // 8   7,1 1,2
-            nodes.Add(new DijkstraNode(8, int.MaxValue, 7, 1));
-            nodes.Add(new DijkstraNode(8, int.MaxValue, 1, 2));
+            nodes.Add(new DijkstraNode(8, DijkstraNode.NoPathDistance, 7, 1));
+            nodes.Add(new DijkstraNode(8, DijkstraNode.NoPathDistance, 1, 2));
 
             /*
                 output:
@@ -71,26 +70,31 @@ namespace Algorithms.Tests.Graph
                 8 2[8]
            */
 
-            Algorithm.CalculateShortestPaths(nodes, 1);
-            Assert.AreEqual(0, nodes.First(n => n.NodeId == 1).Value);
-            Assert.AreEqual(1, nodes.First(n => n.NodeId == 2).Value);
-            Assert.AreEqual(2, nodes.First(n => n.NodeId == 3).Value);
-            Assert.AreEqual(3, nodes.First(n => n.NodeId == 4).Value);
-            Assert.AreEqual(4, nodes.First(n => n.NodeId == 5).Value);
-            Assert.AreEqual(4, nodes.First(n => n.NodeId == 6).Value);
-            Assert.AreEqual(3, nodes.First(n => n.NodeId == 7).Value);
-            Assert.AreEqual(2, nodes.First(n => n.NodeId == 8).Value);
+            Dictionary<int, int> paths = Algorithm.CalculateShortestPaths(nodes, 1);
+            for (int i = 1; i <= 8; i++) 
+            {
+                Assert.True(paths.ContainsKey(i));
+            }
+
+            Assert.AreEqual(0, paths[1]);
+            Assert.AreEqual(1, paths[2]);
+            Assert.AreEqual(2, paths[3]);
+            Assert.AreEqual(3, paths[4]);
+            Assert.AreEqual(4, paths[5]);
+            Assert.AreEqual(4, paths[6]);
+            Assert.AreEqual(3, paths[7]);
+            Assert.AreEqual(2, paths[8]);
         }
 
         private List<DijkstraNode> LoadTestNodes()
         {
             List<DijkstraNode> nodes = new List<DijkstraNode>();
 
-            nodes.Add(new DijkstraNode(1, int.MaxValue, 2, 1));
-            nodes.Add(new DijkstraNode(1, int.MaxValue, 3, 4));
-            nodes.Add(new DijkstraNode(2, int.MaxValue, 3, 2));
-            nodes.Add(new DijkstraNode(2, int.MaxValue, 4, 6));
-            nodes.Add(new DijkstraNode(3, int.MaxValue, 4, 3));
+            nodes.Add(new DijkstraNode(1, DijkstraNode.NoPathDistance, 2, 1));
+            nodes.Add(new DijkstraNode(1, DijkstraNode.NoPathDistance, 3, 4));
+            nodes.Add(new DijkstraNode(2, DijkstraNode.NoPathDistance, 3, 2));
+            nodes.Add(new DijkstraNode(2, DijkstraNode.NoPathDistance, 4, 6));
+            nodes.Add(new DijkstraNode(3, DijkstraNode.NoPathDistance, 4, 3));
             return nodes;
         }
     }

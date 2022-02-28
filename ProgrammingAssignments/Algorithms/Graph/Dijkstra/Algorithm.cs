@@ -9,6 +9,7 @@ namespace Algorithms.Graph.Dijkstra
 {
     public static class Algorithm
     {
+        
         public static void CalculateShortestPaths_old(List<DijkstraNode> nodes, int startNodeId) 
         {
             DijkstraHeap heap = new DijkstraHeap();
@@ -36,14 +37,28 @@ namespace Algorithms.Graph.Dijkstra
 
         }
 
-        public static void CalculateShortestPaths(List<DijkstraNode> nodes, int startNodeId)
+        public static Dictionary<int, int> CalculateShortestPaths(List<DijkstraNode> nodes, int startNodeId)
         {
             DijkstraHeap heap = new DijkstraHeap();
             List<DijkstraNode> processed = new List<DijkstraNode>();
             Dictionary<int, int> lengths = new Dictionary<int, int>();
             lengths.Add(startNodeId, 0);
+            
+            Action<int, int> SetNodeMinValue = (int nodeId, int value) => 
+            {
+                if (!lengths.ContainsKey(nodeId))
+                {
+                    lengths.Add(nodeId, value);
+                }
+                else
+                {
+                    lengths[nodeId] = System.Math.Min(lengths[nodeId], value);
+                }
+            }; 
+
             foreach (DijkstraNode node in nodes) 
             {
+                if (node.NodeId == startNodeId) node.Value = 0;
                 heap.Enqueue(node);
             }
             
@@ -52,8 +67,44 @@ namespace Algorithms.Graph.Dijkstra
                 DijkstraNode node = heap.Dequeue();
                 processed.Add(node);
                 node.Value = lengths[node.NodeId];
+                // step 11: Maintain invariant
+                List<DijkstraNode> matchingNodes = heap.Find(node.NodeId);
+                matchingNodes.Add(node);
+                foreach (DijkstraNode matchingNode in matchingNodes) 
+                {
+                    DijkstraNode updateNode;
+                    if (matchingNode.Value != lengths[node.NodeId]) 
+                    {
+                        updateNode = heap.Remove(matchingNode.Index);
+                        updateNode.Value = lengths[node.NodeId];
+                        heap.Enqueue(updateNode);
+                    }
+                    List<DijkstraNode> referencedNodes = heap.Find(matchingNode.ReferencedNode.NodeId);
+                    if (referencedNodes.Count > 0)
+                    {
+                        foreach (DijkstraNode referencedNode in referencedNodes)
+                        {
+                            SetNodeMinValue(referencedNode.NodeId, matchingNode.DijkstraValue);
 
+                            if (referencedNode.Value != matchingNode.DijkstraValue)
+                            {
+                                updateNode = heap.Remove(referencedNode.Index);
+                                updateNode.Value = matchingNode.DijkstraValue;
+                                heap.Enqueue(updateNode);
+                            }
+                        }
 
+                    }
+                    else 
+                    {
+                        // this is a leaf
+                        SetNodeMinValue(matchingNode.ReferencedNode.NodeId, matchingNode.DijkstraValue);
+                    }
+                    
+                    
+                }
+
+                /*
                 if (nodes.Any(n => n.NodeId == node.ReferencedNode.NodeId && n.ReferencedNode != null))
                 {
                     AddNodesToHeap(node.ReferencedNode.NodeId, nodes, heap, node.DijkstraValue);
@@ -69,7 +120,10 @@ namespace Algorithms.Graph.Dijkstra
                     DijkstraNode leaf = nodes.First(n => n.NodeId == node.ReferencedNode.NodeId);
                     if (leaf.Value > node.DijkstraValue) leaf.Value = node.DijkstraValue;
                 }
+
+                */
             }
+            return lengths;
 
         }
 
@@ -83,11 +137,10 @@ namespace Algorithms.Graph.Dijkstra
             }            
         }
 
-        public static List<DijkstraNode> CalculateShortestPaths(string path, int startNodeId)
+        public static Dictionary<int, int> CalculateShortestPaths(string path, int startNodeId)
         {
             List<DijkstraNode> nodes = LoadGraph(path);
-            CalculateShortestPaths(nodes, startNodeId);
-            return nodes;
+            return CalculateShortestPaths(nodes, startNodeId);
         }
 
         public static List<DijkstraNode> LoadGraph(string path)
@@ -109,7 +162,7 @@ namespace Algorithms.Graph.Dijkstra
                         string[] nodeInfo = fields[i].Split(',');
                         if (nodeInfo.Length == 2)
                         {
-                            node = new DijkstraNode(nodeId, int.MaxValue, int.Parse(nodeInfo[0]), int.Parse(nodeInfo[1]));
+                            node = new DijkstraNode(nodeId, DijkstraNode.NoPathDistance, int.Parse(nodeInfo[0]), int.Parse(nodeInfo[1]));
                             nodes.Add(node);
                         }
                     }

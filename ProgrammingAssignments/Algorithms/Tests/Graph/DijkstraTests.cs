@@ -85,10 +85,10 @@ namespace Algorithms.Tests.Graph
             FileInfo testFile = GetTestFile(fileName);
             Assert.True(File.Exists(testFile.FullName));
 
-            List<DijkstraNode> nodes = Algorithm.CalculateShortestPaths(testFile.FullName, 1);
+            Dictionary<int, int> paths = Algorithm.CalculateShortestPaths(testFile.FullName, 1);
             List<int> expectedResult = GetOutputs(GetOutputFileName(testFile.FullName));
 
-            List<int> result = GetTestResults(_testIds, nodes);
+            List<int> result = GetTestResults(_testIds, paths);
             Assert.AreEqual(result.Count(), expectedResult.Count);
             for (int i = 0; i < result.Count(); i++)
             {
@@ -98,8 +98,6 @@ namespace Algorithms.Tests.Graph
 
         private FileInfo GetTestFile(string path)
         {
-            //FileInfo testCaseFile = new FileInfo(Path.Combine(TestUtils.GetTestCaseDirectory().FullName, "KargerMinCutData", fileName));
-
             DirectoryInfo testDirectory = TestUtils.GetTestCaseDirectory().GetDirectories("DijkstraData").First();
             FileInfo[] files = testDirectory.GetFiles(path);
             Assert.Greater(files.Length, 0);
@@ -130,12 +128,12 @@ namespace Algorithms.Tests.Graph
             return outputs;
         }
 
-        private List<int> GetTestResults(int[] values, List<DijkstraNode> nodes)
+        private List<int> GetTestResults(int[] nodeIds, Dictionary<int, int> paths)
         {
             List<int> results = new List<int>();
-            foreach (int value in values)
+            foreach (int nodeId in nodeIds)
             {
-                results.Add(nodes.First(n => n.NodeId == value).Value);
+                results.Add(paths[nodeId]);
             }
 
             return results;

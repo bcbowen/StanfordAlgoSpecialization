@@ -6,6 +6,8 @@ namespace Algorithms.Graph.Dijkstra
 {
     public class DijkstraNode : NodeBase
     {
+        public const int NoPathDistance = 100000;
+
         public DijkstraNode(int nodeId, int distance) : base(nodeId, distance)
         {
             ReferencedNode = null;

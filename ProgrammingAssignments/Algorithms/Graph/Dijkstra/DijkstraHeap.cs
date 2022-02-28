@@ -8,6 +8,8 @@ namespace Algorithms.Graph.Dijkstra
 {
     public class DijkstraHeap
     {
+        
+
         internal List<DijkstraNode> _heap { get; set; } = new List<DijkstraNode>();
         public int Count { get { return _heap.Count; } }
 
@@ -39,27 +41,30 @@ namespace Algorithms.Graph.Dijkstra
             return head;
         }
 
+        /*
         public DijkstraNode Find(int nodeId)
         {
             if (_heap == null || _heap.Count == 0) return null;
 
             return Find(0, nodeId);
         }
-        
+        */
 
-        private DijkstraNode Find(int index, int nodeId)
+        public List<DijkstraNode> Find(int nodeId)
         {
-            if (index > _heap.Count - 1) return null;
+            List<DijkstraNode> foundNodes = new List<DijkstraNode>();
+
+            if (_heap.Count == 0) return foundNodes;
 
             Queue<DijkstraNode> nodesQueue = new Queue<DijkstraNode>();
-            nodesQueue.Enqueue(_heap[index]);
+            nodesQueue.Enqueue(Peek());
 
             while (nodesQueue.Count > 0) 
             {
                 DijkstraNode node = nodesQueue.Dequeue();
                 if (node.NodeId == nodeId)
                 {
-                    return node;
+                    foundNodes.Add(node);
                 }
                 // left node
                 int childIndex = node.Index * 2 + 1;
@@ -70,17 +75,17 @@ namespace Algorithms.Graph.Dijkstra
                 if (childIndex < _heap.Count) nodesQueue.Enqueue(_heap[childIndex]);
             }
 
-            return null;
+            return foundNodes;
 
         }
 
-        public DijkstraNode Remove(int value)
+        public DijkstraNode Remove(int index)
         {
             DijkstraNode node;
-            node = Find(value);
+            node = _heap[index];
            
-            ReplaceWithLast(node.Index);
-            ReheapDown(node.Index);
+            ReplaceWithLast(index);
+            ReheapDown(index);
             return node;
         }
 

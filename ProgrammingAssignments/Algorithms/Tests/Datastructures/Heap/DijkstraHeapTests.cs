@@ -1,5 +1,8 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
 using Algorithms.Graph.Dijkstra;
+
 using Algorithms.Shared;
 
 namespace Algorithms.Tests.Datastructures.Heap
@@ -205,16 +208,19 @@ namespace Algorithms.Tests.Datastructures.Heap
         */
         public void HeapMaintainsCorrectIndexesWhenInsertingNodes()
         {
-            int[] nodeIds = new[] { 6, 4, 1, 3, 5, 2 };
-            int[] distances = new[] { 5, 3, 0, 2, 4, 1 };
-            int[] referencedNodeIds = new[] { 1, 5, 2, 4, 6, 3 };
-            const int referencedNodeDistance = 1;
+            List<DijkstraNode> nodes = new List<DijkstraNode>
+            {
+                new DijkstraNode(6, 5, 1, 1),
+                new DijkstraNode(4, 3, 5, 1),
+                new DijkstraNode(1, 0, 2, 1),
+                new DijkstraNode(3, 2, 4, 1),
+                new DijkstraNode(5, 4, 6, 1),
+                new DijkstraNode(2, 1, 3, 1)
+            };
 
             DijkstraHeap heap = new DijkstraHeap();
-            DijkstraNode node;
-            for (int i = 0; i < nodeIds.Length; i++)
+            foreach (DijkstraNode node in nodes)
             {
-                node = new DijkstraNode(nodeIds[i], distances[i], referencedNodeIds[i], referencedNodeDistance);
                 heap.Enqueue(node);
             }
 
@@ -249,11 +255,77 @@ namespace Algorithms.Tests.Datastructures.Heap
             heap.ReheapDown(index);
             foreach (int nodeId in nodeIds)
             {
-                node = heap.Find(nodeId);
+                node = heap.Find(nodeId).FirstOrDefault();
                 Assert.NotNull(node);
                 Assert.AreEqual(nodeId, node.NodeId);
             }
         }
 
+        [Test]
+        /* nodes depicted like 6-5+1: node 6, distance 5, referenced Node distance 1
+                1-0+1
+              /       \
+           3-2+1    2-1+1
+           /   \      / 
+        6-5+1  5-4+1  4-3+1
+        */
+        public void RemoveAffectsExpectedNode()
+        {
+            List<DijkstraNode> nodes = new List<DijkstraNode>
+            {
+                new DijkstraNode(6, 5, 1, 1),
+                new DijkstraNode(4, 3, 5, 1),
+                new DijkstraNode(1, 0, 2, 1),
+                new DijkstraNode(3, 2, 4, 1),
+                new DijkstraNode(5, 4, 6, 1),
+                new DijkstraNode(2, 1, 3, 1)
+            };
+
+            DijkstraHeap heap = new DijkstraHeap();
+            foreach (DijkstraNode node in nodes)
+            {
+                heap.Enqueue(node);
+            }
+
+            DijkstraNode found = heap.Find(5).FirstOrDefault();
+            Assert.NotNull(found);
+            DijkstraNode returnNode = heap.Remove(found.Index);
+            Assert.NotNull(returnNode);
+            Assert.False(heap._heap.Any(n => n.NodeId == 5));
+        }
+
+        [Test]
+        /* nodes depicted like 6-5+1: node 6, distance 5, referenced Node distance 1
+                1-0+1
+              /       \
+           3-2+1    2-1+1
+           /   \      / 
+        6-5+1  5-4+1  4-3+1
+        */
+        public void RemoveLeavesIndexesCorrect()
+        {
+            List<DijkstraNode> nodes = new List<DijkstraNode>
+            {
+                new DijkstraNode(6, 5, 1, 1),
+                new DijkstraNode(4, 3, 5, 1),
+                new DijkstraNode(1, 0, 2, 1),
+                new DijkstraNode(3, 2, 4, 1),
+                new DijkstraNode(5, 4, 6, 1),
+                new DijkstraNode(2, 1, 3, 1)
+            };
+
+            DijkstraHeap heap = new DijkstraHeap();
+            foreach (DijkstraNode node in nodes)
+            {
+                heap.Enqueue(node);
+            }
+
+            heap.Remove(5);
+
+            for (int i = 0; i < heap.Count; i++)
+            {
+                Assert.AreEqual(heap._heap[i].Index, i);
+            }
+        }
     }
 }
