@@ -41,20 +41,13 @@ namespace Algorithms.Graph.Dijkstra
             return head;
         }
 
-        /*
-        public DijkstraNode Find(int nodeId)
-        {
-            if (_heap == null || _heap.Count == 0) return null;
-
-            return Find(0, nodeId);
-        }
-        */
-
-        public List<DijkstraNode> Find(int nodeId)
+        public List<DijkstraNode> Find(int nodeId = 0, int referencedNodeId = 0)
         {
             List<DijkstraNode> foundNodes = new List<DijkstraNode>();
 
             if (_heap.Count == 0) return foundNodes;
+            if (nodeId == 0 && referencedNodeId == 0) return foundNodes;
+            if (nodeId != 0 && referencedNodeId != 0) throw new ArgumentException("Only nodeId or referencedNodeId can be set");
 
             Queue<DijkstraNode> nodesQueue = new Queue<DijkstraNode>();
             nodesQueue.Enqueue(Peek());
@@ -62,7 +55,7 @@ namespace Algorithms.Graph.Dijkstra
             while (nodesQueue.Count > 0) 
             {
                 DijkstraNode node = nodesQueue.Dequeue();
-                if (node.NodeId == nodeId)
+                if (node.NodeId == nodeId || node.ReferencedNode.NodeId == referencedNodeId)
                 {
                     foundNodes.Add(node);
                 }
@@ -120,13 +113,13 @@ namespace Algorithms.Graph.Dijkstra
 
                 if (_heap.Count > leftChildIndex &&
                     _heap[leftChildIndex] != null &&
-                    _heap[leftChildIndex].DijkstraValue < _heap[index].DijkstraValue)
+                    _heap[leftChildIndex] < _heap[index])
                     minChildIndex = leftChildIndex;
 
                 if (_heap.Count > rightChildIndex &&
                     _heap[rightChildIndex] != null &&
-                    _heap[rightChildIndex].DijkstraValue < _heap[index].DijkstraValue &&
-                    _heap[rightChildIndex].DijkstraValue < _heap[leftChildIndex].DijkstraValue)
+                    _heap[rightChildIndex] < _heap[index] &&
+                    _heap[rightChildIndex] < _heap[leftChildIndex])
                     minChildIndex = rightChildIndex;
 
                 if (minChildIndex != 0)
@@ -151,7 +144,7 @@ namespace Algorithms.Graph.Dijkstra
             do
             {
                 parentIndex = (index - 1) / 2;
-                if (_heap[index].DijkstraValue < _heap[parentIndex].DijkstraValue)
+                if (_heap[index] < _heap[parentIndex])
                 {
                     DijkstraNode temp = _heap[parentIndex];
                     _heap[parentIndex] = _heap[index];
@@ -165,7 +158,7 @@ namespace Algorithms.Graph.Dijkstra
 
         public int[] GetValues()
         {
-            int[] values = _heap.Select(h => h.DijkstraValue).ToArray();
+            int[] values = _heap.Select(h => h.Value).ToArray();
 
             return values;
         }

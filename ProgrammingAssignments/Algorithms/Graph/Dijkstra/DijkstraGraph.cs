@@ -65,7 +65,7 @@ namespace Algorithms.Graph.Dijkstra
                     {
                         if (transferNode.Value != Unreachable)
                         {
-                            transferNode.Value = node.DijkstraValue;
+                            transferNode.Value = node.Value;
                             transferNode.Path.AddRange(node.Path);
                             transferNode.Path.Add(node.Value);
                             frontier.Enqueue(transferNode);
@@ -86,7 +86,7 @@ namespace Algorithms.Graph.Dijkstra
                     }
                     else
                     {
-                        NodeDistance nd = new NodeDistance(node.ReferencedNode.NodeId, node.DijkstraValue);
+                        NodeDistance nd = new NodeDistance(node.ReferencedNode.NodeId, node.Value);
                         nd.Path.AddRange(node.Path);
                         nd.Path.Add(node.Value);
                         processedNodes.Add(nd);

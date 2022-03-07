@@ -17,7 +17,7 @@ namespace Algorithms.Tests.Datastructures.Heap
             heap.Enqueue(new DijkstraNode(1, 0, 2, 1));
             int[] values = heap.GetValues();
             Assert.AreEqual(1, values.Length);
-            Assert.AreEqual(1, values[0]);
+            Assert.AreEqual(0, values[0]);
         }
 
         /// <summary>
@@ -26,26 +26,26 @@ namespace Algorithms.Tests.Datastructures.Heap
         /// <param name="insertNodes"></param>
         /// <param name="distances"></param>
         /// <param name="retrievedValues"></param>
-        [TestCase(new[] { 1, 2}, new[] { 0, 1 }, new[] { 2, 3 }, new[] { 1, 1 }, new[] { 1, 2})] // insert 1 then 2, nodes stay in same order
-        [TestCase(new[] { 2, 1 }, new[] { 1, 0 }, new[] { 3, 2 }, new[] { 1, 1 }, new[] { 1, 2 })] // insert 2 then 1, 1 is reheaped up since it's the min
-        [TestCase(new[] { 1, 2, 3 }, new[] { 0, 1, 2}, new[] {  2, 3, 4 }, new[] { 1, 1, 1 }, new[] { 1, 2, 3 })] // insert nodes in order, they should keep same order
-        [TestCase(new[] { 3, 2, 1 }, new[] { 2, 1, 0 }, new[] { 4, 3, 2 }, new[] { 1, 1, 1 }, new[] { 1, 3, 2 })] // 3, then 2 -> replaces 3 (2, 3), 1 -> inserted as right child and replaces 2 (1, 3, 2)
-        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, new[] { 5, 3, 0, 2, 4, 1 }, new[] { 1, 5, 2, 4, 6, 3}, new[] { 1, 1, 1, 1, 1, 1}, new[] { 1, 3, 2, 6, 5, 4 })]
-        /* nodes depicted like 6-5+1: node 6, distance 5, referenced Node distance 1
+        [TestCase(new[] { 1, 2}, new[] { 0, 1 }, new[] { 0, 1})] // insert 0 then 1, nodes stay in same order
+        [TestCase(new[] { 2, 1 }, new[] { 1, 0 }, new[] { 0, 1 })] // insert 1 then 0, 0 is reheaped up since it's the min
+        [TestCase(new[] { 1, 2, 3 }, new[] { 0, 1, 2}, new[] { 0, 1, 2 })] // insert nodes in order, they should keep same order
+        [TestCase(new[] { 3, 2, 1 }, new[] { 2, 1, 0 }, new[] { 0, 2, 1 })] // 2, then 1 -> replaces 2, 0 -> inserted as right child and replaces 1 (0, 2, 1)
+        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, new[] { 5, 3, 0, 2, 4, 1 }, new[] { 0, 2, 1, 5, 4, 3 })]
+        /* nodes depicted like 6,5: node id 6, distance 5
          
-            6-5+1      4-3+1        1-0+1           1-0+1              1-0+1              1-0+1
-                      /             /   \           /   \             /    \            /       \
-                   6-5+1         6-5+1  4-3+1     3-2+1  4-3+1      3-2+1  4-3+1      3-2+1    2-1+1
-                                                  /                /   \             /   \      / 
-                                                6-5+1            6-5+1 5-4+1     6-5+1  5-4+1  4-3+1
+            6,5      4,3         1,0           1,0           1,0             1,0
+                     /          /   \         /   \          /  \          /     \
+                   6,5        6,5   4,3     3,2   4,3     3,2    4,3     3,2      2,1
+                                            /             /   \         /   \     / 
+                                          6,5           6,5   5,4      6,5  5,4  4,3
         */
-        public void HeapEnqueueSetsNodesInExpectedPlaces(int[] nodeIds, int[] distances, int[] referencedNodeIds, int[] referencedNodeDistances, int[] expectedNodeIdsFromHeap)
+        public void HeapEnqueueSetsNodesInExpectedPlaces(int[] nodeIds, int[] distances, int[] expectedNodeIdsFromHeap)
         {
             DijkstraHeap heap = new DijkstraHeap();
             DijkstraNode node;
             for (int i = 0; i < nodeIds.Length; i++) 
             {
-                node = new DijkstraNode(nodeIds[i], distances[i], referencedNodeIds[i], referencedNodeDistances[i]); 
+                node = new DijkstraNode(nodeIds[i], distances[i]); 
                 heap.Enqueue(node);
             }
 
@@ -54,86 +54,92 @@ namespace Algorithms.Tests.Datastructures.Heap
             Assert.AreEqual(expectedNodeIdsFromHeap, values);
         }
 
-        /* nodes depicted like 6-5+1: node 6, distance 5, referenced Node distance 1
+        /* nodes depicted like 6,5: node id 6, distance 5
          
-            6-5+1      4-3+1        1-0+1           1-0+1              1-0+1              1-0+1
-                      /             /   \           /   \             /    \            /       \
-                   6-5+1         6-5+1  4-3+1     3-2+1  4-3+1      3-2+1  4-3+1      3-2+1    2-1+1
-                                                  /                /   \             /   \      / 
-                                                6-5+1            6-5+1 5-4+1     6-5+1  5-4+1  4-3+1
+            6,5      4,3         1,0           1,0           1,0             1,0
+                     /          /   \         /   \          /  \          /     \
+                   6,5        6,5   4,3     3,2   4,3     3,2    4,3     3,2      2,1
+                                            /             /   \         /   \     / 
+                                          6,5           6,5   5,4      6,5  5,4  4,3
         */
-        [TestCase(new[] { 6, 4, 1, 3, 5, 2 }, new[] { 5, 3, 0, 2, 4, 1 }, new[] { 1, 5, 2, 4, 6, 3 }, new[] { 1, 1, 1, 1, 1, 1 })]
-        public void HeapDequeuesValuesInOrder(int[] nodeIds, int[] distances, int[] referencedNodeIds, int[] referencedNodeDistances)
+        [Test]
+        public void HeapDequeuesValuesInOrder()
         {
 
             DijkstraHeap heap = new DijkstraHeap();
-            DijkstraNode node;
-            for (int i = 0; i < nodeIds.Length; i++)
-            {
-                node = new DijkstraNode(nodeIds[i], distances[i], referencedNodeIds[i], referencedNodeDistances[i]);
-                heap.Enqueue(node);
-            }
 
-            int expectedValue = 1;
+            // setup: Enqueue nodes in order. We don't care about referenced nodes for this test, just the distances.
+            heap.Enqueue(new DijkstraNode(6, 5));
+            heap.Enqueue(new DijkstraNode(4, 3));
+            heap.Enqueue(new DijkstraNode(1, 0));
+            heap.Enqueue(new DijkstraNode(3, 2));
+            heap.Enqueue(new DijkstraNode(5, 4));
+            heap.Enqueue(new DijkstraNode(2, 1));
+
+            int expectedValue = 0;
             while (expectedValue < 6)
             {
-                node = heap.Dequeue();
-                Assert.AreEqual(expectedValue, node.DijkstraValue);
+                DijkstraNode node = heap.Dequeue();
+                Assert.AreEqual(expectedValue, node.Value);
                 expectedValue++;
             }
         }
 
-
-        /* nodes depicted like 6-5+1: node 6, distance 5, referenced Node distance 1
+        [Test]
+        /* nodes depicted like 6,5,3 node 6, total distance 5, 3 from parent node
          
-                    1-0+1
-                 /        \
-              3-2+1      2-1+1
-              /   \        / 
-           6-5+1  5-4+1  4-3+1
+                    1,0,0
+                   /     \
+                3,2,2     2,1,1
+              /   \         / 
+           6,5,3  5,4,2  4,3,2
         */
-        [TestCase(new[] { 2, 3, 4, 6, 5, 1 }, new[] { 1, 2, 3, 5, 4, 0}, new[] { 3, 4, 5, 1, 6, 2 }, new[] { 1, 1, 1, 1, 1, 1 }, new[] { 1, 3, 2, 6, 5, 4 })]
-        [TestCase(new[] { 1, 3, 4, 6, 5, 2 }, new[] { 0, 2, 3, 5, 4, 1 }, new[] { 2, 4, 5, 1, 6, 3 }, new[] { 1, 1, 1, 1, 1, 1 }, new[] { 1, 3, 2, 6, 5, 4 })]
-        public void ReHeapUpLeavesBalancedHeap(int[] nodeIds, int[] distances, int[] referencedNodeIds, int[] referencedNodeDistances, int[] expectedNodeIdsFromHeap)
+        public void ReHeapUpLeavesBalancedHeap()
         {
             DijkstraHeap heap = new DijkstraHeap();
-            DijkstraNode node;
+            
+            // setup: enqueue all nodes except 2
 
-            for (int i = 0; i < nodeIds.Length; i++)
-            {
-                node = new DijkstraNode(nodeIds[i], distances[i], referencedNodeIds[i], referencedNodeDistances[i]);
-                heap._heap.Add(node);
-            }
+            heap.Enqueue(new DijkstraNode(1, 0, 3, 2));
+            heap.Enqueue(new DijkstraNode(1, 0, 2, 1));
+            heap.Enqueue(new DijkstraNode(3, 2, 6, 5));
+            heap.Enqueue(new DijkstraNode(4, 3));
+            heap.Enqueue(new DijkstraNode(3, 2, 5, 4));
+            heap.Enqueue(new DijkstraNode(6, 5));
+            heap.Enqueue(new DijkstraNode(5, 4));
 
+            // setup: add 2 manually to end
+            DijkstraNode node = new DijkstraNode(2, 1, 4, 2);
+            heap._heap.Add(node);
             heap.ReheapUp();
-            Assert.AreEqual(expectedNodeIdsFromHeap, heap.GetValues());
+            int[] expectedValues = new int[] { 0, 0, 2, 1, 2, 5, 4, 3 };
+            Assert.AreEqual(expectedValues, heap.GetValues());
         }
 
 
-        /* nodes depicted like 6-5+1: node 6, distance 5, referenced Node distance 1
+        [Test]
+        /* nodes depicted like 6,5,3 node 6, total distance 5, 3 from parent node
          
-                    1-0+1
-                 /        \
-              3-2+1      2-1+1
-              /   \        / 
-           6-5+1  5-4+1  4-3+1
+                    1,0,0
+                   /     \
+                3,2,2     2,1,1
+              /   \         / 
+           6,5,3  5,4,2  4,3,2
         */
-        [TestCase(new[] { 2, 3, 4, 6, 5, 1 }, new[] { 1, 2, 3, 5, 4, 0 }, new[] { 3, 4, 5, 1, 6, 2 })]
-        [TestCase(new[] { 1, 3, 4, 6, 5, 2 }, new[] { 0, 2, 3, 5, 4, 1 }, new[] { 2, 4, 5, 1, 6, 3 })]
-        public void ReHeapUpLeavesIndexesCorrectlySet(int[] nodeIds, int[] distances, int[] referencedNodeIds)
+        public void ReHeapUpLeavesIndexesCorrectlySet()
         {
             DijkstraHeap heap = new DijkstraHeap();
-            DijkstraNode node;
+            heap.Enqueue(new DijkstraNode(1, 0, 3, 2));
+            heap.Enqueue(new DijkstraNode(1, 0, 2, 1));
+            heap.Enqueue(new DijkstraNode(3, 2, 6, 5));
+            heap.Enqueue(new DijkstraNode(4, 3));
+            heap.Enqueue(new DijkstraNode(3, 2, 5, 4));
+            heap.Enqueue(new DijkstraNode(6, 5));
+            heap.Enqueue(new DijkstraNode(5, 4));
 
-            const int referencedNodeDistance = 1;
-
-            for (int i = 0; i < nodeIds.Length; i++)
-            {
-                node = new DijkstraNode(nodeIds[i], distances[i], referencedNodeIds[i], referencedNodeDistance);
-                heap._heap.Add(node);
-                heap._heap[i].Index = i;
-            }
-
+            // setup: add 2 manually to end
+            DijkstraNode node = new DijkstraNode(2, 1, 4, 2);
+            heap._heap.Add(node);
             heap.ReheapUp();
 
             for (int i = 0; i < heap.Count; i++)
@@ -142,52 +148,65 @@ namespace Algorithms.Tests.Datastructures.Heap
             }
         }
 
-        /* nodes depicted like 6-5+1: node 6, distance 5, referenced Node distance 1
+        [Test]
+        /* nodes depicted like 6,5,3 node 6, total distance 5, 3 from parent node
          
-                    1-0+1
-                 /        \
-              3-2+1      2-1+1
-              /   \        / 
-           6-5+1  5-4+1  4-3+1
+                    1,0,0
+                   /     \
+                3,2,2     2,1,1
+              /   \         / 
+           6,5,3  5,4,2  4,3,2
         */
-        [TestCase(new[] { 4, 3, 2, 6, 5 }, new[] { 3, 2, 1, 5, 4}, new[] { 5, 4, 3, 1, 6 }, new[] { 1, 1, 1, 1, 1}, new[] { 2, 3, 4, 6, 5 }, 0)]
-        [TestCase(new[] { 1, 3, 4, 6, 5, 2 }, new[] { 0, 2, 3, 5, 4, 1 }, new[] { 2, 4, 5, 1, 6, 3 }, new[] { 1, 1, 1, 1, 1, 1 }, new[] { 1, 3, 2, 6, 5, 4 }, 2)]
-        public void ReHeapDownLeavesBalancedHeap(int[] nodeIds, int[] distances, int[] referencedNodeIds, int[] referencedNodeDistances, int[] expectedDijkstraValuesFromHeap, int index)
+        public void ReHeapDownFromTopLeavesBalancedHeap()
         {
+            const int index = 0;
+            // setup: enqueue nodes in heap, missing node 4
             DijkstraHeap heap = new DijkstraHeap();
-            DijkstraNode node;
+            heap.Enqueue(new DijkstraNode(1, 0, 3, 2));
+            heap.Enqueue(new DijkstraNode(1, 0, 2, 1));
+            heap.Enqueue(new DijkstraNode(3, 2, 6, 5));
+            heap.Enqueue(new DijkstraNode(3, 2, 5, 4));
+            heap.Enqueue(new DijkstraNode(6, 5));
+            heap.Enqueue(new DijkstraNode(5, 4));
 
-            for (int i = 0; i < nodeIds.Length; i++)
-            {
-                node = new DijkstraNode(nodeIds[i], distances[i], referencedNodeIds[i], referencedNodeDistances[i]);
-                heap._heap.Add(node);
-            }
+            // setup: manually put node 4 in index position 
+            DijkstraNode node = new DijkstraNode(4, 3);
+            heap._heap.Insert(index, node);
 
             heap.ReheapDown(index);
             int[] heapDValues = heap.GetValues();
-            Assert.AreEqual(expectedDijkstraValuesFromHeap, heapDValues);
+            int[] expectedValues = new int[] { 0, 2, 0, 3, 2, 5, 4 };
+            Assert.AreEqual(expectedValues, heapDValues);
         }
 
-        /* nodes depicted like 6-5+1: node 6, distance 5, referenced Node distance 1
+        [TestCase(0)]
+        [TestCase(4)]
+        /* nodes depicted like 6,5,3 node 6, total distance 5, 3 from parent node
          
-                    1-0+1
-                 /        \
-              3-2+1      2-1+1
-              /   \        / 
-           6-5+1  5-4+1  4-3+1
+                    1,0,0
+                   /     \
+                3,2,2     2,1,1
+              /   \         / 
+           6,5,3  5,4,2  4,3,2
         */
-        [TestCase(new[] { 4, 3, 2, 6, 5 }, new[] { 3, 2, 1, 5, 4 }, new[] { 5, 4, 3, 1, 6 }, new[] { 1, 1, 1, 1, 1 }, 0)]
-        [TestCase(new[] { 1, 3, 4, 6, 5, 2 }, new[] { 0, 2, 3, 5, 4, 1 }, new[] { 2, 4, 5, 1, 6, 3 }, new[] { 1, 1, 1, 1, 1, 1 }, 2)]
-        public void ReHeapDownLeavesIndexesCorrectlySet(int[] nodeIds, int[] distances, int[] referencedNodeIds, int[] referencedNodeDistances, int index)
+        public void ReHeapDownLeavesIndexesCorrectlySet(int index)
         {
+            // setup: enqueue nodes in heap, missing node 4
             DijkstraHeap heap = new DijkstraHeap();
-            DijkstraNode node;
+            heap.Enqueue(new DijkstraNode(1, 0, 3, 2));
+            heap.Enqueue(new DijkstraNode(1, 0, 2, 1));
+            heap.Enqueue(new DijkstraNode(3, 2, 6, 5));
+            heap.Enqueue(new DijkstraNode(3, 2, 5, 4));
+            heap.Enqueue(new DijkstraNode(6, 5));
+            heap.Enqueue(new DijkstraNode(5, 4));
 
-            for (int i = 0; i < nodeIds.Length; i++)
+            // setup: manually put node 4 in index position
+            DijkstraNode node = new DijkstraNode(4, 3);
+            heap._heap.Insert(index, node);
+            // reset indexes since we manually added to the array
+            for (int i = 0; i < heap.Count; i++)
             {
-                node = new DijkstraNode(nodeIds[i], distances[i], referencedNodeIds[i], referencedNodeDistances[i]);
-                heap._heap.Add(node);
-                heap._heap[i].Index = i;
+               heap._heap[i].Index = i;
             }
 
             heap.ReheapDown(index);
@@ -199,13 +218,6 @@ namespace Algorithms.Tests.Datastructures.Heap
 
 
         [Test]
-        /* nodes depicted like 6-5+1: node 6, distance 5, referenced Node distance 1
-                1-0+1
-              /       \
-           3-2+1    2-1+1
-           /   \      / 
-        6-5+1  5-4+1  4-3+1
-        */
         public void HeapMaintainsCorrectIndexesWhenInsertingNodes()
         {
             List<DijkstraNode> nodes = new List<DijkstraNode>
@@ -255,9 +267,41 @@ namespace Algorithms.Tests.Datastructures.Heap
             heap.ReheapDown(index);
             foreach (int nodeId in nodeIds)
             {
-                node = heap.Find(nodeId).FirstOrDefault();
+                node = heap.Find(nodeId: nodeId).FirstOrDefault();
                 Assert.NotNull(node);
                 Assert.AreEqual(nodeId, node.NodeId);
+            }
+        }
+
+
+        /* nodes depicted like 6-5+1: node 6, distance 5, referenced Node distance 1
+         
+                    1-0+1
+                 /        \
+              3-2+1      2-1+1
+              /   \        / 
+           6-5+1  5-4+1  4-3+1
+        */
+        [TestCase(new[] { 4, 3, 2, 6, 5 }, new[] { 3, 2, 1, 5, 4 }, new[] { 5, 4, 3, 1, 6 }, new[] { 1, 1, 1, 1, 1 }, new[] { 2, 3, 4, 6, 5 }, 0)]
+        [TestCase(new[] { 1, 3, 4, 6, 5, 2 }, new[] { 0, 2, 3, 5, 4, 1 }, new[] { 2, 4, 5, 1, 6, 3 }, new[] { 1, 1, 1, 1, 1, 1 }, new[] { 1, 3, 2, 6, 5, 4 }, 2)]
+        public void FindByReferencedNodeReturnsCorrectNode(int[] nodeIds, int[] distances, int[] referencedNodeIds, int[] referencedNodeDistances, int[] expectedDijkstraValuesFromHeap, int index)
+        {
+            DijkstraHeap heap = new DijkstraHeap();
+            DijkstraNode node;
+
+            for (int i = 0; i < nodeIds.Length; i++)
+            {
+                node = new DijkstraNode(nodeIds[i], distances[i], referencedNodeIds[i], referencedNodeDistances[i]);
+                heap._heap.Add(node);
+                heap._heap[i].Index = i;
+            }
+
+            heap.ReheapDown(index);
+            for (int i = 0; i < nodeIds.Length; i++)
+            {
+                node = heap.Find(referencedNodeId: referencedNodeIds[i]).FirstOrDefault();
+                Assert.NotNull(node);
+                Assert.AreEqual(node.NodeId, nodeIds[i]);
             }
         }
 
@@ -287,7 +331,7 @@ namespace Algorithms.Tests.Datastructures.Heap
                 heap.Enqueue(node);
             }
 
-            DijkstraNode found = heap.Find(5).FirstOrDefault();
+            DijkstraNode found = heap.Find(nodeId: 5).FirstOrDefault();
             Assert.NotNull(found);
             DijkstraNode returnNode = heap.Remove(found.Index);
             Assert.NotNull(returnNode);

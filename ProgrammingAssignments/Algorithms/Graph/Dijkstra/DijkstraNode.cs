@@ -20,6 +20,7 @@ namespace Algorithms.Graph.Dijkstra
 
         public NodeDistance ReferencedNode { get; set; }
 
+        /*
         public int DijkstraValue 
         {
             get 
@@ -27,11 +28,23 @@ namespace Algorithms.Graph.Dijkstra
                 return ReferencedNode != null ? ReferencedNode.Distance + Value : Value;
             }
         }
+        */
 
         public bool Processed { get; set; }
 
         public List<int> Path { get; private set; } = new List<int>();
 
         public int Index { get; set; }
+
+        public static bool operator < (DijkstraNode l, DijkstraNode r) 
+        {
+            return l.Value < r.Value;
+        }
+
+        public static bool operator > (DijkstraNode l, DijkstraNode r)
+        {
+            return l.Value > r.Value;
+        }
+
     }
 }

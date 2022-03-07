@@ -11,7 +11,7 @@ namespace Algorithms.Tests.Graph
     [TestFixture]
     public class DijkstraTests
     {
-        private const string IgnoreMessage = "Dijkstra tests are currently disabled while the files are broken... need to finish refactoring "; 
+        private const string IgnoreMessage = "Dijkstra tests are currently disabled while the files are broken... need to finish refactoring ";
         private int[] _testIds = { 7, 37, 59, 82, 99, 115, 133, 165, 188, 197 };
 
         [TestCase(1, 4)]
@@ -79,7 +79,7 @@ namespace Algorithms.Tests.Graph
             RunTests(testNumber, nodeCount);
         }
 
-        private void RunTests(int testNumber, int nodeCount) 
+        private void RunTests(int testNumber, int nodeCount)
         {
             string fileName = $"input_random_{testNumber}_{nodeCount}.txt";
             FileInfo testFile = GetTestFile(fileName);
@@ -137,6 +137,31 @@ namespace Algorithms.Tests.Graph
             }
 
             return results;
+        }
+
+        [TestCase(1, 4)]
+        [TestCase(3, 4)]
+        public void RunOldAlgorithm(int testNumber, int nodeCount)
+        {
+            string fileName = $"input_random_{testNumber}_{nodeCount}.txt";
+            FileInfo testFile = GetTestFile(fileName);
+            Assert.True(File.Exists(testFile.FullName));
+            List<DijkstraNode> nodes = Algorithm.LoadGraph(testFile.FullName);
+            Algorithm.CalculateShortestPaths_old(nodes, 1);
+            List<int> expectedResult = GetOutputs(GetOutputFileName(testFile.FullName));
+
+            List<int> results = new List<int>();
+            foreach (int nodeId in _testIds)
+            {
+                results.Add(nodes.First(n => n.NodeId == nodeId).Value);
+            }
+
+            //List<int> result = GetTestResults(_testIds, paths);
+            //Assert.AreEqual(result.Count(), expectedResult.Count);
+            for (int i = 0; i < results.Count(); i++)
+            {
+                Assert.AreEqual(expectedResult[i], results[i], $"Mismatch on testId {_testIds[i]} expected: {expectedResult[i]} got: {results[i]}");
+            }
         }
     }
 }
