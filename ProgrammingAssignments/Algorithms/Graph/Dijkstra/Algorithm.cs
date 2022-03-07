@@ -78,7 +78,7 @@ namespace Algorithms.Graph.Dijkstra
             {
                 DijkstraNode node = heap.Dequeue();
                 processed.Add(node);
-                if (lengths.ContainsKey(node.NodeId)) node.Value = lengths[node.NodeId];
+                if (lengths.ContainsKey(node.NodeId) && lengths[node.NodeId] > node.Value) node.Value = lengths[node.NodeId];
                 // step 11: Maintain invariant
                 List<DijkstraNode> matchingNodes = heap.Find(nodeId: node.NodeId);
                 matchingNodes.Add(node);
@@ -99,7 +99,7 @@ namespace Algorithms.Graph.Dijkstra
                     {
                         foreach (DijkstraNode referencedNode in referencedNodes)
                         {
-                            SetNodeMinValue(referencedNode.NodeId, matchingNode.Value, path);
+                            SetNodeMinValue(referencedNode.NodeId, matchingNode.Value + matchingNode.ReferencedNode.Distance, path);
 
                             if (referencedNode.Value != matchingNode.Value)
                             {
@@ -113,7 +113,7 @@ namespace Algorithms.Graph.Dijkstra
                     else 
                     {
                         // this is a leaf
-                        SetNodeMinValue(matchingNode.ReferencedNode.NodeId, matchingNode.Value, path);
+                        SetNodeMinValue(matchingNode.ReferencedNode.NodeId, matchingNode.Value + matchingNode.ReferencedNode.Distance, path);
                     }
                 }
                 // reset nodes still in the heap pointing to this node
