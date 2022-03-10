@@ -18,10 +18,10 @@ namespace Algorithms.Tests.Graph
         public void NodesHaveCorrectShortestPathAfterDijkstra(int nodeId, int expectedDistance)
         {
             List<DijkstraNode> nodes= LoadTestNodes();
-            Dictionary<int, int> paths = Algorithm.CalculateShortestPaths(nodes, 1);
+            Dictionary<int, NodeStatus> paths = Algorithm.CalculateShortestPaths(nodes, 1);
             Assert.True(paths.ContainsKey(nodeId));
 
-            int length = paths[nodeId];
+            int length = paths[nodeId].Length;
 
             Assert.AreEqual(expectedDistance, length);
         }
@@ -70,20 +70,20 @@ namespace Algorithms.Tests.Graph
                 8 2[8]
            */
 
-            Dictionary<int, int> paths = Algorithm.CalculateShortestPaths(nodes, 1);
+            Dictionary<int, NodeStatus> paths = Algorithm.CalculateShortestPaths(nodes, 1);
             for (int i = 1; i <= 8; i++) 
             {
                 Assert.True(paths.ContainsKey(i));
             }
 
-            Assert.AreEqual(0, paths[1]);
-            Assert.AreEqual(1, paths[2]);
-            Assert.AreEqual(2, paths[3]);
-            Assert.AreEqual(3, paths[4]);
-            Assert.AreEqual(4, paths[5]);
-            Assert.AreEqual(4, paths[6]);
-            Assert.AreEqual(3, paths[7]);
-            Assert.AreEqual(2, paths[8]);
+            Assert.AreEqual(0, paths[1].Length);
+            Assert.AreEqual(1, paths[2].Length);
+            Assert.AreEqual(2, paths[3].Length);
+            Assert.AreEqual(3, paths[4].Length);
+            Assert.AreEqual(4, paths[5].Length);
+            Assert.AreEqual(4, paths[6].Length);
+            Assert.AreEqual(3, paths[7].Length);
+            Assert.AreEqual(2, paths[8].Length);
         }
 
         private List<DijkstraNode> LoadTestNodes()

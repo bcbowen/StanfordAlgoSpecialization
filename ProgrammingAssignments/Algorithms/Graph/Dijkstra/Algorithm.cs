@@ -38,68 +38,86 @@ namespace Algorithms.Graph.Dijkstra
 
         }
 
-        public static Dictionary<int, int> CalculateShortestPaths(List<DijkstraNode> nodes, int startNodeId)
+        public static Dictionary<int, NodeStatus> CalculateShortestPaths(List<DijkstraNode> nodes, int startNodeId)
         {
             DijkstraHeap heap = new DijkstraHeap();
             List<DijkstraNode> processed = new List<DijkstraNode>();
-            Dictionary<int, int> lengths = new Dictionary<int, int>();
-            Dictionary<int, List<int>> nodePaths = new Dictionary<int, List<int>>();
-            lengths.Add(startNodeId, 0);
-            nodePaths.Add(startNodeId, new List<int> { startNodeId });
+            Dictionary<int, NodeStatus> lengths = new Dictionary<int, NodeStatus>();
+            //Dictionary<int, List<int>> nodePaths = new Dictionary<int, List<int>>();
+            //nodePaths.Add(startNodeId, new List<int> { startNodeId });
 
-            Action<int, int, List<int>> SetNodeMinValue = (int nodeId, int value, List<int> path) => 
+            //Action<int, int, List<int>> SetNodeMinValue = (int nodeId, int value, List<int> path) =>
+            Action<int, int> SetNodeMinValue = (int nodeId, int value) =>
             {
+                /*
                 if (!lengths.ContainsKey(nodeId))
                 {
-                    lengths.Add(nodeId, value);
+                    lengths.Add(nodeId, new NodeStatus);
                 }
                 else
                 {
-                    if (lengths[nodeId] > value) 
+                */
+                    if (lengths[nodeId].Length > value) 
                     {
-                        lengths[nodeId] = value;
+                        lengths[nodeId].Length = value;
                     }
                     //lengths[nodeId] = System.Math.Min(lengths[nodeId], value);
-                }
+                //}
 
-                if (!nodePaths.ContainsKey(nodeId)) nodePaths.Add(nodeId, new List<int>());
-                nodePaths[nodeId] = path;
+                //if (!nodePaths.ContainsKey(nodeId)) nodePaths.Add(nodeId, new List<int>());
+                //nodePaths[nodeId] = path;
             }; 
 
             foreach (DijkstraNode node in nodes) 
             {
-                if (node.NodeId == startNodeId) node.Value = 0;
+                int distance = node.NodeId == startNodeId ? 0 : DijkstraNode.NoPathDistance;
+                node.Value = distance;
                 heap.Enqueue(node);
-                if (!lengths.ContainsKey(node.NodeId)) lengths.Add(node.NodeId, DijkstraNode.NoPathDistance);
-                if (!nodePaths.ContainsKey(node.NodeId)) nodePaths.Add(node.NodeId, new List<int>());
+                if (!lengths.ContainsKey(node.NodeId)) lengths.Add(node.NodeId, new NodeStatus { Length = distance, UnprocessedReferenceCount = 0 }  );
+                lengths[node.NodeId].UnprocessedReferenceCount++;
+                //if (!nodePaths.ContainsKey(node.NodeId)) nodePaths.Add(node.NodeId, new List<int>());
             }
-            
+
+            int[] nodeIds = nodes.Select(n => n.NodeId).ToArray();
+            int[] referencedNodeIds = nodes.Select(n => n.ReferencedNode.NodeId).ToArray();
+
+            int[] leafIds = referencedNodeIds.Where(rn => !nodeIds.Any(n => n == rn)).Distinct().ToArray();
+            // add leaves
+            foreach (int leafId in leafIds) 
+            {
+                lengths.Add(leafId, new NodeStatus { Length = DijkstraNode.NoPathDistance, IsLeaf = true });
+            }
+
             while (heap.Count > 0)
             {
                 DijkstraNode node = heap.Dequeue();
                 processed.Add(node);
-                if (lengths.ContainsKey(node.NodeId) && lengths[node.NodeId] > node.Value) node.Value = lengths[node.NodeId];
+                if (lengths[node.NodeId].Done && !lengths[node.NodeId].IsLeaf) continue;
+                if (lengths[node.NodeId].Length > node.Value) lengths[node.NodeId].Length = node.Value;
+                lengths[node.NodeId].UnprocessedReferenceCount--;
+
                 // step 11: Maintain invariant
                 List<DijkstraNode> matchingNodes = heap.Find(nodeId: node.NodeId);
                 matchingNodes.Add(node);
                 DijkstraNode updateNode;
                 foreach (DijkstraNode matchingNode in matchingNodes) 
                 {
-                    if (matchingNode.Value != lengths[node.NodeId]) 
+                    if (matchingNode.Value != lengths[node.NodeId].Length) 
                     {
                         updateNode = heap.Remove(matchingNode.Index);
-                        updateNode.Value = lengths[node.NodeId];
+                        updateNode.Value = lengths[node.NodeId].Length;
                         heap.Enqueue(updateNode);
                     }
-                    List<int> path = new List<int>(nodePaths[matchingNode.NodeId]);
-                    if (!path.Contains(matchingNode.NodeId)) path.Add(matchingNode.NodeId);
+                    //List<int> path = new List<int>(nodePaths[matchingNode.NodeId]);
+                    //if (!path.Contains(matchingNode.NodeId)) path.Add(matchingNode.NodeId);
 
                     List<DijkstraNode> referencedNodes = heap.Find(nodeId: matchingNode.ReferencedNode.NodeId);
                     if (referencedNodes.Count > 0)
                     {
                         foreach (DijkstraNode referencedNode in referencedNodes)
                         {
-                            SetNodeMinValue(referencedNode.NodeId, matchingNode.Value + matchingNode.ReferencedNode.Distance, path);
+                            //SetNodeMinValue(referencedNode.NodeId, matchingNode.Value + matchingNode.ReferencedNode.Distance, path);
+                            SetNodeMinValue(referencedNode.NodeId, matchingNode.Value + matchingNode.ReferencedNode.Distance);
 
                             if (referencedNode.Value != matchingNode.Value)
                             {
@@ -113,7 +131,8 @@ namespace Algorithms.Graph.Dijkstra
                     else 
                     {
                         // this is a leaf
-                        SetNodeMinValue(matchingNode.ReferencedNode.NodeId, matchingNode.Value + matchingNode.ReferencedNode.Distance, path);
+                        //SetNodeMinValue(matchingNode.ReferencedNode.NodeId, matchingNode.Value + matchingNode.ReferencedNode.Distance, path);
+                        SetNodeMinValue(matchingNode.ReferencedNode.NodeId, matchingNode.Value + matchingNode.ReferencedNode.Distance);
                     }
                 }
                 // reset nodes still in the heap pointing to this node
@@ -160,7 +179,7 @@ namespace Algorithms.Graph.Dijkstra
             }            
         }
 
-        public static Dictionary<int, int> CalculateShortestPaths(string path, int startNodeId)
+        public static Dictionary<int, NodeStatus> CalculateShortestPaths(string path, int startNodeId)
         {
             List<DijkstraNode> nodes = LoadGraph(path);
             return CalculateShortestPaths(nodes, startNodeId);

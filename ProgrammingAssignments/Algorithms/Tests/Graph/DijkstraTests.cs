@@ -85,7 +85,7 @@ namespace Algorithms.Tests.Graph
             FileInfo testFile = GetTestFile(fileName);
             Assert.True(File.Exists(testFile.FullName));
 
-            Dictionary<int, int> paths = Algorithm.CalculateShortestPaths(testFile.FullName, 1);
+            Dictionary<int, NodeStatus> paths = Algorithm.CalculateShortestPaths(testFile.FullName, 1);
             List<int> expectedResult = GetOutputs(GetOutputFileName(testFile.FullName));
 
             List<int> result = GetTestResults(_testIds, paths);
@@ -128,12 +128,12 @@ namespace Algorithms.Tests.Graph
             return outputs;
         }
 
-        private List<int> GetTestResults(int[] nodeIds, Dictionary<int, int> paths)
+        private List<int> GetTestResults(int[] nodeIds, Dictionary<int, NodeStatus> paths)
         {
             List<int> results = new List<int>();
             foreach (int nodeId in nodeIds)
             {
-                results.Add(paths[nodeId]);
+                results.Add(paths[nodeId].Length);
             }
 
             return results;
