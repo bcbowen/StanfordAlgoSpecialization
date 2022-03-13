@@ -27,6 +27,8 @@ namespace Algorithms.Tests.Graph
 
             DirectedGraph graph = FloydWarshall.LoadGraph(file.FullName);
             Assert.AreEqual(4, graph.Nodes.Count);
+            Assert.AreEqual(2, graph.NodeCount);
+            Assert.AreEqual(4, graph.EdgeCount);
         }
 
         [TestCase(1, 2)]

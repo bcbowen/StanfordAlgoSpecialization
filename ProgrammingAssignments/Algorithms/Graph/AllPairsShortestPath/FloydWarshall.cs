@@ -14,52 +14,76 @@ namespace Algorithms.Graph.AllPairsShortestPath
 
         public static int? CalculateShortestPath(DirectedGraph graph) 
         {
-            int n = graph.Nodes.Count;
+            int n = graph.NodeCount;
             const int infinity = 10000; // don't use int.MaxValue because yada yada yada
-            int[,,] subproblems = new int[n,n,n];
-            for (int v = 0; v < n; v++) 
+                
+            // initialize jagged array int[2][n][n]
+            int[][][] lookup = new int[2][][];
+            for (int i = 0; i < 2; i++) 
             {
-                for (int w = 0; w < n; w++) 
+                lookup[i] = new int[n][];
+                for (int j = 0; j < n; j++) 
                 {
-                    if (v == w)
-                    {
-                        subproblems[0, v, w] = 0;
-                    }
-                    else if (graph.Nodes.Any(n => n.NodeId == v && n.ReferencedNodeId == w)) 
-                    {
-                        subproblems[0, v, w] = graph.Nodes.First(n => n.NodeId == v && n.ReferencedNodeId == w).Value;
-                    }
-                    else 
-                    {
-                        subproblems[0, v, w] = infinity;
-                    }
+                    lookup[i][j] = new int[n];
+                }
+            }
+
+            // Initialize lookup table with appropriate values when i != j.
+            for (int i = 0; i < n; i++) 
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (i != j) lookup[0][i][j] = infinity;
+                }
+            }
+
+            // Initialize lookup table with appropriate values when there is a directed edge from i to j.
+            for (int i = 0; i < n; i++)
+            {
+                foreach (DirectedNode node in graph.Nodes.Where(n => n.NodeId - 1 == i)) 
+                {
+                    lookup[0][i][node.ReferencedNodeId - 1] = node.Value;
                 }
             }
 
             // solve all subproblems
+            int x = 0;
+            int y = 1;
             for (int k = 1; k < n; k++) 
             {
-                for (int v = 1; v < n; v++) 
+                for (int v = 0; v < n; v++) 
                 {
-                    for (int w = 1; w < n; w++) 
+                    for (int w = 0; w < n; w++) 
                     {
-                        int value = System.Math.Min(subproblems[k - 1, v, w], subproblems[k - 1, v, k] + subproblems[k - 1, k, w]);
-                        subproblems[k, v, w] = value;
+                        
+                        int value = System.Math.Min(lookup[x][v][w], lookup[x][v][k] + lookup[x][k][w]);
+                        lookup[y][v][w] = value;
                         Console.WriteLine($"Setting [{k},{v},{w}] to {value}");
                     }
                 }
+                x = (x + 1) % 2;
+                y = (y + 1) % 2;
             }
 
+            x = (n + 1) % 2;
             // check for negative cycle
-            for (int v = 1; v < n; v++) 
+            for (int v = 0; v < n; v++) 
             {
-                if (subproblems[n - 1, v, v] < 0)
+                if (lookup[x][v][v] < 0)
                 {
                     return null;
                 }
             }
 
-            return subproblems[n - 1, n - 1, n - 1];
+            int[][] paths = lookup[(n + 1) % 2];
+            int minValue = paths[0][0];
+            for (int i = 0; i < paths.Length; i++)
+                for (int j = 0; j < paths.Length; j++)
+                    if (paths[i][j] < minValue)
+                        minValue = paths[i][j];
+
+            return minValue;
+
         }
 
 
@@ -79,10 +103,14 @@ namespace Algorithms.Graph.AllPairsShortestPath
             using (StreamReader reader = new StreamReader(fileName))
             {
                 // first line has counts
+                string[] fields; 
                 string line = reader.ReadLine();
+                fields = line.Split(' ');
+                graph.NodeCount = int.Parse(fields[0]);
+                graph.EdgeCount = int.Parse(fields[1]);
                 while ((line = reader.ReadLine()) != null) 
                 {
-                    string[] fields = line.Split(' ');
+                    fields = line.Split(' ');
                     if (fields.Length > 2) 
                     {
                         graph.Nodes.Add(new DirectedNode(int.Parse(fields[0]), int.Parse(fields[1]), int.Parse(fields[2])));

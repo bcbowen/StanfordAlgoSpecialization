@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Algorithms.Shared
 {
     public class DirectedGraph
     {
+
+        public int NodeCount { get; set; }
+        public int EdgeCount { get; set; }
+
         public List<DirectedNode> Nodes { get; private set; } = new List<DirectedNode>();
 
 
