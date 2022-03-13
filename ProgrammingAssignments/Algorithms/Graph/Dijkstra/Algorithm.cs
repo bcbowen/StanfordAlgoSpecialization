@@ -92,7 +92,7 @@ namespace Algorithms.Graph.Dijkstra
             {
                 DijkstraNode node = heap.Dequeue();
                 processed.Add(node);
-                if (lengths[node.NodeId].Done && !lengths[node.NodeId].IsLeaf) continue;
+                //if (lengths[node.NodeId].Done && !lengths[node.NodeId].IsLeaf) continue;
                 if (lengths[node.NodeId].Length > node.Value) lengths[node.NodeId].Length = node.Value;
                 lengths[node.NodeId].UnprocessedReferenceCount--;
 
@@ -117,12 +117,13 @@ namespace Algorithms.Graph.Dijkstra
                         foreach (DijkstraNode referencedNode in referencedNodes)
                         {
                             //SetNodeMinValue(referencedNode.NodeId, matchingNode.Value + matchingNode.ReferencedNode.Distance, path);
-                            SetNodeMinValue(referencedNode.NodeId, matchingNode.Value + matchingNode.ReferencedNode.Distance);
+                            int distance = matchingNode.Value + matchingNode.ReferencedNode.Distance;
+                            SetNodeMinValue(referencedNode.NodeId, distance);
 
-                            if (referencedNode.Value != matchingNode.Value)
+                            if (referencedNode.Value != distance)
                             {
                                 updateNode = heap.Remove(referencedNode.Index);
-                                updateNode.Value = matchingNode.Value;
+                                updateNode.Value = distance;
                                 heap.Enqueue(updateNode);
                             }
                         }

@@ -8,7 +8,7 @@
 
         public bool Done 
         {
-            get { return UnprocessedReferenceCount == 0; }
+            get { return UnprocessedReferenceCount < 0; }
         }
 
         public bool IsLeaf { get; set; } = false;
