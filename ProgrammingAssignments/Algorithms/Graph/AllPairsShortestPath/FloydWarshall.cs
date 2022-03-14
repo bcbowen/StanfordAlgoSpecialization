@@ -12,19 +12,19 @@ namespace Algorithms.Graph.AllPairsShortestPath
     public static class FloydWarshall
     {
 
-        public static int? CalculateShortestPath(DirectedGraph graph) 
+        public static long? CalculateShortestPath(DirectedGraph graph) 
         {
             int n = graph.NodeCount;
-            const int infinity = 10000; // don't use int.MaxValue because yada yada yada
+            const int infinity = 1000000; // don't use int.MaxValue because yada yada yada
                 
             // initialize jagged array int[2][n][n]
-            int[][][] lookup = new int[2][][];
+            long[][][] lookup = new long[2][][];
             for (int i = 0; i < 2; i++) 
             {
-                lookup[i] = new int[n][];
+                lookup[i] = new long[n][];
                 for (int j = 0; j < n; j++) 
                 {
-                    lookup[i][j] = new int[n];
+                    lookup[i][j] = new long[n];
                 }
             }
 
@@ -55,10 +55,10 @@ namespace Algorithms.Graph.AllPairsShortestPath
                 {
                     for (int w = 0; w < n; w++) 
                     {
-                        
-                        int value = System.Math.Min(lookup[x][v][w], lookup[x][v][k] + lookup[x][k][w]);
+
+                        long value = System.Math.Min(lookup[x][v][w], lookup[x][v][k] + lookup[x][k][w]);
                         lookup[y][v][w] = value;
-                        Console.WriteLine($"Setting [{k},{v},{w}] to {value}");
+                        //Console.WriteLine($"Setting [{k},{v},{w}] to {value}");
                     }
                 }
                 x = (x + 1) % 2;
@@ -75,8 +75,8 @@ namespace Algorithms.Graph.AllPairsShortestPath
                 }
             }
 
-            int[][] paths = lookup[(n + 1) % 2];
-            int minValue = paths[0][0];
+            long[][] paths = lookup[(n + 1) % 2];
+            long minValue = paths[0][0];
             for (int i = 0; i < paths.Length; i++)
                 for (int j = 0; j < paths.Length; j++)
                     if (paths[i][j] < minValue)

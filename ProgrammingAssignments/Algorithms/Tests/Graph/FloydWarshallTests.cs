@@ -57,6 +57,54 @@ namespace Algorithms.Tests.Graph
             RunFloydWarshall(testNumber, count);
         }
 
+        [TestCase(17, 32)]
+        [TestCase(18, 32)]
+        [TestCase(19, 32)]
+        [TestCase(20, 32)]
+        [TestCase(21, 64)]
+        [TestCase(22, 64)]
+        [TestCase(23, 64)]
+        [TestCase(24, 64)]
+        public void MediumFloydWarshallTests(int testNumber, int count)
+        {
+            RunFloydWarshall(testNumber, count);
+        }
+
+        [TestCase(25, 128)]
+        [TestCase(26, 128)]
+        [TestCase(27, 128)]
+        [TestCase(28, 128)]
+        [TestCase(29, 256)]
+        [TestCase(30, 256)]
+        [TestCase(31, 256)]
+        [TestCase(32, 256)]
+        public void LargeFloydWarshallTests(int testNumber, int count)
+        {
+            RunFloydWarshall(testNumber, count);
+        }
+
+        [TestCase(33, 512)]
+        [TestCase(34, 512)]
+        [TestCase(35, 512)]
+        [TestCase(36, 512)]
+        [TestCase(37, 1024)]
+        [TestCase(38, 1024)]
+        [TestCase(39, 1024)]
+        [TestCase(40, 1024)]
+        public void XLFloydWarshallTests(int testNumber, int count)
+        {
+            RunFloydWarshall(testNumber, count);
+        }
+
+        [TestCase(41, 2048)]
+        [TestCase(42, 2048)]
+        [TestCase(43, 2048)]
+        [TestCase(44, 2048)]
+        public void GargantuanFloydWarshallTests(int testNumber, int count)
+        {
+            RunFloydWarshall(testNumber, count);
+        }
+
         /// <summary>
         /// Run the Floyd Warshall algorithm
         /// </summary>
@@ -71,16 +119,16 @@ namespace Algorithms.Tests.Graph
 
             DirectedGraph graph = FloydWarshall.LoadGraph(file.FullName);
 
-            int? result = FloydWarshall.CalculateShortestPath(graph);
+            long? result = FloydWarshall.CalculateShortestPath(graph);
 
-            int? expected = GetExpectedOutput(file.FullName);
+            long? expected = GetExpectedOutput(file.FullName);
 
             Assert.AreEqual(expected, result);
         }
 
-        private int? GetExpectedOutput(string fileName)
+        private long? GetExpectedOutput(string fileName)
         {
-            int? result;
+            long? result;
             string outputFileName = fileName.Replace("input_", "output_");
             using (StreamReader reader = new StreamReader(outputFileName))
             {
@@ -93,7 +141,7 @@ namespace Algorithms.Tests.Graph
                 }
                 else
                 {
-                    result = int.Parse(line);
+                    result = long.Parse(line);
                 }
             }
 
