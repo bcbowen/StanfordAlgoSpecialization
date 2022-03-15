@@ -16,6 +16,7 @@ namespace Algorithms.Tests.Greedy.PrimMST
     [TestFixture]
     public class PrimMstTests
     {
+        const string IgnoreMessage = "These take far too long to run the straightforward algorithm, try with the heap based version";
         [Test]
         public void GraphIsLoadedFromTestFile() 
         {
@@ -110,6 +111,8 @@ namespace Algorithms.Tests.Greedy.PrimMST
             RunBasicTest(testNumber, count);
         }
 
+
+        [Ignore(IgnoreMessage)]
         /// <summary>
         /// 
         /// </summary>
@@ -124,7 +127,7 @@ namespace Algorithms.Tests.Greedy.PrimMST
             RunBasicTest(testNumber, count);
         }
 
-        [Ignore("These take far too long to run the straightforward algorithm, try with the heap based version")]
+        [Ignore(IgnoreMessage)]
         [TestCase(41, 4000)]
         [TestCase(42, 4000)]
         [TestCase(43, 4000)]

@@ -15,12 +15,12 @@ namespace Algorithms.Graph.KargerMinCut
 
 				if (result < minCuts)
 				{
-					Console.WriteLine($"New min: {result} after {i} iterations ");
+					//Console.WriteLine($"New min: {result} after {i} iterations ");
 					minCuts = result;
 				}
 			}
 
-			Console.WriteLine($"Final min: {minCuts} ");
+			//Console.WriteLine($"Final min: {minCuts} ");
 			return minCuts;
 		}
 

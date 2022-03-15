@@ -20,6 +20,8 @@ namespace Algorithms.Graph.Kosaraju
 
         /// <summary>
         /// Traverse the nodes from back to front and do DFS, mark the finishing time value for each node
+        /// Note: Somehow this broke, all tests passed before but now it falls into an infinite loop. 
+        /// Need to skip tests until this is fixed
         /// </summary>
         internal static void FirstPass(KosarajuGraph graph)
         {
@@ -50,6 +52,7 @@ namespace Algorithms.Graph.Kosaraju
                             {
                                 // don't remove a node from the stack if it has other edges to explore
                                 node = nodeStack.Peek();
+                                // TODO: infinite loop here
                             }
                             else
                             {

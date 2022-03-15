@@ -41,6 +41,7 @@ namespace Algorithms.Tests.Graph
             RunTests(testNumber, nodeCount);
         }
 
+        [Ignore(IgnoreMessage)]
         [TestCase(13, 32)]
         [TestCase(14, 32)]
         [TestCase(15, 32)]
@@ -50,6 +51,7 @@ namespace Algorithms.Tests.Graph
             RunTests(testNumber, nodeCount);
         }
 
+        [Ignore(IgnoreMessage)]
         [TestCase(17, 64)]
         [TestCase(18, 64)]
         [TestCase(19, 64)]
@@ -59,6 +61,7 @@ namespace Algorithms.Tests.Graph
             RunTests(testNumber, nodeCount);
         }
 
+        [Ignore(IgnoreMessage)]
         [TestCase(21, 128)]
         [TestCase(22, 128)]
         [TestCase(23, 128)]
@@ -69,7 +72,7 @@ namespace Algorithms.Tests.Graph
 
         }
 
-        //[Ignore(IgnoreMessage)]
+        [Ignore(IgnoreMessage)]
         [TestCase(25, 256)]
         [TestCase(26, 256)]
         [TestCase(27, 256)]
