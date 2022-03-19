@@ -9,7 +9,70 @@ namespace Algorithms.Plane.TSPHeuristic
 {
     public static class TravelingSalesman
     {
+        public static int CalculateShortestTour(string path) 
+        {
+            List<Point> points = LoadData(path);
 
+            // Problem file has 33K rows already sorted, test cases are much smaller and not sorted. So we'll make sure we need to sort the data
+            if (NeedsSorting(points)) 
+            {
+                SortPoints(points);
+            }
+
+            for (int i = 0; i < points.Count - 1; i++) 
+            {
+                if (points[i].NearestNeighbor != null) continue;
+                Point nearestNeighbor = FindNearestNeighbor(points, i);
+                points[i].SetNearestNeighbor(nearestNeighbor);
+            }
+
+            // path is total path + distance back to the first point
+            double distance = points.Sum(p => p.NearestNeighborDistance) + Point.CalculateDistance(points[0], points[points.Count - 1]);
+
+            return (int)distance; 
+        }
+
+        internal static Point FindNearestNeighbor(List<Point> points, int index)
+        {
+            int minPointIndex = 0;
+            double minDistance = double.MaxValue;
+
+            // search left (points without nearest neighbor already set)
+            for (int i = index - 1; i > 0; i--)
+            {
+                if (points[i].NearestNeighbor != null) continue; 
+
+                double distance = Point.CalculateDistance(points[i], points[index]);
+                if (distance < minDistance) 
+                {
+                    minPointIndex = i;
+                    minDistance = distance;
+                }
+                if (System.Math.Abs(points[i].X - points[index].X) > minDistance)
+                {
+                    break;
+                }
+            }
+
+            // search right (points without nearest neighbor already set)
+            for (int i = index + 1; i < points.Count; i++)
+            {
+                if (points[i].NearestNeighbor != null) continue;
+
+                double distance = Point.CalculateDistance(points[i], points[index]);
+                if (distance < minDistance)
+                {
+                    minPointIndex = i;
+                    minDistance = distance;
+                }
+                if (System.Math.Abs(points[i].X - points[index].X) > minDistance)
+                {
+                    break;
+                }
+            }
+
+            return points[minPointIndex];
+        }
 
 
         public static List<Point> LoadData(string path) 
@@ -65,6 +128,27 @@ namespace Algorithms.Plane.TSPHeuristic
                 index++;
             }
             return false;
+        }
+
+        internal static void SortPoints(List<Point> points) 
+        {
+            points.Sort(PointComparer);
+        }
+
+        /// <summary>
+        /// Comparer used to sort points in ASC order by x then y
+        /// </summary>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        /// <returns></returns>
+        public static int PointComparer(Point p1, Point p2) 
+        {
+            if (p1.X != p2.X) 
+            {
+                return p1.X.CompareTo(p2.X);
+            }
+
+            return p1.Y.CompareTo(p2.Y);
         }
     }
 }

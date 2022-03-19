@@ -26,8 +26,13 @@ namespace Algorithms.Plane.TSPHeuristic
         {
             NearestNeighbor = neighbor;
 
-            double distance = System.Math.Sqrt(System.Math.Pow(neighbor.X - X, 2) + System.Math.Pow(neighbor.Y - Y, 2));
+            double distance = CalculateDistance(neighbor, this);
             NearestNeighborDistance = distance;
+        }
+
+        public static double CalculateDistance(Point p1, Point p2) 
+        {
+            return System.Math.Sqrt(System.Math.Pow(p2.X - p1.X, 2) + System.Math.Pow(p2.Y - p1.Y, 2));
         }
 
         /// <summary>

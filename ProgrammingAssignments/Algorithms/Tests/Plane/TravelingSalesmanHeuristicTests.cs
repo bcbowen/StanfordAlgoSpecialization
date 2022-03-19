@@ -14,12 +14,12 @@ namespace Algorithms.Tests.Plane
     [TestFixture]
     public class TravelingSalesmanHeuristicTests
     {
-        const string DataDirectory = "TravelingSalesmanData"; 
+        const string DataDirectory = "TSPHeuristicData"; 
 
         [Test]
         public void DataFileLoaded()
         {
-            string fileName = "input_float_33_10.txt";
+            string fileName = "input_simple_15_10.txt";
             DirectoryInfo testDirectory = TestUtils.GetTestCaseDirectory().GetDirectories(DataDirectory).First();
             FileInfo file = testDirectory.GetFiles(fileName).FirstOrDefault();
             Assert.NotNull(file, "Test file not found");
@@ -82,11 +82,11 @@ namespace Algorithms.Tests.Plane
 
         }
 
-        [TestCase(6, 3)]
-        [TestCase(91, 24)]
+        [TestCase(15, 10)]
+        [TestCase(29, 100)]
         public void NeedsSortingReturnsTrueForUnsortedDataFile(int testNumber, int count)
         {
-            string fileName = $"input_float_{testNumber}_{count}.txt";
+            string fileName = $"input_simple_{testNumber}_{count}.txt";
             DirectoryInfo testDirectory = TestUtils.GetTestCaseDirectory().GetDirectories(DataDirectory).First();
             FileInfo file = testDirectory.GetFiles(fileName).FirstOrDefault();
             Assert.NotNull(file, "Test file not found");
@@ -104,6 +104,70 @@ namespace Algorithms.Tests.Plane
             Assert.AreEqual(expectedIndex, point.Index);
             Assert.AreEqual(expectedX, point.X);
             Assert.AreEqual(expectedY, point.Y);
+        }
+
+
+        [TestCase(15, 10)]
+        [TestCase(29, 100)]
+        public void DateLoadedFromTestFileSortedCorrectly(int testNumber, int count)
+        {
+            string fileName = $"input_simple_{testNumber}_{count}.txt";
+            DirectoryInfo testDirectory = TestUtils.GetTestCaseDirectory().GetDirectories(DataDirectory).First();
+            FileInfo file = testDirectory.GetFiles(fileName).FirstOrDefault();
+            Assert.NotNull(file, "Test file not found");
+
+            List<Point> points = TravelingSalesman.LoadData(file.FullName);
+            Assert.True(TravelingSalesman.NeedsSorting(points));
+
+            TravelingSalesman.SortPoints(points);
+
+            Assert.False(TravelingSalesman.NeedsSorting(points));
+        }
+
+        [TestCase(1, 2)]
+        [TestCase(2, 2)]
+        [TestCase(3, 2)]
+        [TestCase(4, 2)]
+        [TestCase(5, 4)]
+        [TestCase(6, 4)]
+        [TestCase(7, 4)]
+        [TestCase(8, 4)]
+        public void CalculateShortestPathTinyFiles(int testNumber, int count) 
+        {
+            RunTSPHeuristic(testNumber, count);
+        }
+
+        /// <summary>
+        /// Run the Traveling Salesman Heuristic algorithm
+        /// </summary>
+        /// <param name="testNumber"></param>
+        /// <param name="count"></param>
+        private void RunTSPHeuristic(int testNumber, int count)
+        {
+            string fileName = $"input_simple_{testNumber}_{count}.txt";
+            DirectoryInfo testDirectory = TestUtils.GetTestCaseDirectory().GetDirectories(DataDirectory).First();
+            FileInfo file = testDirectory.GetFiles(fileName).FirstOrDefault();
+            Assert.NotNull(file, "Test file not found");
+
+            int result = TravelingSalesman.CalculateShortestTour(file.FullName);
+
+            int expected = GetExpectedOutput(file.FullName);
+
+            Assert.AreEqual(expected, result);
+        }
+
+        private int GetExpectedOutput(string fileName)
+        {
+            int result;
+            string outputFileName = fileName.Replace("input_", "output_");
+            using (StreamReader reader = new StreamReader(outputFileName))
+            {
+                string line = reader.ReadLine();
+                reader.Close();               
+                result = int.Parse(line);
+            }
+
+            return result;
         }
     }
 }
