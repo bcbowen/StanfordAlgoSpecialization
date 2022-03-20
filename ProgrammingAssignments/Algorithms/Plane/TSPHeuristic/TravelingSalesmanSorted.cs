@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -8,50 +7,37 @@ using System.Threading.Tasks;
 
 namespace Algorithms.Plane.TSPHeuristic
 {
-    public static class TravelingSalesman
+    public static class TravelingSalesmanSorted
     {
+        /// <summary>
+        /// Depends on having the data sorted, works for tiny cases and 2 small cases, but not for the rest of the test cases
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static double CalculateShortestTour(string path) 
         {
             List<Point> points = LoadData(path);
-            int currentPoint = 0; 
-            int visitedCount = 0;
-            while (visitedCount < points.Count - 1) 
-            {
-                int nearestNeighborIndex = -1;
-                double minDistance = double.MaxValue;
 
-                for (int j = 1; j < points.Count; j++)
-                {
-                    if (points[j].Visited || currentPoint == j) continue;
-                    if (System.Math.Abs(points[currentPoint].X - points[j].X) < minDistance)
-                    {
-                        double distance = Point.CalculateDistance(points[currentPoint], points[j]);
-                        if (distance < minDistance)
-                        {
-                            nearestNeighborIndex = j;
-                            minDistance = distance;
-                        }
-                    }
-                }
-                Debug.Assert(nearestNeighborIndex >= 0);
-                
-                points[currentPoint].SetNearestNeighbor(points[nearestNeighborIndex]);
-                points[nearestNeighborIndex].Visited = true;
-                currentPoint = nearestNeighborIndex;
-                visitedCount++;
-                
+            // Problem file has 33K rows already sorted, test cases are much smaller and not sorted. So we'll make sure we need to sort the data
+            if (NeedsSorting(points)) 
+            {
+                SortPoints(points);
             }
 
-            Debug.Assert(points.Count(p => !p.Visited) == 1);
+            for (int i = 0; i < points.Count; i++) 
+            {
+                if (points[i].NearestNeighbor != null) continue;
+                int nearestNeighbor = FindNearestNeighbor(points, i);
+                points[i].SetNearestNeighbor(points[nearestNeighbor]);
 
-            Point final = points.First(p => !p.Visited);
+            }
 
             // last node goes back to first point
-            points[currentPoint].SetNearestNeighbor(final);
+            points[points.Count - 1].SetNearestNeighbor(points[0]);
 
-            double totalDistance = points.Sum(p => p.NearestNeighborDistance);
+            double distance = points.Sum(p => p.NearestNeighborDistance);
 
-            return System.Math.Floor(totalDistance); 
+            return System.Math.Floor(distance); 
         }
 
         internal static int FindNearestNeighbor(List<Point> points, int index)
@@ -122,5 +108,56 @@ namespace Algorithms.Plane.TSPHeuristic
             return points;
         }
 
+        /// <summary>
+        /// Checks sample of data to determine if it is already sorted in x, y ASC order
+        /// </summary>
+        /// <param name="points"></param>
+        /// <returns></returns>
+        internal static bool NeedsSorting(List<Point> points) 
+        {
+            const int sampleSize = 20;
+
+            double lastX = points[0].X; 
+            double lastY = points[0].Y;
+            int index = 1;
+            while (index < sampleSize && index < points.Count) 
+            {
+                if (points[index].X < lastX) 
+                {
+                    return true;
+                }
+
+                if (points[index].X == lastX && points[index].Y < lastY)
+                {
+                    return true;
+                }
+
+                lastX = points[index].X;
+                lastY = points[index].Y; 
+                index++;
+            }
+            return false;
+        }
+
+        internal static void SortPoints(List<Point> points) 
+        {
+            points.Sort(PointComparer);
+        }
+
+        /// <summary>
+        /// Comparer used to sort points in ASC order by x then y
+        /// </summary>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        /// <returns></returns>
+        public static int PointComparer(Point p1, Point p2) 
+        {
+            if (p1.X != p2.X) 
+            {
+                return p1.X.CompareTo(p2.X);
+            }
+
+            return p1.Y.CompareTo(p2.Y);
+        }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+
 using System.Threading.Tasks;
 
 namespace Algorithms.Plane.TSPHeuristic
@@ -19,11 +21,14 @@ namespace Algorithms.Plane.TSPHeuristic
         public double X { get; set; }
         public double Y { get; set; }
 
+        public bool Visited { get; set; }
+
         public Point NearestNeighbor { get; private set; }
 
         public double NearestNeighborDistance { get; private set; }
         public void SetNearestNeighbor(Point neighbor)
         {
+            Debug.Assert(neighbor != this);
             NearestNeighbor = neighbor;
 
             double distance = CalculateDistance(neighbor, this);
