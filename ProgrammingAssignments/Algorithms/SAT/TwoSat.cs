@@ -12,35 +12,53 @@ namespace Algorithms.SAT
         private static Random Randomizer = new Random();
         public static bool IsSatisfiable(string fileName) 
         {
-            Dictionary<int, bool> settings;
-            List<Condition> conditions;
-            (settings, conditions) = LoadFile(fileName);
+            //Dictionary<int, bool> settings;
+            //List<Condition> conditions;
+            (Dictionary<int, bool> settings, List<Condition> conditions) = LoadFile(fileName);
 
-            for (int i = 0; i < System.Math.Log2(conditions.Count); i++) 
+            //int tweakage = conditions.Count;
+
+            //double outerIterations = System.Math.Min(tweakage, conditions.Count * System.Math.Log2(conditions.Count));
+            //double innerIterations = 2 * System.Math.Pow(conditions.Count, 2);
+
+            double outerIterations = conditions.Count;
+
+            for (int i = 0; i < outerIterations; i++) 
             {
                 Shuffle(settings);
-                for (int j = 0; j < 2 * System.Math.Pow(conditions.Count, 2); j++) 
+                
+                for (int j = 0; j < outerIterations; j++) 
                 {
-                    List<int> unsatisfiedClauses;
-                    bool isSatisfied;
-                    (isSatisfied, unsatisfiedClauses) = IsSatisfied(settings, conditions);
+                    //List<int> unsatisfiedClauses;
+                    //bool isSatisfied;
+                    (bool isSatisfied, List<int> unsatisfiedClauses) = IsSatisfied(settings, conditions);
                     if (isSatisfied) return true;
 
                     int randomIndex = Randomizer.Next(0, unsatisfiedClauses.Count - 1);
-                    settings[randomIndex] = !settings[randomIndex];
+                    int key = unsatisfiedClauses[randomIndex];
+                    settings[key] = !settings[key];
                 }
             }
 
             return false;
         }
 
-        private static (bool, List<int>) IsSatisfied(Dictionary<int, bool> settings, List<Condition> conditions) 
+        internal static (bool, List<int>) IsSatisfied(Dictionary<int, bool> settings, List<Condition> conditions) 
         {
+            // TODO: This doesn't work
             List<int> unsatisfiedClauses = new List<int>();
+            bool result; 
             foreach(Condition condition in conditions) 
             {
-                if (condition.Is1 != settings[condition.Value1]) unsatisfiedClauses.Add(condition.Value1);
-                if (condition.Is2 != settings[condition.Value2]) unsatisfiedClauses.Add(condition.Value2);
+                result = (settings[condition.Value1] ? condition.Is1 : !condition.Is1);
+                result = result | (settings[condition.Value2] ? condition.Is2 : !condition.Is2);
+                //if (condition.Is1 != settings[condition.Value1]) unsatisfiedClauses.Add(condition.Value1);
+                //if (condition.Is2 != settings[condition.Value2]) unsatisfiedClauses.Add(condition.Value2);
+                if (!result) 
+                {
+                    unsatisfiedClauses.Add(condition.Value1);
+                    unsatisfiedClauses.Add(condition.Value2);
+                }
             }
 
             return (unsatisfiedClauses.Count == 0, unsatisfiedClauses);
@@ -50,7 +68,8 @@ namespace Algorithms.SAT
         {
             foreach (int key in settings.Keys) 
             {
-                settings[key] = Randomizer.Next(0, 1) == 1;
+                int next = Randomizer.Next(2);
+                settings[key] = next == 1;
             }
         }
 
@@ -62,9 +81,12 @@ namespace Algorithms.SAT
             using (StreamReader reader = new StreamReader(fileName)) 
             {
                 string line;
+                // first line is count... ignore
+                line = reader.ReadLine();
                 while ((line = reader.ReadLine()) != null) 
                 {
                     Condition condition = Condition.Parse(line);
+                    conditions.Add(condition);
                     if (!settings.ContainsKey(condition.Value1)) 
                     {
                         settings.Add(condition.Value1, true);
