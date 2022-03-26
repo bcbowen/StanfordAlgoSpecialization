@@ -15,13 +15,16 @@ namespace Algorithms.SAT
             //Dictionary<int, bool> settings;
             //List<Condition> conditions;
             (Dictionary<int, bool> settings, List<Condition> conditions) = LoadFile(fileName);
-
+            PruneConditions(conditions);
+            if (conditions.Count == 0) return true;
             //int tweakage = conditions.Count;
 
             //double outerIterations = System.Math.Min(tweakage, conditions.Count * System.Math.Log2(conditions.Count));
+            double outerIterations = conditions.Count * System.Math.Log2(conditions.Count);
             //double innerIterations = 2 * System.Math.Pow(conditions.Count, 2);
 
-            double outerIterations = conditions.Count;
+            //double outerIterations = conditions.Count;
+            //int innerIterations = 25;
 
             for (int i = 0; i < outerIterations; i++) 
             {
@@ -43,17 +46,62 @@ namespace Algorithms.SAT
             return false;
         }
 
+        internal static void PruneConditions(List<Condition> conditions) 
+        {
+            bool reductionMade;
+            do 
+            {
+                reductionMade = false;
+                // flags: 
+                // 1: Positive representation
+                // 2: Negative representation
+                Dictionary<int, int> keyCount = new Dictionary<int, int>();
+                foreach (Condition condition in conditions) 
+                {
+                    if (!keyCount.ContainsKey(condition.Value1))
+                    {
+                        keyCount.Add(condition.Value1, condition.Is1 ? 1 : 2);
+                    }
+                    else
+                    {
+                        keyCount[condition.Value1] = keyCount[condition.Value1] | (condition.Is1 ? 1 : 2); 
+                    }
+
+                    if (!keyCount.ContainsKey(condition.Value2))
+                    {
+                        keyCount.Add(condition.Value2, condition.Is2 ? 1 : 2);
+                    }
+                    else
+                    {
+                        keyCount[condition.Value2] = keyCount[condition.Value2] | (condition.Is2 ? 1 : 2);
+                    }
+                }
+
+                foreach (int key in keyCount.Keys) 
+                {
+                    if (keyCount[key] != 3)
+                    {
+                        for (int i = conditions.Count -1; i >= 0; i--)
+                        {
+                            if (conditions[i].Value1 == key || conditions[i].Value2 == key) conditions.RemoveAt(i);
+                            reductionMade = true;
+                        } 
+                    }
+                }
+
+            } while (reductionMade);
+            
+        }
+
         internal static (bool, List<int>) IsSatisfied(Dictionary<int, bool> settings, List<Condition> conditions) 
         {
-            // TODO: This doesn't work
+            
             List<int> unsatisfiedClauses = new List<int>();
             bool result; 
             foreach(Condition condition in conditions) 
             {
-                result = (settings[condition.Value1] ? condition.Is1 : !condition.Is1);
-                result = result | (settings[condition.Value2] ? condition.Is2 : !condition.Is2);
-                //if (condition.Is1 != settings[condition.Value1]) unsatisfiedClauses.Add(condition.Value1);
-                //if (condition.Is2 != settings[condition.Value2]) unsatisfiedClauses.Add(condition.Value2);
+                result = (settings.ContainsKey(condition.Value1) && settings[condition.Value1] ? condition.Is1 : !condition.Is1);
+                result = result | (settings.ContainsKey(condition.Value2) && settings[condition.Value2] ? condition.Is2 : !condition.Is2);
                 if (!result) 
                 {
                     unsatisfiedClauses.Add(condition.Value1);
