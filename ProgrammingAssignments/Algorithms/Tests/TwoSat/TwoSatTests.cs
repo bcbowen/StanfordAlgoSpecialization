@@ -169,6 +169,25 @@ namespace Algorithms.Tests.TwoSat
             Assert.AreEqual(expected, result);
         }
 
+        [TestCase("2sat1", 6, 6)]
+        [TestCase("2sat2", 57, 54)]
+        [TestCase("2sat3", 295, 288)]
+        [TestCase("2sat4", 11, 11)]
+        [TestCase("2sat5", 101, 98)]
+        [TestCase("2sat6", 26, 25)]
+        public void PruneTestConditionsTest(string fileName, int expectedClauseCount, int expectedLiteralCount) 
+        {
+            DirectoryInfo testDirectory = TestUtils.GetTestCaseDirectory().GetDirectories(DataDirectory).First();
+            FileInfo file = testDirectory.GetFiles($"{fileName}.txt").FirstOrDefault();
+            Assert.NotNull(file, "Test file not found");
+
+            (Dictionary<int, bool> settings, List<Condition> conditions) = SAT.TwoSat.LoadFile(file.FullName);
+            SAT.TwoSat.PruneConditions(conditions);
+            List<int> literals = conditions.Select(c => c.Value1).Concat(conditions.Select(c => c.Value2)).Distinct().ToList();
+            Assert.AreEqual(expectedClauseCount, conditions.Count);
+            Assert.AreEqual(expectedLiteralCount, literals.Count);
+        }
+
 
         private bool GetExpectedOutput(string fileName)
         {

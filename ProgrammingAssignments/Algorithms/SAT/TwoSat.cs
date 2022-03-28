@@ -12,28 +12,19 @@ namespace Algorithms.SAT
         private static Random Randomizer = new Random();
         public static bool IsSatisfiable(string fileName) 
         {
-            //Dictionary<int, bool> settings;
-            //List<Condition> conditions;
             (Dictionary<int, bool> settings, List<Condition> conditions) = LoadFile(fileName);
-            PruneConditions(conditions);
-            if (conditions.Count == 0) return true;
-            //int tweakage = conditions.Count;
+            //PruneConditions(conditions);
+            //if (conditions.Count == 0) return true;
 
-            //double outerIterations = System.Math.Min(tweakage, conditions.Count * System.Math.Log2(conditions.Count));
             double outerIterations = conditions.Count * System.Math.Log2(conditions.Count);
-            //double innerIterations = 2 * System.Math.Pow(conditions.Count, 2);
-
-            //double outerIterations = conditions.Count;
-            //int innerIterations = 25;
+            double innerIterations = 2 * System.Math.Pow(conditions.Count, 2);
 
             for (int i = 0; i < outerIterations; i++) 
             {
                 Shuffle(settings);
                 
-                for (int j = 0; j < outerIterations; j++) 
+                for (int j = 0; j < innerIterations; j++) 
                 {
-                    //List<int> unsatisfiedClauses;
-                    //bool isSatisfied;
                     (bool isSatisfied, List<int> unsatisfiedClauses) = IsSatisfied(settings, conditions);
                     if (isSatisfied) return true;
 
@@ -46,7 +37,7 @@ namespace Algorithms.SAT
             return false;
         }
 
-        internal static void PruneConditions(List<Condition> conditions) 
+        public static void PruneConditions(List<Condition> conditions) 
         {
             bool reductionMade;
             do 
