@@ -1,5 +1,5 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Algorithms.Math
@@ -100,21 +100,22 @@ namespace Algorithms.Math
 			return BigInteger.Subtract(i, j).ToString();
 		}
 
+        /*
 		internal static string Add(string x, string y)
 		{
 			BigInteger i = BigInteger.Parse(x);
 			BigInteger j = BigInteger.Parse(y);
 			return BigInteger.Add(i, j).ToString();
 		}
+		*/
 
-		/*
-		internal static string Add (string x, string y)
+        internal static string Add (string x, string y)
 		{
 			int carry = 0; 
 			int top;
 			int bottom;
 			int sum;
-			int n = Math.Max(x.Length, y.Length);
+			int n = System.Math.Max(x.Length, y.Length);
 			x = x.PadLeft(n, '0');
 			y = y.PadLeft(n, '0');
 			if (x.Length == 1 || y.Length == 1) 
@@ -143,9 +144,9 @@ namespace Algorithms.Math
 				result.Insert(0, carry);
 			}
 
-			return result.ToString();
-		}
-		*/
+            return result.ToString().TrimStart('0');
+        }
+		
 
 		internal static (string, string) SetSizes(string x, string y)
 		{
