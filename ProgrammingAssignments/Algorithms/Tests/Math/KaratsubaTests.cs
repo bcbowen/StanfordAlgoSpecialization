@@ -125,5 +125,23 @@ namespace Algorithms.Tests.Math
 			Assert.AreEqual(expectedY, resultY);
 
 		}
+
+		
+		[TestCase("9", "1", "8")]
+		[TestCase("134", "123", "11")]
+		[TestCase("533", "77", "456")]
+		[TestCase("0", "0", "0")]
+		[TestCase("9", "0", "9")]
+		[TestCase("6164", "4600", "1564")]
+		[TestCase("105", "56", "49")]
+		[TestCase("1000", "1", "999")]
+		[TestCase("234", "189", "45")]
+		[TestCase("56238", "19758", "36480")]
+		//[InlineData("", "", "")]
+		public void SubtractTests(string x, string y, string expected)
+		{
+			string result = Karatsuba.Subtract(x, y);
+			Assert.AreEqual(expected, result);
+		}
 	}
 }
